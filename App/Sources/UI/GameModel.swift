@@ -71,10 +71,28 @@ final class GameModel {
         hintShot.map { engine.preview(direction: .angle($0.angle), power: $0.power) }
     }
 
-    /// 引いている向きと強さが、おてほんに近い（離すと、おてほんどおりに打つ）
+    /// 引いている向きと強さが、おてほんに近い（離すと、おてほんどおりに打つ）。指で合わせやすいよう、幅は広め
     var aimMatchesHint: Bool {
         guard let h = hintShot, let a = aim else { return false }
-        return a.direction.dot(.angle(h.angle)) > cos(4 * .pi / 180) && abs(a.power - h.power) < 0.08
+        return a.direction.dot(.angle(h.angle)) > cos(12 * .pi / 180) && abs(a.power - h.power) < 0.15
+    }
+
+    /// 引いている間に見せる「ここまで引く」位置（台の座標。指を置いたところからの位置）
+    var hintTarget: CGPoint? {
+        guard let h = hintShot, let s = aimStart else { return nil }
+        let d = Vec.angle(h.angle)
+        return CGPoint(x: s.x - d.x * h.power * Self.maxPull, y: s.y - d.y * h.power * Self.maxPull)
+    }
+
+    private var wasMatching = false
+
+    /// おてほんの 1 打を、そのまま打つ（ボタン）
+    func shootHint() {
+        guard let h = hintShot, summary == nil else { return }
+        if engine.shoot(h) {
+            Feedback.shot(power: h.power)
+            setFace(.zoom, for: 0.2)
+        }
     }
 
     /// 引いた量から、向きと強さ（0〜1）
@@ -123,6 +141,9 @@ final class GameModel {
         aimNow = p
         let step = Int((aim?.power ?? 0) * 5)
         if step != lastPowerStep { lastPowerStep = step; Feedback.aimTick() }
+        let match = aimMatchesHint
+        if match && !wasMatching { Feedback.bumper() }
+        wasMatching = match
     }
 
     func endAim() {

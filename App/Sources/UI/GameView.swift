@@ -24,6 +24,20 @@ struct GameView: View {
                     .frame(width: w * scale, height: h * scale)
                     .gesture(drag(scale: scale))
                     .accessibilityLabel("台。ひっぱって離すと、\(game.character.name)が転がります")
+                    if game.hintShot != nil, !game.isAiming, game.summary == nil, !(showIntro && game.mode.stage?.hint != nil) {
+                        VStack {
+                            Spacer()
+                            Button {
+                                game.shootHint()
+                            } label: {
+                                Label("おてほんで打つ（\(game.engine.shotsTaken + 1) 打目）", systemImage: "hand.point.up.left.fill")
+                            }
+                            .buttonStyle(ChunkyButtonStyle(fill: Color(hex: 0xF7A9C4), text: Theme.ink, height: 50))
+                            .frame(maxWidth: 280)
+                            .padding(.bottom, 44 * scale)
+                        }
+                        .frame(width: w * scale, height: h * scale)
+                    }
                     if let s = game.mode.stage, showIntro, game.engine.shotsTaken == 0, let hint = s.hint {
                         IntroCard(stage: s, hint: hint) { withAnimation { showIntro = false } }
                             .padding(24)
@@ -430,6 +444,19 @@ struct TableCanvas: View {
         cue.move(to: CGPoint(x: h.x - d.x * back, y: h.y - d.y * back))
         cue.addLine(to: CGPoint(x: h.x - d.x * (back + 150), y: h.y - d.y * (back + 150)))
         ctx.stroke(cue, with: .color(pink.opacity(0.75)), style: StrokeStyle(lineWidth: 8, lineCap: .round, dash: [6, 6]))
+        // 引いている間：指をここまで持っていく、のピンクの丸
+        if let target = game.hintTarget, let start = game.aimStart {
+            var line = Path()
+            line.move(to: start); line.addLine(to: target)
+            ctx.stroke(line, with: .color(pink.opacity(0.8)), style: StrokeStyle(lineWidth: 3, lineCap: .round, dash: [5, 5]))
+            let ring = CharacterArt.circle(target, match ? 20 : 16 + sin(game.clock * 8) * 2)
+            ctx.fill(ring, with: .color(pink.opacity(match ? 0.7 : 0.35)))
+            ctx.stroke(ring, with: .color(Theme.ink), lineWidth: 2.5)
+            if let now = game.aimNow {
+                ctx.fill(CharacterArt.circle(now, 6), with: .color(.white))
+                ctx.stroke(CharacterArt.circle(now, 6), with: .color(Theme.ink), lineWidth: 2)
+            }
+        }
         if !game.isAiming {
             let label = "おてほん：強さ \(Int((shot.power * 100).rounded()))%"
             let font = Font.system(size: 13, weight: .black, design: .rounded)
@@ -498,7 +525,7 @@ struct HintSheet: View {
                 .frame(width: 60, height: 60).background(Circle().fill(Theme.sun))
                 .overlay(Circle().stroke(Theme.ink, lineWidth: 3))
             Text("\(stage.id) のおてほん").font(Theme.title(22)).foregroundStyle(Theme.ink)
-            Text("最初からやりなおして、★3 の打ち方を 1 打ずつピンクの線で見せます。近い向きと強さで引くと「ぴったり」になり、おてほんどおりに打てます。おてほんの間は、なかまのとくいはお休みです。")
+            Text("最初からやりなおして、★3 の打ち方を 1 打ずつピンクの線で見せます。「おてほんで打つ」ボタンでそのまま打てます。自分で引くときは、ピンクの丸まで指を動かすと「ぴったり」になります。おてほんの間は、なかまのとくいはお休みです。")
                 .font(Theme.body(14)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
             Group {
                 switch price {
