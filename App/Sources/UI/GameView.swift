@@ -76,6 +76,7 @@ struct GameView: View {
                 .padding(.horizontal, 8).padding(.vertical, 2)
                 .background(Capsule().fill(Theme.ink))
             Text(s.goal.label).font(Theme.label(14)).foregroundStyle(Theme.ink)
+                .lineLimit(1).minimumScaleFactor(0.7).layoutPriority(1)
             Spacer(minLength: 4)
             if let g = game.goalText {
                 Text(g).font(Theme.label(13)).monospacedDigit().foregroundStyle(Theme.ink)
@@ -84,12 +85,14 @@ struct GameView: View {
             Text("★3: \(s.par3)打").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
             if game.hintMode {
                 if game.offPath {
-                    Button("おてほんからやりなおす") { app.replay() }
+                    Button("やりなおす") { app.replay() }
                         .font(Theme.label(12)).foregroundStyle(Theme.ink)
                         .padding(.horizontal, 8).padding(.vertical, 4)
                         .background(Capsule().fill(Color(hex: 0xF7A9C4)))
                 } else {
-                    Label("おてほん", systemImage: "lightbulb.fill").font(Theme.label(12)).foregroundStyle(Theme.ink)
+                    Image(systemName: "lightbulb.fill").font(.system(size: 13, weight: .bold)).foregroundStyle(Theme.ink)
+                        .frame(width: 30, height: 30)
+                        .accessibilityLabel("おてほん中")
                         .padding(.horizontal, 8).padding(.vertical, 4)
                         .background(Capsule().fill(Color(hex: 0xF7A9C4).opacity(0.6)))
                 }
@@ -194,7 +197,7 @@ struct TableCanvas: View {
             drawPops(&ctx)
             if let a = aim { drawGauge(&ctx, power: a.power, rules: rules) }
             if let h = game.hintShot, aim != nil { drawGaugeTarget(&ctx, power: h.power, rules: rules) }
-            if game.engine.shotsTaken == 0, !game.isAiming, !game.engine.isMoving { drawHint(&ctx) }
+            if game.engine.shotsTaken == 0, !game.hintMode, !game.isAiming, !game.engine.isMoving { drawHint(&ctx) }
         }
     }
 
