@@ -29,9 +29,10 @@ struct ProView: View {
                     }
                 }
                 VStack(alignment: .leading, spacing: 12) {
-                    benefit("person.3.fill", "限定のなかま 3 匹", "ギンガ・サクラ・ホムラ。カプセルからは出ない子たち。とくい付き")
-                    benefit("bag.fill", "おやつがずっと 2 倍", "カプセルを回せる回数が倍になる。図鑑が早くそろう")
-                    benefit("square.grid.2x2.fill", "台のいろ 3 種", "みどり・すもも・よる。気分で台を変えられる")
+                    benefit("map.fill", "ワールド 4〜6（36 ステージ）", "ワープの台・うごくバンパー・よるのごちゃまぜ。ぜんぶ解けることを確かめた手づくりの台")
+                    benefit("person.3.fill", "限定のなかま 3 匹（なかよし Lv3 から）", "ギンガ・サクラ・ホムラ。とくいがはじめから強い")
+                    benefit("bag.fill", "おやつがずっと 2 倍", "カプセルを倍回せる。なかよし度が早く上がる")
+                    benefit("square.grid.2x2.fill", "台のいろ 3 種", "きょうの台を、みどり・すもも・よるに")
                 }
                 .padding(16)
                 .background(RoundedRectangle(cornerRadius: 20).fill(Theme.paper))
@@ -43,7 +44,7 @@ struct ProView: View {
                         message = app.isPro ? "復元しました" : "復元できる購入が見つかりませんでした" }
                 }
                 .font(Theme.label(14)).foregroundStyle(Theme.ink).underline()
-                Text("きょうの台・ランダム台・カプセルは、Pro がなくてもずっと遊べます。広告はありません。")
+                Text("ワールド 1〜3（36 ステージ）・きょうの台・カプセルは、Pro がなくてもずっと遊べます。広告はありません。")
                     .font(Theme.body(12)).foregroundStyle(Theme.inkSoft).multilineTextAlignment(.center)
             }
             .padding(20)

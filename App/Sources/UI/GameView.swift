@@ -4,12 +4,14 @@ import SwiftUI
 struct GameView: View {
     @Environment(AppModel.self) private var app
     @Bindable var game: GameModel
+    @State private var showIntro = true
 
     static let pad: CGFloat = 22
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 10) {
             hud
+            if let s = game.mode.stage { goalBar(s) }
             GeometryReader { geo in
                 let w = game.engine.rules.width + Self.pad * 2, h = game.engine.rules.height + Self.pad * 2
                 let scale = min(geo.size.width / w, geo.size.height / h)
@@ -21,8 +23,13 @@ struct GameView: View {
                     .frame(width: w * scale, height: h * scale)
                     .gesture(drag(scale: scale))
                     .accessibilityLabel("台。ひっぱって離すと、\(game.character.name)が転がります")
-                    if let r = game.reward {
-                        ResultCard(game: game, reward: r)
+                    if let s = game.mode.stage, showIntro, game.engine.shotsTaken == 0, let hint = s.hint {
+                        IntroCard(stage: s, hint: hint) { withAnimation { showIntro = false } }
+                            .padding(24)
+                            .transition(.scale(scale: 0.9).combined(with: .opacity))
+                    }
+                    if let r = game.summary {
+                        ResultCard(game: game, summary: r)
                             .padding(12)
                             .transition(.scale(scale: 0.9).combined(with: .opacity))
                     }
@@ -32,14 +39,14 @@ struct GameView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
-        .animation(.spring(response: 0.4, dampingFraction: 0.75), value: game.reward != nil)
+        .animation(.spring(response: 0.4, dampingFraction: 0.75), value: game.summary != nil)
         .onAppear {
             game.onFinish = { g in
                 let r = app.finish(g)
                 Task { @MainActor in
-                    try? await Task.sleep(for: .milliseconds(600))
-                    g.setReward(r)
-                    app.maybeShowProAfterGame()
+                    try? await Task.sleep(for: .milliseconds(700))
+                    g.setSummary(r)
+                    app.maybeShowProAfterGame(g)
                 }
             }
         }
@@ -48,18 +55,36 @@ struct GameView: View {
     private func drag(scale: CGFloat) -> some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { v in
+                if showIntro, game.mode.stage?.hint != nil, game.engine.shotsTaken == 0 { withAnimation { showIntro = false } }
                 let p = CGPoint(x: v.location.x / scale - Self.pad, y: v.location.y / scale - Self.pad)
                 if game.isAiming { game.moveAim(to: p) } else { game.beginAim(at: p) }
             }
             .onEnded { _ in game.endAim() }
     }
 
+    private func goalBar(_ s: Stage) -> some View {
+        HStack(spacing: 8) {
+            Text(s.id).font(Theme.title(15)).foregroundStyle(Theme.cream)
+                .padding(.horizontal, 8).padding(.vertical, 2)
+                .background(Capsule().fill(Theme.ink))
+            Text(s.goal.label).font(Theme.label(14)).foregroundStyle(Theme.ink)
+            Spacer(minLength: 4)
+            if let g = game.goalText {
+                Text(g).font(Theme.label(13)).monospacedDigit().foregroundStyle(Theme.ink)
+                    .contentTransition(.numericText())
+            }
+            Text("★3: \(s.par3)打").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
+        }
+        .padding(.horizontal, 4)
+        .accessibilityElement(children: .combine)
+    }
+
     private var hud: some View {
         HStack(spacing: 8) {
             Pill {
-                let total = max(game.engine.rules.shots, game.engine.shotsLeft)
+                let total = max(game.engine.shotsLeft + game.engine.shotsTaken, game.engine.shotsLeft)
                 HStack(spacing: 3) {
-                    ForEach(0..<total, id: \.self) { i in
+                    ForEach(0..<min(total, 14), id: \.self) { i in
                         let left = i < game.engine.shotsLeft
                         Circle()
                             .fill(left ? Color(hex: game.character.body) : .clear)
@@ -81,16 +106,34 @@ struct GameView: View {
                     .animation(.snappy, value: game.engine.score)
             }
             .accessibilityElement(children: .combine)
-            Button { app.route = .home } label: {
-                Image(systemName: "house.fill").font(.system(size: 15, weight: .bold))
+            Button { app.leaveGame() } label: {
+                Image(systemName: game.mode.stage == nil ? "house.fill" : "square.grid.3x3.fill").font(.system(size: 15, weight: .bold))
                     .foregroundStyle(Theme.ink)
                     .frame(width: 38, height: 38)
                     .background(Circle().fill(Theme.cream))
                     .overlay(Circle().stroke(Theme.ink, lineWidth: Theme.line))
                     .background(Circle().fill(Theme.ink).offset(y: 3))
             }
-            .accessibilityLabel("ホームへ")
+            .accessibilityLabel(game.mode.stage == nil ? "ホームへ" : "ステージの一覧へ")
         }
+    }
+}
+
+/// ステージのはじめに出す、おだいと新しい仕掛けの説明
+struct IntroCard: View {
+    let stage: Stage
+    let hint: String
+    let close: () -> Void
+
+    var body: some View {
+        VStack(spacing: 10) {
+            Text("\(stage.id)  \(StageBook.world(stage.world).name)").font(Theme.label(13)).foregroundStyle(Theme.inkSoft)
+            Text(stage.goal.label).font(Theme.title(24)).foregroundStyle(Theme.ink)
+            Text(hint).font(Theme.body(15)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
+            Button("わかった", action: close).buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
+        }
+        .frame(maxWidth: 300)
+        .card()
     }
 }
 
@@ -110,6 +153,8 @@ struct TableCanvas: View {
             drawFrame(&ctx, full: full, pad: pad)
             ctx.translateBy(x: pad, y: pad)
             drawFelt(&ctx, rules: rules)
+            drawWarps(&ctx)
+            drawWalls(&ctx)
             drawBumpers(&ctx)
             drawBalls(&ctx)
             let aim = game.aim
@@ -145,7 +190,16 @@ struct TableCanvas: View {
     private func drawFelt(_ ctx: inout GraphicsContext, rules: Rules) {
         let r = CGRect(x: 0, y: 0, width: rules.width, height: rules.height)
         let shape = rounded(r, 8)
-        ctx.fill(shape, with: .color(Theme.felt(game.table)))
+        let felt = game.mode.stage.map { Color(hex: StageBook.world($0.world).felt) } ?? Theme.felt(game.table)
+        ctx.fill(shape, with: .color(felt))
+        if game.engine.isIce {
+            // こおり：白い斜めのつや
+            for i in stride(from: -560.0, to: 360, by: 70) {
+                var p = Path()
+                p.move(to: CGPoint(x: i, y: rules.height)); p.addLine(to: CGPoint(x: i + rules.height, y: 0))
+                ctx.stroke(p, with: .color(.white.opacity(0.13)), lineWidth: 14)
+            }
+        }
         ctx.fill(shape, with: .radialGradient(Gradient(colors: [.white.opacity(0.16), .black.opacity(0.12)]),
                                              center: CGPoint(x: r.midX, y: r.height * 0.45), startRadius: 30, endRadius: r.height * 0.7))
         var line = Path()
@@ -157,7 +211,14 @@ struct TableCanvas: View {
 
     private func drawBumpers(_ ctx: inout GraphicsContext) {
         for b in game.engine.bumpers {
-            let c = CGPoint(x: b.center.x, y: b.center.y)
+            let cv = b.center(at: game.engine.time)
+            let c = CGPoint(x: cv.x, y: cv.y)
+            if b.amplitude > 0 {
+                var rail = Path()
+                let a = b.base + b.axis * b.amplitude, z = b.base - b.axis * b.amplitude
+                rail.move(to: CGPoint(x: a.x, y: a.y)); rail.addLine(to: CGPoint(x: z.x, y: z.y))
+                ctx.stroke(rail, with: .color(.white.opacity(0.35)), style: StrokeStyle(lineWidth: 4, lineCap: .round, dash: [2, 7]))
+            }
             let r = b.radius * (1 + b.squash * 0.18)
             ctx.fill(CharacterArt.circle(CGPoint(x: c.x + 2, y: c.y + 5), b.radius), with: .color(Color(hex: 0x0A1446).opacity(0.22)))
             ctx.fill(CharacterArt.circle(c, r), with: .color(Theme.bumper))
@@ -173,7 +234,42 @@ struct TableCanvas: View {
             let age = game.engine.time - b.born
             let s = age < 0.3 ? Self.easeOutBack(age / 0.3) : 1
             let bob = abs(sin(game.clock * 2.2 + b.phase)) * 2
-            Self.drawBall(&ctx, at: CGPoint(x: b.center.x, y: b.center.y), number: b.number, radius: 10, scale: max(0.01, s), lift: bob)
+            if b.kind == .ghost {
+                let awake = game.engine.ghostsAwake
+                var g = ctx
+                g.opacity = awake ? 0.95 : 0.4
+                Self.drawBall(&g, at: CGPoint(x: b.center.x, y: b.center.y), number: b.number, radius: 10, scale: max(0.01, s), lift: bob)
+                let ring = CharacterArt.circle(CGPoint(x: b.center.x, y: b.center.y - bob), 15 + (awake ? sin(game.clock * 10) * 2 : 0))
+                ctx.stroke(ring, with: .color(awake ? Color(hex: 0xC3B1EE) : .white.opacity(0.6)), style: StrokeStyle(lineWidth: 2, dash: awake ? [] : [3, 4]))
+            } else {
+                Self.drawBall(&ctx, at: CGPoint(x: b.center.x, y: b.center.y), number: b.number, radius: 10, scale: max(0.01, s), lift: bob)
+            }
+        }
+    }
+
+    private func drawWalls(_ ctx: inout GraphicsContext) {
+        for w in game.engine.walls {
+            var p = Path()
+            p.move(to: CGPoint(x: w.a.x, y: w.a.y)); p.addLine(to: CGPoint(x: w.b.x, y: w.b.y))
+            ctx.stroke(p.offsetBy(dx: 2, dy: 4), with: .color(Color(hex: 0x0A1446).opacity(0.22)), style: StrokeStyle(lineWidth: Wall.thickness * 2, lineCap: .round))
+            ctx.stroke(p, with: .color(Theme.ink), style: StrokeStyle(lineWidth: Wall.thickness * 2 + 3, lineCap: .round))
+            ctx.stroke(p, with: .color(Theme.wood), style: StrokeStyle(lineWidth: Wall.thickness * 2 - 1, lineCap: .round))
+        }
+    }
+
+    private func drawWarps(_ ctx: inout GraphicsContext) {
+        let colors = [Color(hex: 0xC3B1EE), Color(hex: 0x8FD9B6)]
+        for (i, w) in game.engine.warps.enumerated() {
+            for v in [w.a, w.b] {
+                let c = CGPoint(x: v.x, y: v.y)
+                ctx.fill(CharacterArt.circle(c, Warp.radius + 4), with: .color(colors[i % 2]))
+                ctx.fill(CharacterArt.circle(c, Warp.radius), with: .color(Theme.ink))
+                let t = game.clock * 2
+                for k in 0..<3 {
+                    let rr = Warp.radius * (0.3 + 0.7 * ((t + Double(k) / 3).truncatingRemainder(dividingBy: 1)))
+                    ctx.stroke(CharacterArt.circle(c, rr), with: .color(colors[i % 2].opacity(0.7)), lineWidth: 1.5)
+                }
+            }
         }
     }
 
@@ -215,7 +311,15 @@ struct TableCanvas: View {
 
     private func drawSnake(_ ctx: inout GraphicsContext, aim: (direction: Vec, power: Double)?) {
         let e = game.engine
-        CharacterArt.drawBody(&ctx, points: e.path.map { CGPoint(x: $0.x, y: $0.y) }, width: e.rules.bodyRadius * 2, character: game.character)
+        // ワープした所で線を切る
+        var runs: [[CGPoint]] = [[]]
+        for (i, v) in e.path.enumerated() {
+            if i < e.jumps.count, e.jumps[i], !(runs.last?.isEmpty ?? true) { runs.append([]) }
+            runs[runs.count - 1].append(CGPoint(x: v.x, y: v.y))
+        }
+        for run in runs where run.count >= 2 {
+            CharacterArt.drawBody(&ctx, points: run, width: e.rules.bodyRadius * 2, character: game.character)
+        }
         let h = CGPoint(x: e.head.x, y: e.head.y)
         ctx.fill(CharacterArt.ellipse(CGPoint(x: h.x + 2, y: h.y + 5), e.rules.headRadius, e.rules.headRadius * 0.8), with: .color(Color(hex: 0x0A1446).opacity(0.22)))
         let look = aim.map { CGVector(dx: $0.direction.x, dy: $0.direction.y) } ?? CGVector(dx: e.direction.x, dy: e.direction.y)

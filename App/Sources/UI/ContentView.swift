@@ -14,6 +14,8 @@ struct ContentView: View {
                     if let g = app.game { GameView(game: g).id(ObjectIdentifier(g)) } else { HomeView() }
                 case .collection: CollectionView()
                 case .capsule: CapsuleView()
+                case .worlds: WorldsView()
+                case .stages(let w): StagesView(world: w)
                 }
             }
             .frame(maxWidth: 560)

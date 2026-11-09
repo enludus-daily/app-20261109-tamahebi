@@ -3,21 +3,25 @@ import SwiftUI
 enum PlayMode: Equatable, Sendable {
     case daily(String)   // 日付（YYYY-MM-DD）
     case random(UInt32)
+    case stage(Stage)
 
     var seed: UInt32 {
         switch self {
         case .daily(let day): SeededRandom.seed(from: "tamahebi-" + day)
         case .random(let s): s
+        case .stage: 0
         }
     }
     var isDaily: Bool { if case .daily = self { true } else { false } }
+    var stage: Stage? { if case .stage(let s) = self { s } else { nil } }
 }
 
 enum Route: Equatable {
-    case home, game, collection, capsule
+    case home, game, collection, capsule, worlds
+    case stages(Int)
 }
 
-/// アプリ全体の状態：進み具合（端末に保存）・課金・いまの画面
+/// アプリ全体の状態：進み具合（端末に保存）・課金・ステージ・いまの画面
 @MainActor
 @Observable
 final class AppModel {
@@ -29,6 +33,7 @@ final class AppModel {
     var game: GameModel?
     let store: PurchaseStore
     let bundleID: String
+    let book: [Stage]
 
     var isPro: Bool { store.entitlements.isPro }
     var today: String { Progress.dayKey(Date()) }
@@ -42,6 +47,12 @@ final class AppModel {
         } else {
             progress = Progress()
         }
+        if let url = Bundle.main.url(forResource: "stages", withExtension: "json"),
+           let data = try? Data(contentsOf: url), let b = try? StageBook.decode(data) {
+            book = b
+        } else {
+            book = []
+        }
     }
 
     private func save() {
@@ -53,31 +64,64 @@ final class AppModel {
         progress.normalize(isPro: isPro)
     }
 
+    // MARK: ステージ
+
+    func stages(in world: Int) -> [Stage] { book.filter { $0.world == world } }
+
+    func isUnlocked(_ s: Stage) -> Bool { progress.isUnlocked(s, in: book, isPro: isPro) }
+
+    /// 次に遊ぶステージ（まだ解いていない最初の、遊べるステージ）
+    var nextStage: Stage? {
+        book.first { progress.stars(of: $0.id) == 0 && isUnlocked($0) }
+    }
+
+    func stage(after s: Stage) -> Stage? {
+        guard let i = book.firstIndex(where: { $0.id == s.id }), i + 1 < book.count else { return nil }
+        return book[i + 1]
+    }
+
+    var totalStageStars: Int { book.reduce(0) { $0 + progress.stars(of: $1.id) } }
+
     // MARK: 遊ぶ
 
     func play(_ mode: PlayMode) {
-        game = GameModel(mode: mode, character: progress.selectedCharacter, table: progress.table)
+        let (look, rules) = progress.playable(progress.selectedCharacter)
+        game = GameModel(mode: mode, character: look, rules: rules, table: progress.table)
         route = .game
     }
 
     func playDaily() { play(.daily(today)) }
     func playRandom() { play(.random(UInt32.random(in: 0...UInt32.max))) }
+    func playStage(_ s: Stage) {
+        guard isUnlocked(s) else { showPro = StageBook.world(s.world).isPro && !isPro; return }
+        play(.stage(s))
+    }
 
     func replay() {
         guard let g = game else { return playDaily() }
         if case .random = g.mode { playRandom() } else { play(g.mode) }
     }
 
-    /// 遊び終わりに GameModel から呼ばれる
-    func finish(_ g: GameModel) -> Reward {
-        let day: String = { if case .daily(let d) = g.mode { d } else { today } }()
-        let reward = progress.recordGame(score: g.engine.score, eaten: g.engine.eaten, isDaily: g.mode.isDaily, day: day, isPro: isPro)
-        return reward
+    func leaveGame() {
+        if let s = game?.mode.stage { route = .stages(s.world) } else { route = .home }
     }
 
-    /// 価値を感じた直後（2 回目に遊び終えたとき）に 1 回だけ Pro を見せる
-    func maybeShowProAfterGame() {
-        guard !isPro, !progress.hasSeenPaywall, progress.gamesPlayed >= 2 else { return }
+    /// 遊び終わりに GameModel から呼ばれる
+    func finish(_ g: GameModel) -> GameModel.Summary {
+        if let s = g.mode.stage {
+            let stars: Int = { if case .cleared(let n) = g.engine.outcome { n } else { 0 } }()
+            let r = progress.recordStage(s.id, stars: stars, eaten: g.engine.eaten, isPro: isPro)
+            return .stage(r)
+        }
+        let day: String = { if case .daily(let d) = g.mode { d } else { today } }()
+        return .daily(progress.recordGame(score: g.engine.score, eaten: g.engine.eaten, isDaily: g.mode.isDaily, day: day, isPro: isPro))
+    }
+
+    /// 価値を感じた直後に 1 回だけ Pro を見せる：無料のステージ（ワールド 3）を最後まで解いたとき、か、遊び終わり 5 回目
+    func maybeShowProAfterGame(_ g: GameModel) {
+        guard !isPro, !progress.hasSeenPaywall else { return }
+        let finishedFree = g.mode.stage?.id == "3-12" && progress.stars(of: "3-12") > 0
+        guard finishedFree || progress.gamesPlayed >= 5 else { return }
         progress.hasSeenPaywall = true
         showPro = true
     }
@@ -86,6 +130,10 @@ final class AppModel {
 
     func select(_ c: Character) {
         _ = progress.select(c, isPro: isPro)
+    }
+
+    func wear(_ k: Costume, on c: Character) {
+        _ = progress.wear(k, on: c)
     }
 
     func pull() -> PullResult? {
@@ -100,23 +148,39 @@ final class AppModel {
     // MARK: 撮影用（CI のスクリーンショット。起動引数 -screenshotScene <名前>）
 
     func applyScreenshotScene(_ scene: String) {
+        func sample() {
+            progress.owned = ["tama", "mint", "soda", "momo", "kurosuke", "wataame", "kirari"]
+            progress.levels = ["tama": 3, "mint": 2, "kurosuke": 4, "momo": 1, "soda": 1, "wataame": 1, "kirari": 2]
+            for s in book.prefix(9) { progress.stageStars[s.id] = [3, 3, 2, 3, 1, 3, 2, 3, 2][book.firstIndex(of: s)! % 9] }
+        }
         switch scene {
         case "game":
+            sample()
+            if let s = book.first(where: { $0.id == "2-4" }) { play(.stage(s)) }
+            game?.demoAim()
+        case "daily":
             play(.daily("2026-11-09"))
             game?.demoAim()
         case "result":
-            progress.gamesPlayed = 0
-            play(.daily("2026-11-09"))
-            game?.autoplayToEnd(app: self)
+            sample()
+            if let s = book.first(where: { $0.id == "1-10" }) { play(.stage(s)); game?.autoplaySolution(app: self) }
+        case "worlds":
+            sample()
+            route = .worlds
+        case "stages":
+            sample()
+            route = .stages(1)
         case "collection":
-            progress.owned = ["tama", "mint", "soda", "kurosuke", "wataame", "kirari"]
+            sample()
             route = .collection
         case "capsule":
+            sample()
             progress.snacks = 480
             route = .capsule
         case "pro":
             showPro = true
         default:
+            sample()
             progress.streak = 3
             progress.bestByDay[today] = 184
         }

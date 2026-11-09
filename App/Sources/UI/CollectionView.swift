@@ -24,7 +24,7 @@ struct CollectionView: View {
         .padding(.vertical, 8)
         .sheet(item: $detail) { c in
             CharacterDetail(character: c)
-                .presentationDetents([.medium])
+                .presentationDetents([.large])
                 .presentationBackground(Theme.cream)
         }
     }
@@ -45,13 +45,15 @@ struct CollectionView: View {
     private func tile(_ c: Character) -> some View {
         let owned = app.progress.owns(c, isPro: app.isPro)
         let selected = app.progress.selected == c.id
+        let level = app.progress.level(of: c)
+        let look = owned ? c.wearing(app.progress.costume(of: c)) : c
         return Button {
             Feedback.tap()
             if owned { detail = c } else if c.rarity == .pro { app.showPro = true } else { app.route = .capsule }
         } label: {
             VStack(spacing: 4) {
                 ZStack(alignment: .topTrailing) {
-                    CharacterPortrait(character: c, face: owned ? (selected ? .happy : .idle) : .sleep, showBody: false, silhouette: !owned)
+                    CharacterPortrait(character: look, face: owned ? (selected ? .happy : .idle) : .sleep, showBody: false, silhouette: !owned)
                         .frame(height: 76)
                     if c.rarity == .pro && !owned {
                         Image(systemName: "lock.fill").font(.system(size: 12, weight: .bold)).foregroundStyle(Theme.ink)
@@ -59,6 +61,7 @@ struct CollectionView: View {
                     }
                 }
                 Text(owned ? c.name : "？？？").font(Theme.label(13)).foregroundStyle(Theme.ink)
+                if owned { Hearts(level: level, size: 9) }
                 Text(c.rarity.label).font(Theme.body(10)).foregroundStyle(Theme.ink)
                     .padding(.horizontal, 6).padding(.vertical, 1)
                     .background(Capsule().fill(Theme.rarity(c.rarity)))
@@ -69,7 +72,7 @@ struct CollectionView: View {
             .overlay(RoundedRectangle(cornerRadius: 18).stroke(Theme.ink, lineWidth: selected ? 4 : Theme.line))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(owned ? "\(c.name)、\(c.rarity.label)\(selected ? "、えらんでいる" : "")" : "まだ会っていない\(c.rarity.label)のなかま")
+        .accessibilityLabel(owned ? "\(c.name)、\(c.rarity.label)、なかよし Lv\(level)\(selected ? "、えらんでいる" : "")" : "まだ会っていない\(c.rarity.label)のなかま")
     }
 
     private var tablePicker: some View {
@@ -111,26 +114,84 @@ struct CharacterDetail: View {
     let character: Character
 
     var body: some View {
-        VStack(spacing: 12) {
-            CharacterPortrait(character: character, face: .happy)
-                .frame(width: 220, height: 160)
-            Text(character.name).font(Theme.title(28)).foregroundStyle(Theme.ink)
-            Text(character.rarity.label).font(Theme.label(12)).foregroundStyle(Theme.ink)
-                .padding(.horizontal, 10).padding(.vertical, 2)
-                .background(Capsule().fill(Theme.rarity(character.rarity)))
-            Text(character.line).font(Theme.body(15)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
-            Label("とくい：\(character.perk.label)", systemImage: "sparkle")
-                .font(Theme.body(13)).foregroundStyle(Theme.inkSoft)
-            Button(app.progress.selected == character.id ? "いっしょに遊んでいる" : "この子で遊ぶ") {
-                app.select(character)
-                Feedback.bonus()
-                dismiss()
+        let level = app.progress.level(of: character)
+        let costume = app.progress.costume(of: character)
+        ScrollView {
+            VStack(spacing: 12) {
+                CharacterPortrait(character: character.wearing(costume), face: .happy)
+                    .frame(width: 220, height: 160)
+                Text(character.name).font(Theme.title(28)).foregroundStyle(Theme.ink)
+                HStack(spacing: 8) {
+                    Text(character.rarity.label).font(Theme.label(12)).foregroundStyle(Theme.ink)
+                        .padding(.horizontal, 10).padding(.vertical, 2)
+                        .background(Capsule().fill(Theme.rarity(character.rarity)))
+                    Hearts(level: level, size: 13)
+                    Text("なかよし Lv\(level)").font(Theme.label(12)).foregroundStyle(Theme.ink)
+                }
+                Text(character.line).font(Theme.body(15)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
+                Label("とくい：\(character.perk.label(level: level))", systemImage: "sparkle")
+                    .font(Theme.body(13)).foregroundStyle(Theme.ink).multilineTextAlignment(.leading)
+                if level < Roster.maxLevel && character.rarity != .pro {
+                    Text("次の Lv\(level + 1)：\(nextUnlock(level + 1))（カプセルでもう一度会うと上がる）")
+                        .font(Theme.body(12)).foregroundStyle(Theme.inkSoft).multilineTextAlignment(.center)
+                }
+                HStack(spacing: 10) {
+                    ForEach(Costume.allCases, id: \.self) { k in
+                        let ok = k.requiredLevel <= level
+                        Button {
+                            Feedback.tap()
+                            app.wear(k, on: character)
+                        } label: {
+                            VStack(spacing: 2) {
+                                CharacterPortrait(character: character.wearing(k), face: .idle, showBody: false, silhouette: !ok)
+                                    .frame(width: 60, height: 48)
+                                Text(ok ? k.label : "Lv\(k.requiredLevel)").font(Theme.body(11)).foregroundStyle(Theme.ink)
+                            }
+                            .padding(6)
+                            .background(RoundedRectangle(cornerRadius: 12).fill(costume == k ? Theme.sun.opacity(0.6) : Theme.paper))
+                            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Theme.ink, lineWidth: costume == k ? 3 : 1.5))
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(!ok)
+                        .accessibilityLabel("きせかえ \(k.label)\(ok ? "" : "、なかよし Lv\(k.requiredLevel) で使える")")
+                    }
+                }
+                Button(app.progress.selected == character.id ? "いっしょに遊んでいる" : "この子で遊ぶ") {
+                    app.select(character)
+                    Feedback.bonus()
+                    dismiss()
+                }
+                .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
+                .disabled(app.progress.selected == character.id)
+                .padding(.horizontal, 24)
             }
-            .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
-            .disabled(app.progress.selected == character.id)
-            .padding(.horizontal, 24)
+            .padding(20)
         }
-        .padding(20)
+    }
+
+    private func nextUnlock(_ l: Int) -> String {
+        switch l {
+        case 2: "きせかえ「パステル」"
+        case 3: "とくいが強くなる"
+        case 4: "きせかえ「よるいろ」"
+        default: "とくいがいちばん強くなる"
+        }
+    }
+}
+
+/// なかよし度のハート（5 こ）
+struct Hearts: View {
+    let level: Int
+    var size: CGFloat = 10
+    var body: some View {
+        HStack(spacing: 1) {
+            ForEach(0..<Roster.maxLevel, id: \.self) { i in
+                Image(systemName: i < level ? "heart.fill" : "heart")
+                    .font(.system(size: size, weight: .bold))
+                    .foregroundStyle(i < level ? Color(hex: 0xF7A9C4) : Theme.disabled)
+            }
+        }
+        .accessibilityHidden(true)
     }
 }
 

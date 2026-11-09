@@ -4,6 +4,10 @@ import SwiftUI
 @MainActor
 @Observable
 final class GameModel {
+    enum Summary: Equatable {
+        case daily(Reward)
+        case stage(StageReward)
+    }
     struct Pop: Identifiable {
         let id = UUID()
         let text: String
@@ -34,17 +38,20 @@ final class GameModel {
     private(set) var clock = 0.0
     private var lastDate: Date?
     private var lastPowerStep = 0
-    private(set) var reward: Reward?
-    private(set) var shake = 0.0
+    private(set) var summary: Summary?
     var onFinish: ((GameModel) -> Void)?
 
     static let maxPull: CGFloat = 120
 
-    init(mode: PlayMode, character: Character, table: TableTheme) {
+    init(mode: PlayMode, character: Character, rules: Rules, table: TableTheme) {
         self.mode = mode
         self.character = character
         self.table = table
-        engine = GameEngine(seed: mode.seed, rules: character.rules)
+        if let s = mode.stage {
+            engine = GameEngine(stage: s, rules: rules)
+        } else {
+            engine = GameEngine(seed: mode.seed, rules: rules)
+        }
     }
 
     var isAiming: Bool { aimStart != nil }
@@ -70,10 +77,20 @@ final class GameModel {
         return .idle
     }
 
+    /// おだいの進み具合（ステージ）
+    var goalText: String? {
+        guard let s = mode.stage else { return nil }
+        switch s.goal.kind {
+        case .eatAll: return "のこり \(engine.balls.count) こ"
+        case .eatEight: return engine.ateEight ? "8 番 OK！" : "8 番球をねらえ"
+        case .score: return "\(engine.score) / \(s.goal.target)"
+        }
+    }
+
     // MARK: 操作
 
     func beginAim(at p: CGPoint) {
-        guard engine.canShoot, reward == nil else { return }
+        guard engine.canShoot, summary == nil else { return }
         aimStart = p
         aimNow = p
         lastPowerStep = 0
@@ -108,7 +125,6 @@ final class GameModel {
 
     private func step(_ dt: Double) {
         clock += dt
-        shake = max(0, shake - dt)
         for e in engine.advance(by: dt) { handle(e) }
         for i in sparks.indices where !sparks[i].ring {
             sparks[i].at.x += sparks[i].velocity.dx * dt
@@ -125,10 +141,18 @@ final class GameModel {
         faceUntil = clock + seconds
     }
 
+    private func pop(_ text: String, at p: CGPoint, color: Color = .white, big: Bool = false) {
+        pops.append(Pop(text: text, at: p, color: color, born: clock, big: big))
+    }
+
+    private var center: CGPoint { CGPoint(x: engine.rules.width / 2, y: engine.rules.height * 0.42) }
+
     private func handle(_ e: GameEvent) {
         switch e {
         case .rail(let speed):
             Feedback.rail(speed: speed)
+        case .wall:
+            Feedback.rail(speed: 600)
         case .bumper:
             Feedback.bumper()
             setFace(.bonk, for: 0.35)
@@ -136,29 +160,44 @@ final class GameModel {
             Feedback.body()
             sparks.append(Spark(at: CGPoint(x: at.x, y: at.y), velocity: .zero, color: .white, born: clock, ring: true))
             setFace(.bonk, for: 0.35)
+        case .warp(let from, let to):
+            Feedback.body()
+            for p in [from, to] {
+                sparks.append(Spark(at: CGPoint(x: p.x, y: p.y), velocity: .zero, color: .white, born: clock, ring: true))
+            }
+        case .ghostAwake:
+            Feedback.bonus()
+            pop("ゴースト球がおきた！", at: CGPoint(x: engine.head.x, y: engine.head.y - 26), color: Color(hex: 0xC3B1EE))
         case .eat(let number, let combo, let points, let at):
             Feedback.eat(combo: combo)
             setFace(.happy, for: 0.7)
             let c = CGPoint(x: at.x, y: at.y)
-            pops.append(Pop(text: (combo > 1 ? "×\(combo) " : "") + "+\(points)", at: c,
-                            color: number == 8 ? Theme.sun : .white, born: clock, big: false))
+            pop((combo > 1 ? "×\(combo) " : "") + "+\(points)", at: c, color: number == 8 ? Theme.sun : .white)
             for k in 0..<12 {
                 let a = Double(k) / 12 * 2 * .pi
                 sparks.append(Spark(at: c, velocity: CGVector(dx: cos(a) * 150, dy: sin(a) * 150), color: Theme.ball(number), born: clock, ring: false))
             }
         case .bonusShot:
             Feedback.bonus()
-            pops.append(Pop(text: "ボーナスショット +1", at: CGPoint(x: engine.rules.width / 2, y: engine.rules.height * 0.42),
-                            color: Theme.sun, born: clock, big: true))
+            pop("ボーナスショット +1", at: center, color: Theme.sun, big: true)
         case .stopped(let ateAny):
-            if !ateAny { setFace(.oops, for: 0.9); Feedback.miss() }
+            if !ateAny, !engine.isFinished { setFace(.oops, for: 0.9); Feedback.miss() }
+        case .cleared:
+            Feedback.finished()
+            setFace(.full, for: 3)
+            pop("クリア！", at: center, color: Theme.sun, big: true)
+            onFinish?(self)
+        case .failed:
+            Feedback.miss()
+            setFace(.sad, for: 3)
+            onFinish?(self)
         case .finished:
             Feedback.finished()
             onFinish?(self)
         }
     }
 
-    func setReward(_ r: Reward) { reward = r }
+    func setSummary(_ s: Summary) { summary = s }
 
     // MARK: 撮影用
 
@@ -168,15 +207,12 @@ final class GameModel {
         aimNow = CGPoint(x: h.x + 30, y: h.y + 40)
     }
 
-    func autoplayToEnd(app: AppModel) {
-        var turn = 0
-        while !engine.isFinished, turn < 40 {
-            turn += 1
-            let target = engine.balls.first.map { CGPoint(x: $0.center.x, y: $0.center.y) } ?? CGPoint(x: 180, y: 100)
-            let d = Vec(x: target.x - engine.head.x, y: target.y - engine.head.y)
-            engine.shoot(direction: d, power: 0.55)
-            for _ in 0..<3000 where engine.isMoving { _ = engine.advance(by: 1.0 / 120) }
+    func autoplaySolution(app: AppModel) {
+        guard let s = mode.stage else { return }
+        for shot in s.solution where !engine.isFinished {
+            engine.shoot(shot)
+            _ = engine.runUntilStopped()
         }
-        setReward(app.finish(self))
+        setSummary(app.finish(self))
     }
 }

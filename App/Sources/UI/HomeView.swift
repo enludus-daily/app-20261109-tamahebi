@@ -38,12 +38,22 @@ struct HomeView: View {
                     .font(Theme.label(12)).foregroundStyle(Theme.cream)
                     .padding(.horizontal, 10).padding(.vertical, 3)
                     .background(Capsule().fill(Theme.ink))
+                Button {
+                    if let n = app.nextStage { app.playStage(n) } else { app.route = .worlds }
+                } label: {
+                    VStack(spacing: 0) {
+                        Text(app.nextStage.map { "ステージ \($0.id) へ" } ?? "ステージをえらぶ")
+                        Text("★ \(app.totalStageStars)/\(app.book.count * 3)").font(Theme.body(11))
+                    }
+                }
+                .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white, height: 62))
+                HStack(spacing: 10) {
+                    Button("きょうの台") { app.playDaily() }
+                        .buttonStyle(ChunkyButtonStyle(fill: app.progress.best(on: app.today) == nil ? Theme.sun : Theme.cream))
+                    Button("ステージ一覧") { app.route = .worlds }
+                        .buttonStyle(ChunkyButtonStyle())
+                }
                 todayLine
-                Button("きょうの台であそぶ") { app.playDaily() }
-                    .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white, height: 60))
-                    .font(Theme.title(20))
-                Button("ランダム台") { app.playRandom() }
-                    .buttonStyle(ChunkyButtonStyle())
                 HStack(spacing: 10) {
                     Button { app.route = .collection } label: {
                         Label("なかま \(app.progress.owned.count + (app.isPro ? Roster.proOnly.count : 0))/\(Roster.all.count)", systemImage: "person.2.fill")

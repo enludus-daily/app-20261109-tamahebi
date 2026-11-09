@@ -105,19 +105,30 @@ struct CapsuleView: View {
 
     private func reveal(_ r: PullResult) -> some View {
         VStack(spacing: 8) {
-            Text(r.isNew ? "あたらしいなかま！" : "また会えたね").font(Theme.title(18)).foregroundStyle(Theme.ink)
-            CharacterPortrait(character: r.character, face: .happy).frame(width: 200, height: 150)
+            Text(r.isNew ? "あたらしいなかま！" : (r.levelUp != nil ? "なかよし度アップ！" : "また会えたね")).font(Theme.title(18)).foregroundStyle(Theme.ink)
+            CharacterPortrait(character: r.character.wearing(app.progress.costume(of: r.character)), face: .happy).frame(width: 200, height: 150)
+            if !r.isNew {
+                HStack(spacing: 6) {
+                    Hearts(level: app.progress.level(of: r.character), size: 16)
+                    Text("Lv\(app.progress.level(of: r.character))").font(Theme.title(16)).foregroundStyle(Theme.ink)
+                }
+                if let u = r.unlocked {
+                    Text(u).font(Theme.label(14)).foregroundStyle(Theme.ink)
+                        .padding(.horizontal, 10).padding(.vertical, 4)
+                        .background(Capsule().fill(Color(hex: 0xF7A9C4).opacity(0.5)))
+                }
+            }
             Text(r.character.name).font(Theme.title(30)).foregroundStyle(Theme.ink)
             Text(r.character.rarity.label).font(Theme.label(12)).foregroundStyle(Theme.ink)
                 .padding(.horizontal, 10).padding(.vertical, 2)
                 .background(Capsule().fill(Theme.rarity(r.character.rarity)))
             Text(r.character.line).font(Theme.body(14)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
-            Label("とくい：\(r.character.perk.label)", systemImage: "sparkle").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
-            if !r.isNew {
+            Label("とくい：\(r.character.perk.label(level: app.progress.level(of: r.character)))", systemImage: "sparkle").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
+            if r.refund > 0 {
                 HStack(spacing: 4) { SnackIcon(size: 16); Text("おかえし +\(r.refund)").font(Theme.label(13)) }.foregroundStyle(Theme.ink)
             }
             HStack(spacing: 10) {
-                Button("この子で遊ぶ") { app.select(r.character); app.playDaily() }
+                Button("この子にする") { app.select(r.character); Feedback.tap(); withAnimation { phase = .idle; result = nil } }
                     .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
                 Button("とじる") { withAnimation { phase = .idle; result = nil } }
                     .buttonStyle(ChunkyButtonStyle())
@@ -183,7 +194,7 @@ struct RatesSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 Text("出るなかまと確率").font(Theme.title(22)).foregroundStyle(Theme.ink)
-                Text("カプセルは遊んでためたおやつだけで回せます。お金では回せません。かぶったときは、おやつが \(Progress.duplicateRefund) 返ってきます。Pro 限定のなかまはカプセルからは出ません。")
+                Text("カプセルは遊んでためたおやつだけで回せます。お金では回せません。同じ子にもう一度会うと、なかよし度が上がります（Lv5 まで。Lv2・Lv4 できせかえ、Lv3・Lv5 でとくいが強くなる）。Lv5 の子に会ったときは、おやつが \(Progress.maxLevelRefund) 返ってきます。Pro 限定のなかまはカプセルからは出ません。")
                     .font(Theme.body(13)).foregroundStyle(Theme.inkSoft)
                 ForEach([Rarity.superRare, .rare, .common], id: \.self) { r in
                     VStack(alignment: .leading, spacing: 4) {

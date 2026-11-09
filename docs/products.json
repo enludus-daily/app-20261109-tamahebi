@@ -7,18 +7,18 @@
       "referenceName": "Pro",
       "price": 480,
       "familySharable": true,
-      "reviewNote": "Pro を買うと、限定のなかま3匹（ギンガ・サクラ・ホムラ）、遊ぶともらえるおやつ（ゲーム内ポイント。販売はしていません）が2倍、台のいろ3種が使えます。課金の画面はホーム右上の「Pro をみる」から開けます。",
+      "reviewNote": "Pro を買うと、ワールド4〜6（36ステージ）、限定のなかま3匹（ギンガ・サクラ・ホムラ）、遊ぶともらえるおやつ（ゲーム内ポイント。販売はしていません）が2倍、台のいろ3種が使えます。課金の画面はホーム右上の「Pro をみる」から開けます。",
       "reviewScreenshot": "docs/iap/paywall.png",
       "localizations": [
         {
           "locale": "ja",
           "name": "タマヘビ Pro",
-          "description": "限定のなかま3匹・おやつ2倍・台のいろ3種"
+          "description": "追加の36ステージ・限定なかま3匹・おやつ2倍"
         },
         {
           "locale": "en-US",
           "name": "Tamahebi Pro",
-          "description": "3 exclusive friends, 2x snacks, table colors"
+          "description": "36 more stages, 3 friends, 2x snacks"
         }
       ]
     }

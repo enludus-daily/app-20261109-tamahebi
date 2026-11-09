@@ -102,9 +102,12 @@ struct EngineTests {
     }
 
     @Test func perksChangeTheRules() {
-        #expect(Roster.character("hakka").rules.previewBounces == Rules.standard.previewBounces + 1)
-        #expect(Roster.character("wataame").rules.growPerBall > Rules.standard.growPerBall)
-        #expect(Roster.character("kurosuke").rules.eightBallChance > Rules.standard.eightBallChance)
-        #expect(Roster.character("tama").rules == Rules.standard)
+        #expect(Roster.character("hakka").rules().previewBounces == Rules.standard.previewBounces + 1)
+        #expect(Roster.character("hakka").rules(level: 3).previewBounces == Rules.standard.previewBounces + 2)
+        #expect(Roster.character("wataame").rules().growPerBall > Rules.standard.growPerBall)
+        #expect(Roster.character("kurosuke").rules().eightBallChance > Rules.standard.eightBallChance)
+        #expect(Roster.character("mint").rules().iceFactor > Rules.standard.iceFactor)
+        #expect(Roster.character("ramune").rules(level: 3).extraStageShots == 2)
+        #expect(Roster.character("tama").rules() == Rules.standard)
     }
 }

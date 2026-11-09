@@ -41,7 +41,7 @@ struct ProgressTests {
         var rng = SeededRandom(seed: 1)
         let r = p.pull(using: &rng)
         try #require(r != nil)
-        #expect(p.snacks == Progress.startingSnacks - Progress.capsuleCost + (r!.isNew ? 0 : Progress.duplicateRefund))
+        #expect(p.snacks == Progress.startingSnacks - Progress.capsuleCost)
         #expect(p.owned.contains(r!.character.id))
         #expect(r!.character.rarity != .pro)
     }
@@ -54,14 +54,73 @@ struct ProgressTests {
         #expect(p.snacks == Progress.capsuleCost - 1)
     }
 
-    @Test func duplicatesRefundSnacks() {
+    @Test func duplicatesRaiseFriendship() throws {
         var p = Progress()
         p.owned = Set(Roster.capsulePool.map(\.id))
         p.snacks = 1000
         var rng = SeededRandom(seed: 2)
-        let r = p.pull(using: &rng)!
+        let pulled = p.pull(using: &rng)
+        let r = try #require(pulled)
         #expect(!r.isNew)
-        #expect(p.snacks == 1000 - Progress.capsuleCost + Progress.duplicateRefund)
+        #expect(r.levelUp == 2)
+        #expect(r.unlocked != nil)
+        #expect(p.level(of: r.character) == 2)
+        #expect(p.snacks == 1000 - Progress.capsuleCost)
+    }
+
+    @Test func maxLevelDuplicatesRefundSnacks() throws {
+        var p = Progress()
+        p.owned = Set(Roster.capsulePool.map(\.id))
+        for c in Roster.capsulePool { p.levels[c.id] = Roster.maxLevel }
+        p.snacks = 1000
+        var rng = SeededRandom(seed: 2)
+        let pulled = p.pull(using: &rng)
+        let r = try #require(pulled)
+        #expect(r.levelUp == nil)
+        #expect(p.snacks == 1000 - Progress.capsuleCost + Progress.maxLevelRefund)
+    }
+
+    @Test func costumesNeedFriendship() {
+        var p = Progress()
+        let tama = Roster.character("tama")
+        let early = p.wear(.pastel, on: tama)
+        #expect(!early)
+        p.levels["tama"] = 2
+        let ok = p.wear(.pastel, on: tama)
+        #expect(ok)
+        #expect(p.costume(of: tama) == .pastel)
+        #expect(p.playable(tama).look.body != tama.body)
+        let night = p.wear(.night, on: tama)
+        #expect(!night)
+    }
+
+    @Test func proFriendsStartStrong() {
+        let p = Progress()
+        #expect(p.level(of: Roster.character("ginga")) == Progress.proCharacterLevel)
+        #expect(p.level(of: Roster.character("mint")) == 0)
+    }
+
+    @Test func stageRewardsOnlyNewStars() {
+        var p = Progress()
+        let first = p.recordStage("1-1", stars: 1, eaten: 1, isPro: false)
+        #expect(first.isFirstClear)
+        #expect(first.snacks == Progress.stageFirstClear + Progress.stagePerNewStar)
+        let again = p.recordStage("1-1", stars: 1, eaten: 1, isPro: false)
+        #expect(again.snacks == 0)
+        let better = p.recordStage("1-1", stars: 3, eaten: 1, isPro: false)
+        #expect(better.snacks == 2 * Progress.stagePerNewStar)
+        #expect(p.stars(of: "1-1") == 3)
+        _ = p.recordStage("1-1", stars: 2, eaten: 1, isPro: false)
+        #expect(p.stars(of: "1-1") == 3)
+    }
+
+    @Test func oldSavesStillLoad() throws {
+        let old = #"{"snacks":321,"owned":["tama","mint"],"selected":"mint","bestByDay":{},"streak":2,"totalEaten":5,"gamesPlayed":3,"pulls":1,"hasSeenPaywall":false,"table":"blue"}"#
+        let p = try JSONDecoder().decode(Progress.self, from: Data(old.utf8))
+        #expect(p.snacks == 321)
+        #expect(p.selected == "mint")
+        #expect(p.level(of: Roster.character("mint")) == 1)
+        #expect(p.stageStars.isEmpty)
     }
 
     @Test func ratesAddUpToOne() {
