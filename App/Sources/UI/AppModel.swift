@@ -36,12 +36,22 @@ final class AppModel {
     let book: [Stage]
 
     var isPro: Bool { store.entitlements.isPro }
+    var worldPackID: String { ProductID.pack("worlds", bundleID: bundleID) }
+    var friendPackID: String { ProductID.pack("friends", bundleID: bundleID) }
+    /// ワールド 7〜8（24 ステージ）
+    var hasWorldPack: Bool { store.entitlements.has(worldPackID) }
+    /// おやつ三姉妹（なかま 3 匹）
+    var hasFriendPack: Bool { store.entitlements.has(friendPackID) }
+
+    func owns(_ c: Character) -> Bool { progress.owns(c, isPro: isPro, friendPack: hasFriendPack) }
+    var ownedCount: Int { Roster.all.filter(owns).count }
     var today: String { Progress.dayKey(Date()) }
 
     init(defaults: UserDefaults = .standard) {
         bundleID = Bundle.main.bundleIdentifier ?? "com.enludus.daily.006"
         let pro = ProductID.pro(bundleID: bundleID)
-        store = PurchaseStore(productIDs: [pro], proProductIDs: [pro])
+        store = PurchaseStore(productIDs: [pro, ProductID.pack("worlds", bundleID: bundleID), ProductID.pack("friends", bundleID: bundleID)],
+                              proProductIDs: [pro])
         if let data = defaults.data(forKey: Self.key), let p = try? JSONDecoder().decode(Progress.self, from: data) {
             progress = p
         } else {
@@ -61,14 +71,17 @@ final class AppModel {
 
     func onLaunch() async {
         await store.load()
-        progress.normalize(isPro: isPro)
+        progress.normalize(isPro: isPro, friendPack: hasFriendPack)
     }
 
     // MARK: ステージ
 
     func stages(in world: Int) -> [Stage] { book.filter { $0.world == world } }
 
-    func isUnlocked(_ s: Stage) -> Bool { progress.isUnlocked(s, in: book, isPro: isPro) }
+    func isUnlocked(_ s: Stage) -> Bool { progress.isUnlocked(s, in: book, isPro: isPro, worldPack: hasWorldPack) }
+
+    /// お金で開くワールドで、まだ買っていない
+    func isLockedBehindPurchase(_ w: World) -> Bool { (w.isPro && !isPro) || (w.isPack && !hasWorldPack) }
 
     /// 次に遊ぶステージ（まだ解いていない最初の、遊べるステージ）
     var nextStage: Stage? {
@@ -86,7 +99,9 @@ final class AppModel {
 
     func play(_ mode: PlayMode, hint: Bool = false) {
         let (look, rules) = progress.playable(progress.selectedCharacter)
-        game = GameModel(mode: mode, character: look, rules: hint ? .standard : rules, table: progress.table, hintMode: hint)
+        var hintRules = Rules.standard
+        hintRules.bumpersWaitWhileResting = true
+        game = GameModel(mode: mode, character: look, rules: hint ? hintRules : rules, table: progress.table, hintMode: hint)
         route = .game
     }
 
@@ -105,7 +120,7 @@ final class AppModel {
     func playDaily() { play(.daily(today)) }
     func playRandom() { play(.random(UInt32.random(in: 0...UInt32.max))) }
     func playStage(_ s: Stage) {
-        guard isUnlocked(s) else { showPro = StageBook.world(s.world).isPro && !isPro; return }
+        guard isUnlocked(s) else { showPro = isLockedBehindPurchase(StageBook.world(s.world)); return }
         play(.stage(s))
     }
 
@@ -141,7 +156,7 @@ final class AppModel {
     // MARK: なかま
 
     func select(_ c: Character) {
-        _ = progress.select(c, isPro: isPro)
+        _ = progress.select(c, isPro: isPro, friendPack: hasFriendPack)
     }
 
     func wear(_ k: Costume, on c: Character) {
@@ -154,7 +169,7 @@ final class AppModel {
     }
 
     func refreshAfterPurchase() {
-        progress.normalize(isPro: isPro)
+        progress.normalize(isPro: isPro, friendPack: hasFriendPack)
     }
 
     // MARK: 撮影用（CI のスクリーンショット。起動引数 -screenshotScene <名前>）
@@ -192,7 +207,7 @@ final class AppModel {
             sample()
             progress.snacks = 480
             route = .capsule
-        case "pro":
+        case "pro", "shop":
             showPro = true
         default:
             sample()

@@ -49,6 +49,7 @@ struct Stage: Identifiable, Equatable, Codable, Sendable {
     var balls: [StageBall]
     var walls: [Wall] = []
     var warps: [Warp] = []
+    var pads: [Pad] = []
     var ice = false
     var goal: Goal
     var shots: Int
@@ -66,21 +67,26 @@ struct Stage: Identifiable, Equatable, Codable, Sendable {
 }
 
 struct World: Identifiable, Equatable, Sendable {
+    enum Access: Equatable, Sendable { case free, pro, pack }
     let id: Int
     let name: String
     let detail: String
-    let isPro: Bool
+    let access: Access
     let felt: UInt32
+    var isPro: Bool { access == .pro }
+    var isPack: Bool { access == .pack }
 }
 
 enum StageBook {
     static let worlds: [World] = [
-        World(id: 1, name: "ビリヤード場", detail: "まずは球を食べるところから", isPro: false, felt: 0x3D7CC0),
-        World(id: 2, name: "からだクッション", detail: "ゴースト球は、からだで跳ねてから", isPro: false, felt: 0x3F9A73),
-        World(id: 3, name: "こおりの台", detail: "よくすべる台と、かべ", isPro: false, felt: 0x5C8FB0),
-        World(id: 4, name: "ワープの台", detail: "穴に入ると、もう片方から出る", isPro: true, felt: 0x8A5A8C),
-        World(id: 5, name: "うごくバンパー", detail: "タイミングをはかって打つ", isPro: true, felt: 0x9A6B4F),
-        World(id: 6, name: "よるのごちゃまぜ", detail: "ぜんぶの仕掛けが出てくる", isPro: true, felt: 0x2E3A66),
+        World(id: 1, name: "ビリヤード場", detail: "まずは球を食べるところから", access: .free, felt: 0x3D7CC0),
+        World(id: 2, name: "からだクッション", detail: "ゴースト球は、からだで跳ねてから", access: .free, felt: 0x3F9A73),
+        World(id: 3, name: "こおりの台", detail: "よくすべる台と、かべ", access: .free, felt: 0x5C8FB0),
+        World(id: 4, name: "ワープの台", detail: "穴に入ると、もう片方から出る", access: .pro, felt: 0x8A5A8C),
+        World(id: 5, name: "うごくバンパー", detail: "タイミングをはかって打つ", access: .pro, felt: 0x9A6B4F),
+        World(id: 6, name: "よるのごちゃまぜ", detail: "ぜんぶの仕掛けが出てくる", access: .pro, felt: 0x2E3A66),
+        World(id: 7, name: "かそく床の台", detail: "矢印の床に乗ると、ぎゅんと加速", access: .pack, felt: 0x4F8F8F),
+        World(id: 8, name: "こわれるブロック", detail: "ブロックは当てるとこわれる。こわして道を作る", access: .pack, felt: 0x7A6A9A),
     ]
 
     static func decode(_ data: Data) throws -> [Stage] {

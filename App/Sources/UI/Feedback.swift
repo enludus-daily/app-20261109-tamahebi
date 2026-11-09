@@ -25,7 +25,7 @@ enum Feedback {
     static func tap() { light.impactOccurred(intensity: 0.5) }
     static func reveal(_ r: Rarity) {
         switch r {
-        case .superRare, .pro: notice.notificationOccurred(.success)
+        case .superRare, .pro, .pack: notice.notificationOccurred(.success)
         case .rare: rigid.impactOccurred()
         case .common: medium.impactOccurred()
         }

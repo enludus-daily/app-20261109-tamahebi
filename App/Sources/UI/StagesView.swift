@@ -33,7 +33,7 @@ struct WorldsView: View {
         let stages = app.stages(in: w.id)
         let first = stages.first
         let open = first.map { app.isUnlocked($0) } ?? false
-        let proLocked = w.isPro && !app.isPro
+        let proLocked = app.isLockedBehindPurchase(w)
         let stars = app.progress.totalStars(world: w.id, in: app.book)
         return Button {
             Feedback.tap()
@@ -44,7 +44,7 @@ struct WorldsView: View {
                     MiniTable(stage: first, felt: Color(hex: w.felt))
                         .opacity(open || proLocked ? 1 : 0.55)
                     if proLocked {
-                        Label("Pro", systemImage: "lock.fill").font(Theme.label(13)).foregroundStyle(Theme.ink)
+                        Label(w.isPack ? "パック" : "Pro", systemImage: "lock.fill").font(Theme.label(13)).foregroundStyle(Theme.ink)
                             .padding(.horizontal, 10).padding(.vertical, 4)
                             .background(Capsule().fill(Theme.rarity(.pro)))
                             .overlay(Capsule().stroke(Theme.ink, lineWidth: 2))
@@ -67,7 +67,7 @@ struct WorldsView: View {
             .background(RoundedRectangle(cornerRadius: 20).fill(Theme.ink).offset(y: 4))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("ワールド \(w.id) \(w.name)、星 \(stars)\(proLocked ? "、Pro" : (open ? "" : "、まだ遊べない"))")
+        .accessibilityLabel("ワールド \(w.id) \(w.name)、星 \(stars)\(proLocked ? (w.isPack ? "、ワールドパック" : "、Pro") : (open ? "" : "、まだ遊べない"))")
     }
 }
 
@@ -136,7 +136,7 @@ struct StagesView: View {
 
     /// このワールドで役に立つなかま
     private func friendTip(_ w: World) -> some View {
-        let id: String? = [2: "momo", 3: "mint", 4: "soda", 5: "neon"][w.id]
+        let id: String? = [2: "momo", 3: "mint", 4: "soda", 5: "neon", 7: "yuzu", 8: "ishimaru"][w.id]
         return Group {
             if let id {
                 let c = Roster.character(id)
@@ -173,9 +173,10 @@ struct MiniTable: View {
             func p(_ v: Vec) -> CGPoint { CGPoint(x: ox + v.x * k, y: oy + v.y * k) }
             for w in s.walls {
                 var path = Path(); path.move(to: p(w.a)); path.addLine(to: p(w.b))
-                ctx.stroke(path, with: .color(Theme.woodLight), style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                ctx.stroke(path, with: .color(w.breakable ? Color(hex: 0xF7A9C4) : Theme.woodLight), style: StrokeStyle(lineWidth: 3, lineCap: .round))
             }
             for w in s.warps { for v in [w.a, w.b] { ctx.fill(CharacterArt.circle(p(v), 4), with: .color(Theme.ink)) } }
+            for pad in s.pads { ctx.fill(CharacterArt.circle(p(pad.center), 5), with: .color(Color(hex: 0x8FD9B6))) }
             for b in s.bumpers { ctx.fill(CharacterArt.circle(p(b.center), max(2, b.radius * k)), with: .color(Theme.bumper)) }
             for b in s.balls {
                 ctx.fill(CharacterArt.circle(p(b.center), 3), with: .color(b.kind == .ghost ? .white.opacity(0.6) : Theme.ball(b.number)))

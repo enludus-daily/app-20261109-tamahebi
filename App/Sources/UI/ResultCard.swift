@@ -98,7 +98,7 @@ struct ResultCard: View {
                         Button("つぎへ") { app.playStage(next) }
                             .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
                     } else {
-                        Button("Pro でつづき") { app.showPro = true }
+                        Button(StageBook.world(next.world).isPack ? "パックでつづき" : "Pro でつづき") { app.showPro = true }
                             .buttonStyle(ChunkyButtonStyle(fill: Theme.sun))
                     }
                 }
@@ -129,6 +129,8 @@ struct ResultCard: View {
         if s.ice { return "こおりはすべる。弱めに引いてみよう。ミントはすべりにくい" }
         if !s.warps.isEmpty { return "穴の出口の向きをよそく線で見てみよう。ソーダは出口で加速する" }
         if s.bumpers.contains(where: { $0.amplitude > 0 }) { return "バンパーが動いている。よそく線がとおる時に打とう" }
+        if !s.pads.isEmpty { return "かそく床の矢印の先を、よそく線で見てみよう。ユズはもっと速く飛ぶ" }
+        if s.walls.contains(where: { $0.breakable }) { return "ピンクのブロックは当てるとこわれる。イシマルはかたいブロックに強い" }
         return "よそく線を見ながら、2 こまとめて食べるとショットが増えるよ"
     }
 

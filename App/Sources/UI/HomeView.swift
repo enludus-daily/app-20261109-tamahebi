@@ -15,8 +15,8 @@ struct HomeView: View {
                 Spacer()
                 Button { app.showPro = true } label: {
                     Pill {
-                        Image(systemName: app.isPro ? "checkmark.seal.fill" : "sparkles").foregroundStyle(Theme.ink)
-                        Text(app.isPro ? "Pro" : "Pro をみる").font(Theme.label(14)).foregroundStyle(Theme.ink)
+                        Image(systemName: "bag.fill").foregroundStyle(Theme.ink)
+                        Text("おみせ").font(Theme.label(14)).foregroundStyle(Theme.ink)
                     }
                 }
                 .buttonStyle(.plain)
@@ -56,7 +56,7 @@ struct HomeView: View {
                 todayLine
                 HStack(spacing: 10) {
                     Button { app.route = .collection } label: {
-                        Label("なかま \(app.progress.owned.count + (app.isPro ? Roster.proOnly.count : 0))/\(Roster.all.count)", systemImage: "person.2.fill")
+                        Label("なかま \(app.ownedCount)/\(Roster.all.count)", systemImage: "person.2.fill")
                     }
                     .buttonStyle(ChunkyButtonStyle())
                     Button { app.route = .capsule } label: {

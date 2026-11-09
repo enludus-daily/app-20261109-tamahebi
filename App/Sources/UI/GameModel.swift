@@ -182,6 +182,17 @@ final class GameModel {
             Feedback.rail(speed: speed)
         case .wall:
             Feedback.rail(speed: 600)
+        case .wallBreak(let at):
+            Feedback.bumper()
+            let c = CGPoint(x: at.x, y: at.y)
+            for k in 0..<10 {
+                let a = Double(k) / 10 * 2 * .pi
+                sparks.append(Spark(at: c, velocity: CGVector(dx: cos(a) * 120, dy: sin(a) * 120), color: Color(hex: 0xF7A9C4), born: clock, ring: false))
+            }
+            pop("パキッ", at: c, color: Color(hex: 0xF7A9C4))
+        case .pad(let at):
+            Feedback.shot(power: 0.7)
+            sparks.append(Spark(at: CGPoint(x: at.x, y: at.y), velocity: .zero, color: .white, born: clock, ring: true))
         case .bumper:
             Feedback.bumper()
             setFace(.bonk, for: 0.35)

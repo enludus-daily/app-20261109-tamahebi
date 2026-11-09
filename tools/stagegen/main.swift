@@ -37,7 +37,7 @@ struct Gen {
         s.body = Array(pts.dropFirst().reversed())
 
         // 仕掛け
-        var nBump = 0, nWall = 0, nWarp = 0, nMoving = 0, nGhost = 0
+        var nBump = 0, nWall = 0, nWarp = 0, nMoving = 0, nGhost = 0, nPad = 0, nCage = 0
         var nBall = 2
         switch w {
         case 1: nBump = Int((d * 3).rounded()); nBall = 1 + Int((d * 4).rounded())
@@ -45,9 +45,11 @@ struct Gen {
         case 3: s.ice = true; nWall = 1 + Int((d * 2).rounded()); nBump = i(0, Int(d * 2)); nBall = 2 + Int((d * 3).rounded())
         case 4: nWarp = k < 6 ? 1 : i(1, 2); nBump = i(0, 2); nWall = i(0, 1); nBall = 2 + Int((d * 3).rounded()); nGhost = k > 7 ? 1 : 0
         case 5: nMoving = 2 + Int((d * 2).rounded()); nBall = 2 + Int((d * 3).rounded()); nWall = k > 6 ? 1 : 0
-        default:
+        case 6:
             s.ice = chance(0.4); nWarp = i(0, 1); nMoving = i(0, 2); nBump = i(0, 1); nWall = i(0, 2)
             nGhost = i(0, 2); nBall = 3 + Int((d * 3).rounded())
+        case 7: nPad = 1 + Int((d * 2).rounded()); nBump = i(0, 2); nWall = k > 5 ? i(0, 1) : 0; nBall = 2 + Int((d * 3).rounded())
+        default: nCage = 1 + Int((d * 2).rounded()); nPad = k > 5 ? i(0, 1) : 0; nBump = i(0, 1); nBall = 2 + Int((d * 3).rounded())
         }
         func clear(_ p: Vec, _ m: Double, _ s: Stage) -> Bool {
             if p.distance(to: s.head) < m + 40 { return false }
@@ -55,6 +57,7 @@ struct Gen {
             if s.bumpers.contains(where: { $0.center.distance(to: p) < $0.radius + m + $0.amplitude + 14 }) { return false }
             if s.balls.contains(where: { $0.center.distance(to: p) < m + 34 }) { return false }
             if s.warps.contains(where: { $0.a.distance(to: p) < m + 30 || $0.b.distance(to: p) < m + 30 }) { return false }
+            if s.pads.contains(where: { $0.center.distance(to: p) < m + Pad.radius + 14 }) { return false }
             for wall in s.walls {
                 let ab = wall.b - wall.a
                 let t = min(max((p - wall.a).dot(ab) / ab.dot(ab), 0), 1)
@@ -94,11 +97,34 @@ struct Gen {
                 s.bumpers.append(StageBumper(center: p, radius: rad, axis: Vec.angle(r(0, .pi)), amplitude: amp, speed: r(1.2, 2.6), phase: r(0, 6)))
             }
         }
+        for _ in 0..<nPad {
+            if let p = spot(Pad.radius, s) { s.pads.append(Pad(center: p, angle: Double(i(0, 7)) * .pi / 4)) }
+        }
         let eightGoal = (w == 1 && (k == 6 || k == 10)) || (w == 6 && (k == 3 || k == 7))
         for n in 0..<nBall {
             if let p = spot(10, s) {
                 let ghost = n < nGhost
                 s.balls.append(StageBall(center: p, number: ghost ? 1 + (n % 7) : 1 + ((n + k) % 7), kind: ghost ? .ghost : .normal))
+            }
+        }
+        // こわれるブロックのかご：球のまわり 3 方をブロックでかこむ（1 方はあいている）
+        if nCage > 0 {
+            let caged = Array(s.balls.indices.prefix(nCage))
+            for bi in caged {
+                let c = s.balls[bi].center
+                let h = 30.0
+                let corners = [Vec(x: -h, y: -h), Vec(x: h, y: -h), Vec(x: h, y: h), Vec(x: -h, y: h)]
+                let open = i(0, 3)
+                for side in 0..<4 where side != open {
+                    let a = c + corners[side], b = c + corners[(side + 1) % 4]
+                    let inside = [a, b].allSatisfy { (p: Vec) -> Bool in
+                        let okX = p.x > 8 && p.x < rules.width - 8
+                        let okY = p.y > 8 && p.y < rules.height - 8
+                        return okX && okY
+                    }
+                    let hard: Bool = k > 7 && side % 2 == 0
+                    if inside { s.walls.append(Wall(a: a, b: b, hits: hard ? 2 : 1)) }
+                }
             }
         }
         if eightGoal, let p = spot(10, s) {
@@ -181,12 +207,14 @@ let hints: [String: String] = [
     "4-1": "穴に入ると、もう片方の穴から同じ向きで出てくる",
     "5-1": "バンパーが動いている。よそく線は、いま打ったときの線",
     "6-1": "ぜんぶの仕掛けが出てくる。なかまのとくいも使おう",
+    "7-1": "矢印の床に乗ると、矢印の向きにぎゅんと飛びだす",
+    "8-1": "こわれるブロックは当てるとこわれる。白い線のブロックは 2 回",
 ]
 
 let solver = Solver()
 var out: [Stage] = []
 let onlyWorld = CommandLine.arguments.count > 1 ? Int(CommandLine.arguments[1]) : nil
-for w in 1...6 {
+for w in 1...8 {
     if let o = onlyWorld, o != w { continue }
     for k in 0..<12 {
         var tries = 0
@@ -201,6 +229,8 @@ for w in 1...6 {
             if w == 3 && s.walls.isEmpty { continue }
             if w == 4 && s.warps.isEmpty { continue }
             if w == 5 && s.bumpers.filter({ $0.amplitude > 0 }).count < 2 { continue }
+            if w == 7 && s.pads.isEmpty { continue }
+            if w == 8 && !s.walls.contains(where: { $0.breakable }) { continue }
             let target = s.goal.kind == .eatEight ? 1 : s.balls.count
             let maxDepth = min(7, target + 2)
             s.shots = maxDepth

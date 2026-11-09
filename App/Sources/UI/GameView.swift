@@ -182,6 +182,7 @@ struct TableCanvas: View {
             ctx.translateBy(x: pad, y: pad)
             drawFelt(&ctx, rules: rules)
             drawWarps(&ctx)
+            drawPads(&ctx)
             drawWalls(&ctx)
             drawBumpers(&ctx)
             drawBalls(&ctx)
@@ -283,7 +284,34 @@ struct TableCanvas: View {
             p.move(to: CGPoint(x: w.a.x, y: w.a.y)); p.addLine(to: CGPoint(x: w.b.x, y: w.b.y))
             ctx.stroke(p.offsetBy(dx: 2, dy: 4), with: .color(Color(hex: 0x0A1446).opacity(0.22)), style: StrokeStyle(lineWidth: Wall.thickness * 2, lineCap: .round))
             ctx.stroke(p, with: .color(Theme.ink), style: StrokeStyle(lineWidth: Wall.thickness * 2 + 3, lineCap: .round))
-            ctx.stroke(p, with: .color(Theme.wood), style: StrokeStyle(lineWidth: Wall.thickness * 2 - 1, lineCap: .round))
+            if w.breakable {
+                // こわれるブロック：ピンク。2 回のものは白い線
+                ctx.stroke(p, with: .color(Color(hex: 0xF7A9C4)), style: StrokeStyle(lineWidth: Wall.thickness * 2 - 1, lineCap: .round))
+                ctx.stroke(p, with: .color(Theme.ink.opacity(0.35)), style: StrokeStyle(lineWidth: 1.2, dash: [3, 5]))
+                if w.hits >= 2 { ctx.stroke(p, with: .color(.white), style: StrokeStyle(lineWidth: 2.4, lineCap: .round)) }
+            } else {
+                ctx.stroke(p, with: .color(Theme.wood), style: StrokeStyle(lineWidth: Wall.thickness * 2 - 1, lineCap: .round))
+            }
+        }
+    }
+
+    private func drawPads(_ ctx: inout GraphicsContext) {
+        for pad in game.engine.pads {
+            let c = CGPoint(x: pad.center.x, y: pad.center.y)
+            let shape = CharacterArt.circle(c, Pad.radius)
+            ctx.fill(shape, with: .color(Color(hex: 0x8FD9B6)))
+            ctx.stroke(shape, with: .color(Theme.ink), lineWidth: 2.5)
+            var g = ctx
+            g.translateBy(x: c.x, y: c.y)
+            g.rotate(by: .radians(pad.angle))
+            let shift = (game.clock * 18).truncatingRemainder(dividingBy: 8) - 4
+            for k in [-6.0, 4.0] {
+                var chev = Path()
+                chev.move(to: CGPoint(x: k + shift - 5, y: -7))
+                chev.addLine(to: CGPoint(x: k + shift + 3, y: 0))
+                chev.addLine(to: CGPoint(x: k + shift - 5, y: 7))
+                g.stroke(chev, with: .color(Theme.ink), style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+            }
         }
     }
 

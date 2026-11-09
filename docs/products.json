@@ -7,18 +7,60 @@
       "referenceName": "Pro",
       "price": 480,
       "familySharable": true,
-      "reviewNote": "Pro を買うと、ワールド4〜6（36ステージ）、限定のなかま3匹（ギンガ・サクラ・ホムラ）、遊ぶともらえるおやつ（ゲーム内ポイント。販売はしていません）が2倍、台のいろ3種が使えます。課金の画面はホーム右上の「Pro をみる」から開けます。",
+      "reviewNote": "Pro を買うと、ワールド4〜6（36ステージ）、限定のなかま3匹（ギンガ・サクラ・ホムラ）、遊ぶともらえるおやつ（ゲーム内ポイント。販売はしていません）が2倍、台のいろ3種が使えます。ヒントもいつでも無料になります。ホーム右上の「おみせ」から買えます。",
       "reviewScreenshot": "docs/iap/paywall.png",
       "localizations": [
         {
           "locale": "ja",
           "name": "タマヘビ Pro",
-          "description": "追加の36ステージ・限定なかま3匹・おやつ2倍"
+          "description": "追加36ステージ・ヒント無料・限定なかま3匹・おやつ2倍"
         },
         {
           "locale": "en-US",
           "name": "Tamahebi Pro",
           "description": "36 more stages, 3 friends, 2x snacks"
+        }
+      ]
+    },
+    {
+      "type": "NON_CONSUMABLE",
+      "productId": "com.enludus.daily.006.pack.worlds",
+      "referenceName": "World Pack",
+      "price": 240,
+      "familySharable": true,
+      "reviewNote": "ワールドパックを買うと、ワールド7（かそく床）とワールド8（こわれるブロック）の24ステージが遊べます。ホーム右上の「おみせ」から買えます。",
+      "reviewScreenshot": "docs/iap/paywall.png",
+      "localizations": [
+        {
+          "locale": "ja",
+          "name": "ワールドパック",
+          "description": "ワールド7・8の24ステージ（かそく床・ブロック）"
+        },
+        {
+          "locale": "en-US",
+          "name": "World Pack",
+          "description": "24 stages: boost pads and breakable blocks"
+        }
+      ]
+    },
+    {
+      "type": "NON_CONSUMABLE",
+      "productId": "com.enludus.daily.006.pack.friends",
+      "referenceName": "Friend Pack",
+      "price": 240,
+      "familySharable": true,
+      "reviewNote": "なかまパックを買うと、カプセルからは出ないなかま3匹（カスタード・チョコ・マッチャ）が使えます。ホーム右上の「おみせ」から買えます。",
+      "reviewScreenshot": "docs/iap/paywall.png",
+      "localizations": [
+        {
+          "locale": "ja",
+          "name": "なかまパック",
+          "description": "おやつ三姉妹（なかま3匹・なかよしLv3から）"
+        },
+        {
+          "locale": "en-US",
+          "name": "Friend Pack",
+          "description": "3 sweet friends, starting at friendship Lv3"
         }
       ]
     }

@@ -73,6 +73,12 @@ struct Rules: Equatable, Sendable {
     var eightGivesShot = false
     /// ステージのはじめの長さの足し
     var extraStartLength = 0.0
+    /// 止まっている間、うごくバンパーも待つ（おてほんのときだけ。ふだんはずっと動くので、タイミングを考えて打つ）
+    var bumpersWaitWhileResting = false
+    /// かそく床で押し出される速さ
+    var padSpeed = 760.0
+    /// こわれるブロックが 1 回でこわれる
+    var breaksInOneHit = false
 
     static let standard = Rules()
 }
@@ -101,7 +107,18 @@ struct Bumper: Equatable, Sendable {
 struct Wall: Equatable, Codable, Sendable {
     var a: Vec
     var b: Vec
+    /// こわれるブロック：あと何回当たるとこわれるか（0 はこわれないかべ）
+    var hits = 0
     static let thickness = 5.0
+    var breakable: Bool { hits > 0 }
+}
+
+/// かそく床：上を通ると、矢印の向きに勢いよく押し出す
+struct Pad: Equatable, Codable, Sendable {
+    var center: Vec
+    var angle: Double
+    static let radius = 18.0
+    var direction: Vec { .angle(angle) }
 }
 
 /// 入口と出口の 2 つの穴。どちらから入っても、もう片方から同じ速さで出る
@@ -125,6 +142,8 @@ enum GameEvent: Equatable, Sendable {
     case bumper(index: Int)
     case bodyBounce(at: Vec)
     case wall
+    case wallBreak(at: Vec)
+    case pad(at: Vec)
     case warp(from: Vec, to: Vec)
     case ghostAwake
     case eat(number: Int, combo: Int, points: Int, at: Vec)
@@ -173,12 +192,14 @@ struct GameEngine: Sendable {
     private(set) var bumpers: [Bumper] = []
     private(set) var walls: [Wall] = []
     private(set) var warps: [Warp] = []
+    private(set) var pads: [Pad] = []
     private(set) var balls: [TableBall] = []
     private(set) var time = 0.0
     private(set) var ghostsAwake = false
     private(set) var goalMet = false
     private(set) var ateEight = false
     private var warpLock: Int?
+    private var padLock: Int?
     private var bouncedThisShot = false
     private var accumulator = 0.0
     /// 止まっている間の時間（球の出てくる動きなど、見た目だけに使う）
@@ -213,6 +234,7 @@ struct GameEngine: Sendable {
         bumpers = stage.bumpers.map { Bumper(base: $0.center, radius: $0.radius, axis: $0.axis.normalized, amplitude: $0.amplitude, speed: $0.speed, phase: $0.phase) }
         walls = stage.walls
         warps = stage.warps
+        pads = stage.pads
         balls = stage.balls.enumerated().map { TableBall(center: $1.center, number: $1.number, kind: $1.kind, born: 0, phase: Double($0) * 1.7) }
         // はじめのからだ：折れ線を spacing ごとに打つ
         let line = stage.body + [stage.head]
@@ -290,7 +312,7 @@ struct GameEngine: Sendable {
     func preview(direction d: Vec, power: Double) -> ShotPreview {
         guard d.length > 0 else { return ShotPreview(points: [], end: head, reachesStop: true) }
         let p = min(max(power, 0), 1)
-        var ball = Mover(position: head, velocity: d.normalized * (p * rules.maxSpeed), warpLock: warpLock)
+        var ball = Mover(position: head, velocity: d.normalized * (p * rules.maxSpeed), warpLock: warpLock, padLock: padLock)
         var field = makeField()
         var pts: [Vec] = []
         var bounces = 0
@@ -299,7 +321,7 @@ struct GameEngine: Sendable {
             let r = Self.step(&ball, dt: 1.0 / 150, rules: rules, field: &field, body: path, bodyLimit: limit)
             field.time += 1.0 / 150
             if i % 4 == 0 || r.warped != nil { pts.append(ball.position) }
-            if r.hit != nil, r.hit != .warp { bounces += 1; if bounces >= rules.previewBounces { break } }
+            if let h = r.hit, h != .warp, h != .pad { bounces += 1; if bounces >= rules.previewBounces { break } }
             if r.stopped { break }
         }
         return ShotPreview(points: pts, end: ball.position, reachesStop: bounces < rules.previewBounces)
@@ -308,7 +330,7 @@ struct GameEngine: Sendable {
     // MARK: 時間を進める
 
     /// 物理は 1/240 秒の決まった刻みで進める（画面の速さが違っても、ステージを作ったときと同じ動きになる）。
-    /// 時間（うごくバンパー）は、頭が転がっている間だけ進む。止まっている間は台も止まるので、よそく線がずれない
+    /// うごくバンパーはふだんずっと動く。おてほんのときだけ、止まっている間は待つ（作ったときと同じ動きにする）
     static let tick = 1.0 / 240
 
     mutating func advance(by dt: Double) -> [GameEvent] {
@@ -316,7 +338,7 @@ struct GameEngine: Sendable {
         for i in bumpers.indices { bumpers[i].squash = max(0, bumpers[i].squash - dt * 5) }
         guard isMoving else {
             accumulator = 0
-            idleTime += dt
+            if rules.bumpersWaitWhileResting || stage == nil { idleTime += dt } else { time += dt }
             return []
         }
         var events: [GameEvent] = []
@@ -333,22 +355,27 @@ struct GameEngine: Sendable {
     }
 
     private func makeField() -> Field {
-        Field(bumpers: bumpers, walls: walls, warps: warps, time: time, ice: isIce)
+        Field(bumpers: bumpers, walls: walls, warps: warps, pads: pads, time: time, ice: isIce)
     }
 
     private mutating func physicsStep(_ dt: Double, events: inout [GameEvent]) {
-        var ball = Mover(position: head, velocity: velocity, warpLock: warpLock)
+        var ball = Mover(position: head, velocity: velocity, warpLock: warpLock, padLock: padLock)
         var field = makeField()
         let r = Self.step(&ball, dt: dt, rules: rules, field: &field, body: path, bodyLimit: neckIndex)
         time += dt
         bumpers = field.bumpers
+        walls = field.walls
         head = ball.position
         velocity = ball.velocity
         warpLock = ball.warpLock
+        padLock = ball.padLock
+        if let at = r.broke { events.append(.wallBreak(at: at)) }
+        if let at = r.padded { events.append(.pad(at: at)) }
         switch r.hit {
         case .rail: events.append(.rail(speed: r.speed)); bouncedThisShot = true
         case .bumper(let i): events.append(.bumper(index: i)); bouncedThisShot = true
         case .wall: events.append(.wall); bouncedThisShot = true
+        case .pad: break
         case .body(let i):
             events.append(.bodyBounce(at: path[i]))
             if !ghostsAwake, balls.contains(where: { $0.kind == .ghost }) { ghostsAwake = true; events.append(.ghostAwake) }
@@ -457,16 +484,21 @@ struct GameEngine: Sendable {
 
     // MARK: 物理（プレビューと共通）
 
-    struct Mover { var position: Vec; var velocity: Vec; var warpLock: Int? }
-    struct Field { var bumpers: [Bumper]; var walls: [Wall]; var warps: [Warp]; var time: Double; var ice: Bool }
-    enum Hit: Equatable { case rail, bumper(Int), body(Int), wall, warp }
-    struct StepResult { var hit: Hit?; var stopped: Bool; var speed: Double; var warped: (from: Vec, to: Vec)? }
+    struct Mover { var position: Vec; var velocity: Vec; var warpLock: Int?; var padLock: Int? = nil }
+    struct Field { var bumpers: [Bumper]; var walls: [Wall]; var warps: [Warp]; var pads: [Pad] = []; var time: Double; var ice: Bool }
+    enum Hit: Equatable { case rail, bumper(Int), body(Int), wall, warp, pad }
+    struct StepResult {
+        var hit: Hit?; var stopped: Bool; var speed: Double; var warped: (from: Vec, to: Vec)?
+        var broke: Vec? = nil; var padded: Vec? = nil
+    }
 
     static func step(_ b: inout Mover, dt: Double, rules: Rules, field: inout Field, body: [Vec], bodyLimit: Int) -> StepResult {
         let r = rules.headRadius
         b.position = b.position + b.velocity * dt
         var hit: Hit?
         var warped: (from: Vec, to: Vec)?
+        var broke: Vec?
+        var padded: Vec?
         if b.position.x < r { b.position.x = r; b.velocity.x = -b.velocity.x * rules.restitution; hit = .rail }
         if b.position.x > rules.width - r { b.position.x = rules.width - r; b.velocity.x = -b.velocity.x * rules.restitution; hit = .rail }
         if b.position.y < r { b.position.y = r; b.velocity.y = -b.velocity.y * rules.restitution; hit = .rail }
@@ -489,7 +521,8 @@ struct GameEngine: Sendable {
             }
         }
 
-        for w in field.walls {
+        var broken: Int?
+        for (wi, w) in field.walls.enumerated() {
             let ab = w.b - w.a
             let len2 = ab.dot(ab)
             guard len2 > 0 else { continue }
@@ -504,8 +537,29 @@ struct GameEngine: Sendable {
                 if vn < 0 {
                     b.velocity = b.velocity - n * ((1 + rules.restitution) * vn)
                     hit = .wall
+                    if w.breakable {
+                        let left = rules.breaksInOneHit ? 0 : w.hits - 1
+                        if left <= 0 { broken = wi } else { field.walls[wi].hits = left }
+                    }
                 }
                 b.position = closest + n * m
+            }
+        }
+        if let wi = broken {
+            let w = field.walls.remove(at: wi)
+            broke = (w.a + w.b) * 0.5
+        }
+
+        // かそく床：入った瞬間に、矢印の向きへ押し出す。出るまでは 1 回だけ
+        if let lock = b.padLock, lock < field.pads.count, b.position.distance(to: field.pads[lock].center) > Pad.radius + r { b.padLock = nil }
+        if b.padLock == nil {
+            for (i, pad) in field.pads.enumerated() where b.position.distance(to: pad.center) < Pad.radius {
+                let sp = max(b.velocity.length, rules.padSpeed)
+                b.velocity = pad.direction * min(sp, rules.maxSpeed)
+                b.padLock = i
+                padded = pad.center
+                if hit == nil { hit = .pad }
+                break
             }
         }
 
@@ -555,9 +609,9 @@ struct GameEngine: Sendable {
         let next = speed * exp(-rules.friction * k * dt) - rules.deceleration * k * dt
         if next < 6 {
             b.velocity = .zero
-            return StepResult(hit: hit, stopped: true, speed: speed, warped: warped)
+            return StepResult(hit: hit, stopped: true, speed: speed, warped: warped, broke: broke, padded: padded)
         }
         b.velocity = b.velocity * (next / speed)
-        return StepResult(hit: hit, stopped: false, speed: speed, warped: warped)
+        return StepResult(hit: hit, stopped: false, speed: speed, warped: warped, broke: broke, padded: padded)
     }
 }

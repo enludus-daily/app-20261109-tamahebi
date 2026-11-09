@@ -43,21 +43,21 @@ struct CollectionView: View {
     }
 
     private func tile(_ c: Character) -> some View {
-        let owned = app.progress.owns(c, isPro: app.isPro)
+        let owned = app.owns(c)
         let selected = app.progress.selected == c.id
         let level = app.progress.level(of: c)
         let look = owned ? c.wearing(app.progress.costume(of: c)) : c
         return Button {
             Feedback.tap()
-            if owned { detail = c } else if c.rarity == .pro { app.showPro = true } else { app.route = .capsule }
+            if owned { detail = c } else if c.rarity == .pro || c.rarity == .pack { app.showPro = true } else { app.route = .capsule }
         } label: {
             VStack(spacing: 4) {
                 ZStack(alignment: .topTrailing) {
                     CharacterPortrait(character: look, face: owned ? (selected ? .happy : .idle) : .sleep, showBody: false, silhouette: !owned)
                         .frame(height: 76)
-                    if c.rarity == .pro && !owned {
+                    if (c.rarity == .pro || c.rarity == .pack) && !owned {
                         Image(systemName: "lock.fill").font(.system(size: 12, weight: .bold)).foregroundStyle(Theme.ink)
-                            .padding(5).background(Circle().fill(Theme.rarity(.pro)))
+                            .padding(5).background(Circle().fill(Theme.rarity(c.rarity)))
                     }
                 }
                 Text(owned ? c.name : "？？？").font(Theme.label(13)).foregroundStyle(Theme.ink)

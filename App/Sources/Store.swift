@@ -21,6 +21,9 @@ struct Entitlements: Equatable, Sendable {
 
     var isPro: Bool { !owned.isDisjoint(with: proProductIDs) }
 
+    /// 追加パック（Pro には含まれない買い切り）を持っているか
+    func has(_ productID: String) -> Bool { owned.contains(productID) }
+
     func owns(_ productID: String) -> Bool { isPro || owned.contains(productID) }
 
     mutating func replace(with productIDs: Set<String>) { owned = productIDs }

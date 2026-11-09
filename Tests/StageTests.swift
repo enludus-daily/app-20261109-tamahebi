@@ -12,11 +12,11 @@ struct StageTests {
         ProcessInfo.processInfo.environment["STAGES_JSON"].map { URL(fileURLWithPath: $0) }
     }
 
-    @Test func thereAreSixWorldsOfTwelve() throws {
+    @Test func thereAreEightWorldsOfTwelve() throws {
         let book = try Self.book()
-        #expect(book.count == 72)
-        for w in 1...6 { #expect(book.filter { $0.world == w }.count == 12) }
-        #expect(Set(book.map(\.id)).count == 72)
+        #expect(book.count == 96)
+        for w in 1...8 { #expect(book.filter { $0.world == w }.count == 12) }
+        #expect(Set(book.map(\.id)).count == 96)
     }
 
     @Test func everyStageHasRoomAndPar() throws {
@@ -33,6 +33,8 @@ struct StageTests {
         #expect(book.filter { $0.world == 3 }.allSatisfy { $0.ice && !$0.walls.isEmpty })
         #expect(book.filter { $0.world == 4 }.allSatisfy { !$0.warps.isEmpty })
         #expect(book.filter { $0.world == 5 }.allSatisfy { $0.bumpers.contains { $0.amplitude > 0 } })
+        #expect(book.filter { $0.world == 7 }.allSatisfy { !$0.pads.isEmpty })
+        #expect(book.filter { $0.world == 8 }.allSatisfy { $0.walls.contains { $0.breakable } })
     }
 
     /// 生成のときに見つけた打ち方を再生すると、どのステージも解ける
@@ -94,5 +96,66 @@ struct StageTests {
         for s in book where s.world < 4 { p.stageStars[s.id] = 1 }
         #expect(!p.isUnlocked(firstPro, in: book, isPro: false))
         #expect(p.isUnlocked(firstPro, in: book, isPro: true))
+        // ワールドパックは Pro がなくても、ワールド 3 のあとから
+        let firstPack = try #require(book.first { $0.id == "7-1" })
+        #expect(!p.isUnlocked(firstPack, in: book, isPro: false))
+        #expect(p.isUnlocked(firstPack, in: book, isPro: false, worldPack: true))
+        let eight = try #require(book.first { $0.id == "8-1" })
+        #expect(!p.isUnlocked(eight, in: book, isPro: false, worldPack: true))
+    }
+
+    @Test func padsLaunchTheHead() {
+        let s = Stage(id: "t", world: 7, index: 0, head: Vec(x: 180, y: 400), body: [Vec(x: 180, y: 480)],
+                      balls: [StageBall(center: Vec(x: 40, y: 40), number: 1)],
+                      pads: [Pad(center: Vec(x: 180, y: 330), angle: 0)],
+                      goal: Goal(kind: .eatAll), shots: 3, par3: 1, par2: 2)
+        var e = GameEngine(stage: s)
+        e.shoot(direction: Vec(x: 0, y: -1), power: 0.3)
+        let events = e.runUntilStopped()
+        #expect(events.contains { if case .pad = $0 { true } else { false } })
+        #expect(e.head.x > 300)  // 右へ押し出された
+    }
+
+    @Test func blocksBreak() {
+        let s = Stage(id: "t", world: 8, index: 0, head: Vec(x: 180, y: 400), body: [Vec(x: 180, y: 480)],
+                      balls: [StageBall(center: Vec(x: 180, y: 200), number: 1)],
+                      walls: [Wall(a: Vec(x: 140, y: 300), b: Vec(x: 220, y: 300), hits: 1)],
+                      goal: Goal(kind: .eatAll), shots: 3, par3: 1, par2: 2)
+        var e = GameEngine(stage: s)
+        e.shoot(direction: Vec(x: 0, y: -1), power: 0.5)
+        let events = e.runUntilStopped()
+        #expect(events.contains { if case .wallBreak = $0 { true } else { false } })
+        #expect(e.walls.isEmpty)
+    }
+
+    @Test func hardBlocksNeedTwoHitsUnlessBreaker() {
+        let s = Stage(id: "t", world: 8, index: 0, head: Vec(x: 180, y: 400), body: [Vec(x: 180, y: 480)],
+                      balls: [StageBall(center: Vec(x: 40, y: 40), number: 1)],
+                      walls: [Wall(a: Vec(x: 140, y: 300), b: Vec(x: 220, y: 300), hits: 2)],
+                      goal: Goal(kind: .eatAll), shots: 3, par3: 1, par2: 2)
+        var normal = GameEngine(stage: s)
+        normal.shoot(direction: Vec(x: 0, y: -1), power: 0.3)
+        // 1 回目に当たったところで止めて見る（跳ね返って、からだでもう一度当たることがあるため）
+        for _ in 0..<2000 where normal.isMoving {
+            if normal.advance(by: GameEngine.tick).contains(.wall) { break }
+        }
+        #expect(normal.walls.first?.hits == 1)
+        var strong = GameEngine(stage: s, rules: Roster.character("ishimaru").rules(level: 3))
+        strong.shoot(direction: Vec(x: 0, y: -1), power: 0.3)
+        _ = strong.runUntilStopped()
+        #expect(strong.walls.isEmpty)
+    }
+
+    @Test func bumpersKeepMovingUnlessHinting() throws {
+        let book = try Self.book()
+        let s = try #require(book.first { $0.world == 5 })
+        var normal = GameEngine(stage: s)
+        _ = normal.advance(by: 1.5)
+        #expect(normal.time > 1)
+        var r = Rules.standard
+        r.bumpersWaitWhileResting = true
+        var hint = GameEngine(stage: s, rules: r)
+        _ = hint.advance(by: 1.5)
+        #expect(hint.time == 0)
     }
 }

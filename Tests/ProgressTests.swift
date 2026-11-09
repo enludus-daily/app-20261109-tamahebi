@@ -94,6 +94,18 @@ struct ProgressTests {
         #expect(!night)
     }
 
+    @Test func packFriendsNeedThePack() {
+        var p = Progress()
+        let choco = Roster.character("choco")
+        #expect(!p.owns(choco, isPro: true))
+        #expect(p.owns(choco, isPro: false, friendPack: true))
+        #expect(p.level(of: choco) == Progress.proCharacterLevel)
+        _ = p.select(choco, isPro: false, friendPack: true)
+        p.normalize(isPro: false, friendPack: false)
+        #expect(p.selected == Roster.starterID)
+        #expect(!Roster.capsulePool.contains(choco))
+    }
+
     @Test func proFriendsStartStrong() {
         let p = Progress()
         #expect(p.level(of: Roster.character("ginga")) == Progress.proCharacterLevel)

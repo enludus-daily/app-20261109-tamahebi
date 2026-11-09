@@ -44,6 +44,7 @@ enum Theme {
         case .rare: Color(hex: 0xA9D4F2)
         case .superRare: Color(hex: 0xF7D063)
         case .pro: Color(hex: 0xC3B1EE)
+        case .pack: Color(hex: 0xF7C4DD)
         }
     }
 

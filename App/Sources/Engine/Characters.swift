@@ -4,7 +4,7 @@ import Foundation
 // なかよし度（Lv1〜5）：同じ子がカプセルでもう一度出ると上がる。Lv2・Lv4 できせかえ、Lv3・Lv5 でとくいが強くなる。
 
 enum Rarity: String, Codable, CaseIterable, Sendable {
-    case common, rare, superRare, pro
+    case common, rare, superRare, pro, pack
 
     var label: String {
         switch self {
@@ -12,6 +12,7 @@ enum Rarity: String, Codable, CaseIterable, Sendable {
         case .rare: "レア"
         case .superRare: "スーパーレア"
         case .pro: "Pro 限定"
+        case .pack: "パック限定"
         }
     }
     /// カプセルで出る確率（Pro 限定はカプセルから出ない）
@@ -20,7 +21,7 @@ enum Rarity: String, Codable, CaseIterable, Sendable {
         case .common: 0.70
         case .rare: 0.25
         case .superRare: 0.05
-        case .pro: 0
+        case .pro, .pack: 0
         }
     }
 }
@@ -33,6 +34,7 @@ enum Mark: String, Codable, Sendable {
 /// とくい。どれもステージの攻略か、おやつに効く
 enum Perk: String, Codable, Sendable {
     case none, grip, warpBoost, bigMouth, ghostFriend, extraShot, longGuide, grow, lucky8, bouncy, coins, bigCoins
+    case padBoost, breaker, rolling
 
     /// レベルごとの説明（level は 1〜5）
     func label(level: Int) -> String {
@@ -50,6 +52,9 @@ enum Perk: String, Codable, Sendable {
         case .bouncy: return "バンパーで、よりはずむ" + (strong ? "（もっと）" : "")
         case .coins: return "もらえるおやつ +\(strong ? 30 : 20)%"
         case .bigCoins: return "もらえるおやつ +\(strong ? 70 : 50)%"
+        case .padBoost: return "かそく床で、もっと速く飛びだす" + (strong ? "（いちばん速い）" : "")
+        case .breaker: return strong ? "こわれるブロックを、どれも 1 回でこわす" : "かたいブロックに強い（Lv3 で、どれも 1 回でこわす）"
+        case .rolling: return "よく転がる（とまりにくい）" + (strong ? "（もっと）" : "")
         }
     }
 
@@ -65,6 +70,9 @@ enum Perk: String, Codable, Sendable {
         case .grow: rules.growPerBall += strong ? 20 : 12; rules.extraStartLength = strong ? 80 : 40
         case .lucky8: rules.eightBallChance = 0.24; rules.eightGivesShot = strong
         case .bouncy: rules.bumperKick = strong ? 1.22 : 1.16
+        case .padBoost: rules.padSpeed = strong ? 1000 : 900
+        case .breaker: rules.breaksInOneHit = strong
+        case .rolling: rules.friction *= strong ? 0.72 : 0.84
         case .none, .coins, .bigCoins: break
         }
     }
@@ -158,6 +166,10 @@ enum Roster {
                   line: "ゴースト球とだけは、なぜか仲よし。"),
         Character(id: "ramune", name: "ラムネ", rarity: .common, body: 0xC3B1EE, shade: 0xA693D6, belly: 0xF8F4FF, spot: 0xFFFFFF, mark: .note, perk: .extraShot,
                   line: "あきらめが悪い。もう 1 回だけ！"),
+        Character(id: "goma", name: "ゴマ", rarity: .common, body: 0xCFC3B0, shade: 0xB5A893, belly: 0xFFFBF2, spot: 0x6E625C, mark: .moon, perk: .rolling,
+                  line: "のんびり屋。いちど転がると、なかなか止まらない。"),
+        Character(id: "yuzu", name: "ユズ", rarity: .common, body: 0xD8E58A, shade: 0xBFCC72, belly: 0xFBFFE8, spot: 0xFFFFFF, mark: .leaf, perk: .padBoost,
+                  line: "矢印を見ると、つい乗りたくなる。"),
         Character(id: "kurosuke", name: "クロスケ", rarity: .rare, body: 0x5B5160, shade: 0x463D4B, belly: 0xE9E2EC, spot: 0xF7D063, mark: .eight, perk: .lucky8,
                   line: "8 番球のにおいがわかるらしい。"),
         Character(id: "wataame", name: "ワタアメ", rarity: .rare, body: 0xF9C6DD, shade: 0xA9D4F2, belly: 0xFFFFFF, spot: 0xA9D4F2, mark: .flower, perk: .grow,
@@ -166,22 +178,37 @@ enum Roster {
                   line: "先のことまで、ひんやり見とおす。"),
         Character(id: "caramel", name: "キャラメル", rarity: .rare, body: 0xD9A877, shade: 0xBD8D5E, belly: 0xFFF1DE, spot: 0xFFF1DE, mark: .moon, perk: .coins,
                   line: "おやつをためこむのがとくい。"),
+        Character(id: "ishimaru", name: "イシマル", rarity: .rare, body: 0xA9A4B5, shade: 0x8E899B, belly: 0xF1EFF5, spot: 0xD9D5E2, mark: .bolt, perk: .breaker,
+                  line: "かたい頭が自まん。ブロックはまかせて。"),
+        Character(id: "ruri", name: "ルリ", rarity: .rare, body: 0x8FA9E8, shade: 0x7590D1, belly: 0xF0F4FF, spot: 0xFFFFFF, mark: .drop, perk: .rolling,
+                  line: "台の上を、すべるように泳ぐ。"),
         Character(id: "kirari", name: "キラリ", rarity: .superRare, body: 0xF2D27E, shade: 0xDEC172, belly: 0xFFFDF2, spot: 0xFFFFFF, mark: .crown, perk: .bigCoins,
                   line: "台の王さま。おやつがざくざく。"),
         Character(id: "neon", name: "ネオン", rarity: .superRare, body: 0x9FE6E0, shade: 0xF5A3D8, belly: 0xFFFFFF, spot: 0xF5A3D8, mark: .bolt, perk: .bouncy,
                   line: "バンパーに当たると、ぴかっと光る。"),
+        Character(id: "aurora", name: "オーロラ", rarity: .superRare, body: 0xA6E3CF, shade: 0xC6B4F0, belly: 0xFFFFFF, spot: 0xF7C4DD, mark: .galaxy, perk: .longGuide,
+                  line: "夜空のいろを、からだにまとう。"),
+        Character(id: "milk", name: "ミルク", rarity: .superRare, body: 0xF4F1EC, shade: 0xDCD6CE, belly: 0xFFFFFF, spot: 0xA9D4F2, mark: .note, perk: .bigMouth,
+                  line: "なんでもひとのみ。口の大きさは台いちばん。"),
         Character(id: "ginga", name: "ギンガ", rarity: .pro, body: 0x6F7FC9, shade: 0x5867AE, belly: 0xE8ECFF, spot: 0xFFF3B0, mark: .galaxy, perk: .longGuide,
                   line: "夜の台で、星の線をたどる。"),
         Character(id: "sakura", name: "サクラ", rarity: .pro, body: 0xF8C3CF, shade: 0xE7A2B3, belly: 0xFFF7F9, spot: 0xFFFFFF, mark: .blossom, perk: .grow,
                   line: "春のように、のびのびと。"),
         Character(id: "homura", name: "ホムラ", rarity: .pro, body: 0xF7B27A, shade: 0xE59D6A, belly: 0xFFF2E3, spot: 0xFFE08A, mark: .flame, perk: .bouncy,
                   line: "あつい一打で、台をかけぬける。"),
+        Character(id: "custard", name: "カスタード", rarity: .pack, body: 0xF6DD9A, shade: 0xE3C47A, belly: 0xFFF9E8, spot: 0xD9A877, mark: .flower, perk: .padBoost,
+                  line: "おやつ三姉妹の長女。ぷるんと加速。"),
+        Character(id: "choco", name: "チョコ", rarity: .pack, body: 0xB88A6E, shade: 0x9C7258, belly: 0xF5E6DA, spot: 0xF7C4DD, mark: .heart, perk: .breaker,
+                  line: "おやつ三姉妹の次女。かたいものもパキッ。"),
+        Character(id: "matcha", name: "マッチャ", rarity: .pack, body: 0xA9C98A, shade: 0x8FB070, belly: 0xF6FBEE, spot: 0xFFFFFF, mark: .leaf, perk: .bigCoins,
+                  line: "おやつ三姉妹の三女。おやつ集めの名人。"),
     ]
 
     static func character(_ id: String) -> Character {
         all.first { $0.id == id } ?? all[0]
     }
 
-    static var capsulePool: [Character] { all.filter { $0.rarity != .pro } }
+    static var capsulePool: [Character] { all.filter { $0.rarity != .pro && $0.rarity != .pack } }
     static var proOnly: [Character] { all.filter { $0.rarity == .pro } }
+    static var packOnly: [Character] { all.filter { $0.rarity == .pack } }
 }

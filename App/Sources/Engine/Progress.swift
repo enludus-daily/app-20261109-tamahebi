@@ -136,14 +136,18 @@ struct Progress: Codable, Equatable, Sendable {
 
     func canPull() -> Bool { snacks >= Self.capsuleCost }
 
-    func owns(_ c: Character, isPro: Bool) -> Bool {
-        c.rarity == .pro ? isPro : owned.contains(c.id)
+    func owns(_ c: Character, isPro: Bool, friendPack: Bool = false) -> Bool {
+        switch c.rarity {
+        case .pro: isPro
+        case .pack: friendPack
+        default: owned.contains(c.id)
+        }
     }
 
     // MARK: なかよし度・きせかえ
 
     func level(of c: Character) -> Int {
-        c.rarity == .pro ? max(Self.proCharacterLevel, levels[c.id] ?? 0) : (owned.contains(c.id) ? max(1, levels[c.id] ?? 1) : 0)
+        (c.rarity == .pro || c.rarity == .pack) ? max(Self.proCharacterLevel, levels[c.id] ?? 0) : (owned.contains(c.id) ? max(1, levels[c.id] ?? 1) : 0)
     }
 
     func costume(of c: Character) -> Costume {
@@ -211,10 +215,18 @@ struct Progress: Codable, Equatable, Sendable {
     }
 
     /// ステージを遊べるか：1 つ前のステージを解いている（各ワールドの 1 番目は、前のワールドの最後を解いている）。Pro のワールドは Pro が要る
-    func isUnlocked(_ stage: Stage, in book: [Stage], isPro: Bool) -> Bool {
-        if StageBook.world(stage.world).isPro && !isPro { return false }
+    /// ワールド 7〜8（ワールドパック）は、パックがあればワールド 1〜3 を解いたあとから遊べる（Pro のワールドを飛ばせる）
+    func isUnlocked(_ stage: Stage, in book: [Stage], isPro: Bool, worldPack: Bool = false) -> Bool {
+        let w = StageBook.world(stage.world)
+        if w.isPro && !isPro { return false }
+        if w.isPack && !worldPack { return false }
         guard let i = book.firstIndex(where: { $0.id == stage.id }) else { return false }
         if i == 0 { return true }
+        if stage.index == 0, w.isPack {
+            // パックのワールドの最初：ワールド 3 の最後を解いていればよい
+            return book.contains { $0.id == "3-12" && self.stars(of: $0.id) > 0 }
+                && (stage.world == 7 || self.stars(of: book[i - 1].id) > 0)
+        }
         return self.stars(of: book[i - 1].id) > 0
     }
 
@@ -263,18 +275,16 @@ struct Progress: Codable, Equatable, Sendable {
         return c.rarity.pullRate / Double(same)
     }
 
-    mutating func select(_ c: Character, isPro: Bool) -> Bool {
-        guard owns(c, isPro: isPro) else { return false }
+    mutating func select(_ c: Character, isPro: Bool, friendPack: Bool = false) -> Bool {
+        guard owns(c, isPro: isPro, friendPack: friendPack) else { return false }
         selected = c.id
         return true
     }
 
     /// Pro が外れた（返金など）ときは、Pro 限定のなかまと台を元に戻す
-    mutating func normalize(isPro: Bool) {
-        if !isPro {
-            if selectedCharacter.rarity == .pro { selected = Roster.starterID }
-            if table.isPro { table = .blue }
-        }
+    mutating func normalize(isPro: Bool, friendPack: Bool = false) {
+        if !owns(selectedCharacter, isPro: isPro, friendPack: friendPack) { selected = Roster.starterID }
+        if !isPro, table.isPro { table = .blue }
     }
 
     // MARK: 日付
