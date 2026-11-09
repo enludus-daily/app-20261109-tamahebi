@@ -1,36 +1,65 @@
-# daily-app-template
+# ころがれ！タマヘビ（app-20261109-tamahebi）
 
-enludus-daily で毎日作る iOS アプリ（SwiftUI）のテンプレート。テンプレートから作ったリポジトリでは、この README をそのアプリの説明に書き換える。
+スネーク × ビリヤードのパズルゲーム。台のどこでもひっぱって離すと、ヘビのタマが転がる。転がった跡がそのまま胴体になり、胴体はクッションとして跳ね返す。球を食べると伸び、10 ショットで点を競う。
 
-## 中身
+- 枠：006（`com.enludus.daily.006`。app-20261108-kosouji から使い回し）
+- 元にした試作：Web 版（claude.ai の Artifact）。手触りと難しさは本人の感想（「むずい」）で直した版を移植した
 
-| パス | 役割 |
+## 遊びの中身
+
+| 仕組み | 中身 |
 |---|---|
-| `project.yml` | XcodeGen の spec。`.xcodeproj` はコミットしない |
-| `App/Sources/`, `Tests/` | ひな形のアプリとテスト（Swift Testing） |
-| `App/Resources/` | アイコン、アクセントカラー、`PrivacyInfo.xcprivacy` |
-| `.github/workflows/ci.yml` | push / PR で daily-actions の `ios-ci.yml` を呼ぶ（40 桁の SHA で固定） |
-| `.github/workflows/testflight.yml` | 手動（workflow_dispatch）で `ios-testflight.yml` を呼ぶ（アップロードのあと内部テストに配信） |
-| `.github/workflows/asc.yml` | 手動で `ios-asc.yml` を呼ぶ（App Store Connect に名前・説明などを入れる / 最新ビルドを配信） |
-| `docs/app-store.json`, `PRIVACY.md` | App Store Connect に入れる情報、プライバシーポリシー |
-| `scripts/pin-daily-actions.sh` | daily-actions の SHA を書き換える（整備用のセッションか本人だけ。自己 CI の成功を確かめる） |
-| `scripts/new-app.sh` | 名前・表示名・枠（Bundle ID）に書き換える |
-| `scripts/preflight-push.sh`, `.githooks/pre-push` | push の前の検査（秘密・個人情報）と1日の上限 |
-| `scripts/scan-sensitive.sh` | 検査の複製（正本は daily-actions/scan/。違うと CI が警告） |
-| `scripts/make-icon.py` | アイコンを作る（Pillow） |
-| `.claude/skills/` | dev-lifecycle / dev-judgment / dev-workflow（naki0227/useful-map から取得） |
-| `CLAUDE.md`, `docs/daily-runbook.md` | 毎日のセッションの決まりと手順 |
-| `docs/app-store.md` | 審査の危険・本人がすることの記録 |
+| きょうの台 | 日付から種を作り、だれが遊んでも同じ配置（バンパー 3〜4 個・球 4 個） |
+| からだ＝クッション | 打った軌跡が胴体になり、頭が胴体に当たると跳ね返る（切れない）。自分の体で角度を作る |
+| よそく線 | 3 回跳ね返るところまで。止まる位置も出る |
+| 連続 | 1 ショットで 2 個続けて食べるとショット +1。×2・×3 の倍率 |
+| おやつ | スコア ÷ 5 ＋ 星 1 つにつき 10 ＋ きょうの台の 1 回目に 50。ゲームの中だけのポイントで、売らない |
+| カプセル | おやつ 120 でなかまを 1 匹。かぶったら 40 返る。確率は画面に全部出す（ふつう 70%・レア 25%・スーパーレア 5%） |
+| なかま | 15 匹（カプセル 12・Pro 限定 3）。色・おでこの印・ひとことが違い、レア以上は「とくい」（よそく線 +1、伸びやすい、8 番球が出やすい、よくはずむ、おやつ増し） |
+| 毎日開く理由 | きょうの台・続けた日数・きょうのベスト・おやつがたまってカプセルが回せる |
 
-## 手元（Mac）で開く
+作らなかったもの：ランキング（サーバーが要る）、音（v1 は振動だけ）、お金で回すガチャ・おやつの販売（消耗型の課金は作らない）。
 
-```sh
-brew install xcodegen   # CI は 2.46.0 で固定
-xcodegen generate
-open DailyApp.xcodeproj
-```
+## 世界観と見た目
 
-## 版
+- このアプリでは「ビリヤード台」が画面の枠になり、「ビリヤードの球」がキャラクターの頭とエサになる
+- からし色のストライプの地、木の縁と青いラシャの台、すもも色（黒は使わない）の太い線、押すと沈むボタン
+- 本人が Web 版のキャラと UI を「いい感じ」と言ったので、StudyReel の淡いトーンではなく、この見た目を引き継いだ。`scripts/tone-check.py` の強い色は 0 件
 
-- Xcode 27.1（ランナー `xcode-27`。GitHub では Preview 扱い）、iOS 18.0 以降、iPhone だけ（iPhone Duo の内側の画面にも合わせる）、Swift 6
-- スキルの取得元：`naki0227/personal-knowledge`（Vault、private）の `templates/repo-bootstrap/.claude/skills/` を、本人の整備用セッションで写す（2026-11-05 に app-quality-bar を追加）
+## 手応えの表
+
+| 場面 | 動き | 振動 | 表情 |
+|---|---|---|---|
+| 引く | キューが下がる・強さのゲージ・よそく線 | 強さの目盛りをまたぐたびに selection | キリッ（強く引くと眉） |
+| 打つ | — | medium（強さで 0.4〜1.0） | > < |
+| クッション | — | light（速さで強さ） | — |
+| バンパー | バンパーがふくらむ | rigid | 目を回す |
+| からだで跳ね返る | 白い輪 | soft | 目を回す |
+| 食べる | 球の色の粒・点数が飛ぶ | rigid（連続で強く） | ^ ^ |
+| ボーナスショット | 文字が飛ぶ・HUD の玉が弾む | success | — |
+| 外した | — | soft（弱く） | しょんぼり |
+| 終わり | 結果の札・星が 1 つずつ | success・星ごとに light | 星の数で変わる |
+| カプセル | ハンドルが回り、カプセルが落ちて弾む | 等級で強さが変わる | ^ ^ |
+
+## 課金
+
+形：**買い切りの Pro**（`com.enludus.daily.006.pro`・¥480。枠 006 に残っていた商品を名前と説明を変えて使う）。
+中身：限定のなかま 3 匹（とくい付き）・おやつ 2 倍（カプセルを倍回せる）・台のいろ 3 種。核（毎日の台・ランダム台・カプセル・12 匹）は無料で全部遊べる。広告なし。
+出す場面：2 回目に遊び終えたとき 1 回だけ。あとはホーム右上・なかまの一覧の鍵から。
+
+### 勝算の表
+
+| 項目 | 内容 |
+|---|---|
+| 払う理由 3 つ | ①図鑑を埋めたい（限定 3 匹はお金でしか会えない）②カプセルを早く回したい（おやつ 2 倍）③お気に入りの子と台で遊びたい（見た目＋とくい） |
+| 比べたアプリ | **このセッションでは App Store を調べていない（未調査）**。次の見直しで、スネーク系・ひっぱり系のカジュアルゲーム 3 本以上の課金の形と値段を表にする |
+| 値段の位置 | ¥480 は買い切りの Pro の目安（¥300〜¥600）の中ほど。消耗型の課金のゲームと違い、1 回で終わる |
+| 売上の幅（フリーミアム 2%、手数料 15%、¥480 → 手取り約 ¥408） | 月 300 本 → 約 ¥2,400／1,000 本 → 約 ¥8,200／3,000 本 → 約 ¥24,500 |
+| 弱点 | 遊びが短く、Pro の中身が収集に寄っている。対策：なかまを足す（追加パック）、とくいで遊び方が変わる子を増やす |
+
+## 開発
+
+- SwiftUI（Canvas と TimelineView で台を描く）。外部の依存なし
+- ゲームの計算は `App/Sources/Engine/`（画面から切り離し、`Tests/` でテスト）
+- スクリーンショット：`-screenshotScene launch|game|result|collection|capsule|pro`
+- ビルドとテストは GitHub Actions（`.github/workflows/ci.yml`）。TestFlight は `testflight.yml` を手動で

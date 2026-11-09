@@ -4,25 +4,26 @@
 
 | 項目 | 内容 |
 |---|---|
-| Bundle ID | com.enludus.daily.___ |
+| Bundle ID | com.enludus.daily.006 |
 | アプリ名 | （毎日のセッションが決める。本人の許可 2026-11-04） |
-| サポート URL | https://github.com/enludus-daily/__REPO__/issues |
-| プライバシーポリシー URL | https://github.com/enludus-daily/__REPO__/blob/main/PRIVACY.md |
-| 年齢区分の答え | （暴力・ギャンブル・Web 閲覧・生成 AI などの有無。API では入れないので本人が入力） |
+| サポート URL | https://github.com/enludus-daily/app-20261109-tamahebi/issues |
+| プライバシーポリシー URL | https://github.com/enludus-daily/app-20261109-tamahebi/blob/main/PRIVACY.md |
+| 年齢区分の答え | 暴力・ギャンブルなし（カプセルはゲーム内ポイントだけで回す。換金性なし）。本人が入力 |
 | 輸出コンプライアンス | `ITSAppUsesNonExemptEncryption = NO`（標準の暗号だけ。ビルドの答えは asc が NO で入れる） |
 
 ## 審査の危険
 
-- 4.3(b) の種類に当たらない理由：
-- 既存のアプリとの意味のある違い：
-- 長く使える価値（4.2）：
-- 他社の名前・商標・見た目を使っていないか：
-- Apple Intelligence を使う場合、使えない端末での動き：
+- 4.3(b) の種類に当たらない理由：自作の物理パズルゲーム。懐中電灯・壁紙などの種類ではない
+- 既存のアプリとの意味のある違い：打ち出した軌跡がそのまま胴体になり、その胴体がクッションになる（スネークとビリヤードの組み合わせ）
+- 長く使える価値（4.2）：日付で決まる「きょうの台」、続けた日数、15匹のなかまの収集
+- 他社の名前・商標・見た目を使っていないか：使っていない（キャラクター・絵はすべて自作のコード描画）
+- Apple Intelligence：使わない
+- ガチャ（3.1.1 のルートボックス）：カプセルはゲーム内で遊んでためたおやつだけで回す。お金では回せない。確率は画面（出るなかまと確率）に全部出している
 
 ## 収益の道筋（本人が選ぶ）
 
-- 候補：なし / 投げ銭（StoreKit 2）/ 買い切り（StoreKit 2）/ 広告（AdMob。公開後に AdMob の登録・審査・app-ads.txt・プライバシー申告の変更が要る）
-- 理由：
+- 買い切りの Pro（com.enludus.daily.006.pro・¥480。枠 006 に残っていた商品を使い回す）
+- 理由：README の「課金」
 
 ## App プライバシーの答え（下書き。申告は本人。公開 API がない）
 

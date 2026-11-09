@@ -1,14 +1,14 @@
 {
   "_doc": "App Store Connect に API で入れる情報（.github/workflows/asc.yml の metadata が読む）。文字数：name・subtitle 30、keywords 100（カンマ区切り）、promotionalText 170、description 4000。カテゴリの ID は EDUCATION・PRODUCTIVITY・UTILITIES・LIFESTYLE・HEALTH_AND_FITNESS など。審査への提出と App プライバシーの申告は本人が行う。",
   "locale": "ja",
-  "name": "",
-  "subtitle": "",
-  "primaryCategory": "",
+  "name": "ころがれ！タマヘビ",
+  "subtitle": "ひっぱって転がす、ヘビのビリヤード",
+  "primaryCategory": "GAMES",
   "secondaryCategory": "",
-  "supportUrl": "https://github.com/enludus-daily/__REPO__/issues",
-  "privacyPolicyUrl": "https://github.com/enludus-daily/__REPO__/blob/main/PRIVACY.md",
-  "keywords": "",
-  "promotionalText": "",
-  "description": "",
-  "whatToTest": ""
+  "supportUrl": "https://github.com/enludus-daily/app-20261109-tamahebi/issues",
+  "privacyPolicyUrl": "https://github.com/enludus-daily/app-20261109-tamahebi/blob/main/PRIVACY.md",
+  "keywords": "ヘビ,スネーク,ビリヤード,パズル,物理,ひっぱり,デイリー,カプセル,キャラ,なかま,反射,ころがる",
+  "promotionalText": "毎日かわる「きょうの台」。ひっぱって、はなして、タマを転がそう。通った跡はタマのからだになって、クッションみたいに跳ね返る！",
+  "description": "ころがれ！タマヘビは、スネークとビリヤードをまぜたパズルゲームです。\n\n■ 遊び方\n・台のどこでもひっぱって、はなすとタマが転がります\n・転がった跡が、そのままタマのからだになります\n・からだはクッション。自分のからだで跳ね返して、角度を作れます\n・番号の球を食べるとのびます。1回で2こ続けて食べると、ショットが1回ふえます\n・10ショットでおしまい。星3つをめざそう\n\n■ 毎日あそぶ理由\n・「きょうの台」は日付で決まり、だれが遊んでも同じ配置です\n・続けた日数と、その日のベストが残ります\n・遊ぶとおやつがたまり、カプセルで新しいなかまに会えます（お金では回せません）\n\n■ なかま\n・タマ、ミント、クロスケ、キラリなど12匹。それぞれ表情とおでこの印がちがい、一部は「とくい」をもっています\n\n■ タマヘビ Pro（買い切り）\n・限定のなかま3匹\n・おやつがずっと2倍\n・台のいろ3種\n\n広告はありません。データは端末の中だけに保存します。",
+  "whatToTest": "きょうの台を遊ぶ → 結果のあとにカプセルを回す → なかまの一覧で選ぶ → その子で遊ぶ。Pro の購入と「購入を復元」（ホーム右上の Pro をみる）。"
 }

@@ -1,0 +1,28 @@
+{
+  "identifier" : "6E1F0B2A",
+  "nonRenewingSubscriptions" : [ ],
+  "products" : [
+    {
+      "displayPrice" : "480",
+      "familyShareable" : true,
+      "internalID" : "6E1F0B2B",
+      "localizations" : [
+        {
+          "description" : "限定のなかま3匹・おやつ2倍・台のいろ3種",
+          "displayName" : "タマヘビ Pro",
+          "locale" : "ja"
+        }
+      ],
+      "productID" : "com.enludus.daily.006.pro",
+      "referenceName" : "Pro",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "",
+    "_developerTeamID" : "",
+    "_locale" : "ja"
+  },
+  "subscriptionGroups" : [ ],
+  "version" : { "major" : 3, "minor" : 0 }
+}

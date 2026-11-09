@@ -1,6 +1,6 @@
 # XcodeGen の spec（https://github.com/yonaskolb/XcodeGen）。.xcodeproj はコミットせず、CI と手元で生成する。
 # 名前と Bundle ID は scripts/new-app.sh が書き換える（テンプレートの名前・Bundle ID の文字列を全部置き換える）。
-name: DailyApp
+name: Tamahebi
 options:
   developmentLanguage: ja
   deploymentTarget:
@@ -14,7 +14,7 @@ settings:
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     DEAD_CODE_STRIPPING: YES
 targets:
-  DailyApp:
+  Tamahebi:
     type: application
     platform: iOS
     sources:
@@ -23,7 +23,7 @@ targets:
     info:
       path: App/Info.plist
       properties:
-        CFBundleDisplayName: DailyApp
+        CFBundleDisplayName: "タマヘビ"
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         # 標準の HTTPS 以外の暗号を使わない前提。使うなら本人に戻す（輸出規制の申告が変わる）
@@ -36,31 +36,31 @@ targets:
           - UIInterfaceOrientationPortrait
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.enludus.daily.template
-        PRODUCT_NAME: DailyApp
+        PRODUCT_BUNDLE_IDENTIFIER: com.enludus.daily.006
+        PRODUCT_NAME: Tamahebi
         # iPhone だけ（iPad 対応にすると iPad のスクリーンショットも提出に要る）
         TARGETED_DEVICE_FAMILY: "1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         CODE_SIGN_STYLE: Automatic
-  DailyAppTests:
+  TamahebiTests:
     type: bundle.unit-test
     platform: iOS
     sources:
       - path: Tests
     dependencies:
-      - target: DailyApp
+      - target: Tamahebi
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.enludus.daily.template.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.enludus.daily.006.tests
         GENERATE_INFOPLIST_FILE: YES
 schemes:
-  DailyApp:
+  Tamahebi:
     build:
       targets:
-        DailyApp: all
-        DailyAppTests: [test]
+        Tamahebi: all
+        TamahebiTests: [test]
     test:
       gatherCoverageData: true
       targets:
-        - DailyAppTests
+        - TamahebiTests
