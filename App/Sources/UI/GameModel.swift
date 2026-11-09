@@ -28,6 +28,10 @@ final class GameModel {
     let mode: PlayMode
     let character: Character
     let table: TableTheme
+    /// おてほんモード：ステージの解き方を 1 打ずつ見せる（とくいはお休みにして、作ったときと同じ動きにする）
+    let hintMode: Bool
+    /// おてほんと違う打ち方をした
+    private(set) var offPath = false
     private(set) var engine: GameEngine
     private(set) var aimStart: CGPoint?
     private(set) var aimNow: CGPoint?
@@ -43,10 +47,11 @@ final class GameModel {
 
     static let maxPull: CGFloat = 120
 
-    init(mode: PlayMode, character: Character, rules: Rules, table: TableTheme) {
+    init(mode: PlayMode, character: Character, rules: Rules, table: TableTheme, hintMode: Bool = false) {
         self.mode = mode
         self.character = character
         self.table = table
+        self.hintMode = hintMode
         if let s = mode.stage {
             engine = GameEngine(stage: s, rules: rules)
         } else {
@@ -55,6 +60,22 @@ final class GameModel {
     }
 
     var isAiming: Bool { aimStart != nil }
+
+    /// いま見せるおてほんの 1 打
+    var hintShot: Shot? {
+        guard hintMode, !offPath, engine.canShoot, let s = mode.stage, engine.shotsTaken < s.solution.count else { return nil }
+        return s.solution[engine.shotsTaken]
+    }
+
+    var hintPreview: ShotPreview? {
+        hintShot.map { engine.preview(direction: .angle($0.angle), power: $0.power) }
+    }
+
+    /// 引いている向きと強さが、おてほんに近い（離すと、おてほんどおりに打つ）
+    var aimMatchesHint: Bool {
+        guard let h = hintShot, let a = aim else { return false }
+        return a.direction.dot(.angle(h.angle)) > cos(4 * .pi / 180) && abs(a.power - h.power) < 0.08
+    }
 
     /// 引いた量から、向きと強さ（0〜1）
     var aim: (direction: Vec, power: Double)? {
@@ -107,7 +128,15 @@ final class GameModel {
     func endAim() {
         defer { aimStart = nil; aimNow = nil }
         guard let a = aim else { return }
+        if let h = hintShot, aimMatchesHint {
+            if engine.shoot(h) {
+                Feedback.shot(power: h.power)
+                setFace(.zoom, for: 0.2)
+            }
+            return
+        }
         if engine.shoot(direction: a.direction, power: a.power) {
+            if hintMode { offPath = true }
             Feedback.shot(power: a.power)
             setFace(.zoom, for: 0.2)
         }

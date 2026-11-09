@@ -61,6 +61,8 @@ struct Progress: Codable, Equatable, Sendable {
     static let stagePerNewStar = 10
     /// Pro 限定のなかまは、はじめから Lv3
     static let proCharacterLevel = 3
+    /// ヒント（そのステージのおてほんの打ち方）。1 日 1 回は無料、Pro はいつも無料
+    static let hintCost = 30
 
     var snacks = Progress.startingSnacks
     var owned: Set<String> = [Roster.starterID]
@@ -76,6 +78,9 @@ struct Progress: Codable, Equatable, Sendable {
     var pulls = 0
     var hasSeenPaywall = false
     var table: TableTheme = .blue
+    /// ヒントを開けたステージ（一度開けたら、そのステージではずっと見られる）
+    var hintedStages: Set<String> = []
+    var lastFreeHintDay: String?
 
     init() {}
 
@@ -97,6 +102,32 @@ struct Progress: Codable, Equatable, Sendable {
         pulls = try c.decodeIfPresent(Int.self, forKey: .pulls) ?? 0
         hasSeenPaywall = try c.decodeIfPresent(Bool.self, forKey: .hasSeenPaywall) ?? false
         table = try c.decodeIfPresent(TableTheme.self, forKey: .table) ?? .blue
+        hintedStages = try c.decodeIfPresent(Set<String>.self, forKey: .hintedStages) ?? []
+        lastFreeHintDay = try c.decodeIfPresent(String.self, forKey: .lastFreeHintDay)
+    }
+
+    // MARK: ヒント
+
+    enum HintPrice: Equatable, Sendable { case owned, pro, freeToday, snacks(Int), tooFewSnacks(Int) }
+
+    func hintPrice(for stageID: String, day: String, isPro: Bool) -> HintPrice {
+        if hintedStages.contains(stageID) { return .owned }
+        if isPro { return .pro }
+        if lastFreeHintDay != day { return .freeToday }
+        return snacks >= Self.hintCost ? .snacks(Self.hintCost) : .tooFewSnacks(Self.hintCost)
+    }
+
+    /// ヒントを開ける。おやつが足りないときは false
+    mutating func unlockHint(for stageID: String, day: String, isPro: Bool) -> Bool {
+        switch hintPrice(for: stageID, day: day, isPro: isPro) {
+        case .owned: return true
+        case .pro: break
+        case .freeToday: lastFreeHintDay = day
+        case .snacks(let n): snacks -= n
+        case .tooFewSnacks: return false
+        }
+        hintedStages.insert(stageID)
+        return true
     }
 
     var selectedCharacter: Character { Roster.character(selected) }

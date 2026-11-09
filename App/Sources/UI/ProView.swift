@@ -31,6 +31,7 @@ struct ProView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     benefit("map.fill", "ワールド 4〜6（36 ステージ）", "ワープの台・うごくバンパー・よるのごちゃまぜ。ぜんぶ解けることを確かめた手づくりの台")
                     benefit("person.3.fill", "限定のなかま 3 匹（なかよし Lv3 から）", "ギンガ・サクラ・ホムラ。とくいがはじめから強い")
+                    benefit("lightbulb.fill", "ヒントがいつでも無料", "どのステージでも、★3 のおてほんを見られる")
                     benefit("bag.fill", "おやつがずっと 2 倍", "カプセルを倍回せる。なかよし度が早く上がる")
                     benefit("square.grid.2x2.fill", "台のいろ 3 種", "きょうの台を、みどり・すもも・よるに")
                 }

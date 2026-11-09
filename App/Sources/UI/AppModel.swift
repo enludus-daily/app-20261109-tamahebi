@@ -84,10 +84,22 @@ final class AppModel {
 
     // MARK: 遊ぶ
 
-    func play(_ mode: PlayMode) {
+    func play(_ mode: PlayMode, hint: Bool = false) {
         let (look, rules) = progress.playable(progress.selectedCharacter)
-        game = GameModel(mode: mode, character: look, rules: rules, table: progress.table)
+        game = GameModel(mode: mode, character: look, rules: hint ? .standard : rules, table: progress.table, hintMode: hint)
         route = .game
+    }
+
+    // MARK: ヒント
+
+    func hintPrice(for s: Stage) -> Progress.HintPrice { progress.hintPrice(for: s.id, day: today, isPro: isPro) }
+
+    /// ヒントを開けて、おてほんモードで最初から
+    @discardableResult
+    func playWithHint(_ s: Stage) -> Bool {
+        guard progress.unlockHint(for: s.id, day: today, isPro: isPro) else { return false }
+        play(.stage(s), hint: true)
+        return true
     }
 
     func playDaily() { play(.daily(today)) }
@@ -99,7 +111,7 @@ final class AppModel {
 
     func replay() {
         guard let g = game else { return playDaily() }
-        if case .random = g.mode { playRandom() } else { play(g.mode) }
+        if case .random = g.mode { playRandom() } else { play(g.mode, hint: g.hintMode) }
     }
 
     func leaveGame() {
@@ -158,6 +170,9 @@ final class AppModel {
             sample()
             if let s = book.first(where: { $0.id == "2-4" }) { play(.stage(s)) }
             game?.demoAim()
+        case "hint":
+            sample()
+            if let s = book.first(where: { $0.id == "2-8" }) { play(.stage(s), hint: true) }
         case "daily":
             play(.daily("2026-11-09"))
             game?.demoAim()

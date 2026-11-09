@@ -180,6 +180,11 @@ struct GameEngine: Sendable {
     private(set) var ateEight = false
     private var warpLock: Int?
     private var bouncedThisShot = false
+    private var accumulator = 0.0
+    /// 止まっている間の時間（球の出てくる動きなど、見た目だけに使う）
+    private(set) var idleTime = 0.0
+    /// 見た目の時計（物理の時間 + 止まっている間の時間）
+    var clock: Double { time + idleTime }
 
     var isFinished: Bool { outcome != nil }
     var isIce: Bool { stage?.ice ?? false }
@@ -276,8 +281,8 @@ struct GameEngine: Sendable {
         var all: [GameEvent] = []
         var t = 0.0
         while isMoving, t < maxSeconds {
-            all += advance(by: 1.0 / 240)
-            t += 1.0 / 240
+            all += advance(by: Self.tick)
+            t += Self.tick
         }
         return all
     }
@@ -302,17 +307,23 @@ struct GameEngine: Sendable {
 
     // MARK: 時間を進める
 
+    /// 物理は 1/240 秒の決まった刻みで進める（画面の速さが違っても、ステージを作ったときと同じ動きになる）。
+    /// 時間（うごくバンパー）は、頭が転がっている間だけ進む。止まっている間は台も止まるので、よそく線がずれない
+    static let tick = 1.0 / 240
+
     mutating func advance(by dt: Double) -> [GameEvent] {
         guard dt > 0 else { return [] }
         for i in bumpers.indices { bumpers[i].squash = max(0, bumpers[i].squash - dt * 5) }
         guard isMoving else {
-            time += dt
+            accumulator = 0
+            idleTime += dt
             return []
         }
         var events: [GameEvent] = []
-        let n = max(1, Int((dt * 240).rounded(.up)))
-        for _ in 0..<n where isMoving {
-            physicsStep(dt / Double(n), events: &events)
+        accumulator += dt
+        while accumulator >= Self.tick - 1e-9, isMoving {
+            accumulator -= Self.tick
+            physicsStep(Self.tick, events: &events)
         }
         return events
     }
@@ -439,7 +450,7 @@ struct GameEngine: Sendable {
             if path.contains(where: { $0.distance(to: c) < 24 }) { continue }
             let eight = rng.unit() < rules.eightBallChance
             let number = eight ? 8 : 1 + Int(rng.unit() * 7)
-            balls.append(TableBall(center: c, number: number, born: time, phase: rng.unit() * 6))
+            balls.append(TableBall(center: c, number: number, born: time + idleTime, phase: rng.unit() * 6))
             return
         }
     }

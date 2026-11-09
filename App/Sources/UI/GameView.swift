@@ -5,6 +5,7 @@ struct GameView: View {
     @Environment(AppModel.self) private var app
     @Bindable var game: GameModel
     @State private var showIntro = true
+    @State private var showHint = false
 
     static let pad: CGFloat = 22
 
@@ -40,6 +41,13 @@ struct GameView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
         .animation(.spring(response: 0.4, dampingFraction: 0.75), value: game.summary != nil)
+        .sheet(isPresented: $showHint) {
+            if let s = game.mode.stage {
+                HintSheet(stage: s) { showHint = false }
+                    .presentationDetents([.medium])
+                    .presentationBackground(Theme.cream)
+            }
+        }
         .onAppear {
             game.onFinish = { g in
                 let r = app.finish(g)
@@ -74,6 +82,26 @@ struct GameView: View {
                     .contentTransition(.numericText())
             }
             Text("★3: \(s.par3)打").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
+            if game.hintMode {
+                if game.offPath {
+                    Button("おてほんからやりなおす") { app.replay() }
+                        .font(Theme.label(12)).foregroundStyle(Theme.ink)
+                        .padding(.horizontal, 8).padding(.vertical, 4)
+                        .background(Capsule().fill(Color(hex: 0xF7A9C4)))
+                } else {
+                    Label("おてほん", systemImage: "lightbulb.fill").font(Theme.label(12)).foregroundStyle(Theme.ink)
+                        .padding(.horizontal, 8).padding(.vertical, 4)
+                        .background(Capsule().fill(Color(hex: 0xF7A9C4).opacity(0.6)))
+                }
+            } else {
+                Button { showHint = true } label: {
+                    Image(systemName: "lightbulb.fill").font(.system(size: 14, weight: .bold)).foregroundStyle(Theme.ink)
+                        .frame(width: 32, height: 32)
+                        .background(Circle().fill(Theme.sun))
+                        .overlay(Circle().stroke(Theme.ink, lineWidth: 2))
+                }
+                .accessibilityLabel("ヒント")
+            }
         }
         .padding(.horizontal, 4)
         .accessibilityElement(children: .combine)
@@ -158,11 +186,13 @@ struct TableCanvas: View {
             drawBumpers(&ctx)
             drawBalls(&ctx)
             let aim = game.aim
+            if let h = game.hintShot, let hp = game.hintPreview { drawHint(&ctx, shot: h, preview: hp) }
             if let a = aim, let pv = game.preview { drawGuide(&ctx, preview: pv, aim: a) }
             drawSnake(&ctx, aim: aim)
             drawSparks(&ctx)
             drawPops(&ctx)
             if let a = aim { drawGauge(&ctx, power: a.power, rules: rules) }
+            if let h = game.hintShot, aim != nil { drawGaugeTarget(&ctx, power: h.power, rules: rules) }
             if game.engine.shotsTaken == 0, !game.isAiming, !game.engine.isMoving { drawHint(&ctx) }
         }
     }
@@ -231,7 +261,7 @@ struct TableCanvas: View {
 
     private func drawBalls(_ ctx: inout GraphicsContext) {
         for b in game.engine.balls {
-            let age = game.engine.time - b.born
+            let age = game.engine.clock - b.born
             let s = age < 0.3 ? Self.easeOutBack(age / 0.3) : 1
             let bob = abs(sin(game.clock * 2.2 + b.phase)) * 2
             if b.kind == .ghost {
@@ -356,6 +386,45 @@ struct TableCanvas: View {
         }
     }
 
+    /// おてほんの線（ピンク）と、キューの影
+    private func drawHint(_ ctx: inout GraphicsContext, shot: Shot, preview pv: ShotPreview) {
+        let pink = Color(hex: 0xF7A9C4)
+        let match = game.aimMatchesHint
+        for (i, p) in pv.points.enumerated() where i % 2 == 0 {
+            ctx.fill(CharacterArt.circle(CGPoint(x: p.x, y: p.y), match ? 3.4 : 2.6), with: .color(pink.opacity(match ? 1 : 0.85)))
+        }
+        let h = game.engine.head, d = Vec.angle(shot.angle)
+        let back = game.engine.rules.headRadius + 6 + shot.power * 36
+        var cue = Path()
+        cue.move(to: CGPoint(x: h.x - d.x * back, y: h.y - d.y * back))
+        cue.addLine(to: CGPoint(x: h.x - d.x * (back + 150), y: h.y - d.y * (back + 150)))
+        ctx.stroke(cue, with: .color(pink.opacity(0.75)), style: StrokeStyle(lineWidth: 8, lineCap: .round, dash: [6, 6]))
+        if !game.isAiming {
+            let label = "おてほん：強さ \(Int((shot.power * 100).rounded()))%"
+            let font = Font.system(size: 13, weight: .black, design: .rounded)
+            let at = CGPoint(x: min(max(h.x, 90), game.engine.rules.width - 90), y: max(h.y - 34, 20))
+            for (dx, dy) in [(-1.5, 0.0), (1.5, 0), (0, -1.5), (0, 1.5)] {
+                ctx.draw(Text(label).font(font).foregroundStyle(Theme.ink), at: CGPoint(x: at.x + dx, y: at.y + dy))
+            }
+            ctx.draw(Text(label).font(font).foregroundStyle(pink), at: at)
+        } else if match {
+            let font = Font.system(size: 15, weight: .black, design: .rounded)
+            let at = CGPoint(x: game.engine.rules.width / 2, y: game.engine.rules.height - 44)
+            for (dx, dy) in [(-1.5, 0.0), (1.5, 0), (0, -1.5), (0, 1.5)] {
+                ctx.draw(Text("ぴったり！はなして").font(font).foregroundStyle(Theme.ink), at: CGPoint(x: at.x + dx, y: at.y + dy))
+            }
+            ctx.draw(Text("ぴったり！はなして").font(font).foregroundStyle(pink), at: at)
+        }
+    }
+
+    private func drawGaugeTarget(_ ctx: inout GraphicsContext, power: Double, rules: Rules) {
+        let gw = 140.0, gx = rules.width / 2 - gw / 2, gy = rules.height - 26
+        let x = gx + gw * power
+        var p = Path()
+        p.move(to: CGPoint(x: x, y: gy - 7)); p.addLine(to: CGPoint(x: x, y: gy + 17))
+        ctx.stroke(p, with: .color(Color(hex: 0xF7A9C4)), style: StrokeStyle(lineWidth: 4, lineCap: .round))
+    }
+
     private func drawGauge(_ ctx: inout GraphicsContext, power: Double, rules: Rules) {
         let gw = 140.0, gx = rules.width / 2 - gw / 2, gy = rules.height - 26
         ctx.fill(rounded(CGRect(x: gx - 3, y: gy - 3, width: gw + 6, height: 16), 8), with: .color(Theme.ink))
@@ -382,5 +451,53 @@ struct TableCanvas: View {
     static func easeOutBack(_ x: Double) -> Double {
         let c = 1.70158
         return 1 + (c + 1) * pow(x - 1, 3) + c * pow(x - 1, 2)
+    }
+}
+
+/// ヒントを開ける確認
+struct HintSheet: View {
+    @Environment(AppModel.self) private var app
+    let stage: Stage
+    let close: () -> Void
+
+    var body: some View {
+        let price = app.hintPrice(for: stage)
+        VStack(spacing: 14) {
+            Image(systemName: "lightbulb.fill").font(.system(size: 30, weight: .bold)).foregroundStyle(Theme.ink)
+                .frame(width: 60, height: 60).background(Circle().fill(Theme.sun))
+                .overlay(Circle().stroke(Theme.ink, lineWidth: 3))
+            Text("\(stage.id) のおてほん").font(Theme.title(22)).foregroundStyle(Theme.ink)
+            Text("最初からやりなおして、★3 の打ち方を 1 打ずつピンクの線で見せます。近い向きと強さで引くと「ぴったり」になり、おてほんどおりに打てます。おてほんの間は、なかまのとくいはお休みです。")
+                .font(Theme.body(14)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
+            Group {
+                switch price {
+                case .owned:
+                    Button("おてほんを見る") { open() }.buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
+                case .pro:
+                    Button("おてほんを見る（Pro は無料）") { open() }.buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
+                case .freeToday:
+                    Button("きょうの無料ヒントで見る") { open() }.buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
+                    Text("無料ヒントは 1 日 1 回。一度開けたステージは、ずっと見られます").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
+                case .snacks(let n):
+                    Button { open() } label: {
+                        HStack(spacing: 6) { Text("おやつ"); SnackIcon(size: 18); Text("\(n) で見る") }
+                    }
+                    .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
+                    Text("いまのおやつ \(app.progress.snacks)。一度開けたステージは、ずっと見られます").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
+                case .tooFewSnacks(let n):
+                    Text("おやつが \(n) 要ります（いま \(app.progress.snacks)）。あしたの無料ヒントを待つか、ステージやきょうの台でおやつをためよう")
+                        .font(Theme.body(13)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
+                }
+            }
+            if !app.isPro {
+                Button("Pro ならヒントはいつも無料") { close(); app.showPro = true }
+                    .font(Theme.label(13)).foregroundStyle(Theme.ink).underline()
+            }
+        }
+        .padding(24)
+    }
+
+    private func open() {
+        if app.playWithHint(stage) { Feedback.bonus(); close() }
     }
 }

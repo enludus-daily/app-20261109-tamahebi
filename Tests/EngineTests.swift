@@ -111,3 +111,26 @@ struct EngineTests {
         #expect(Roster.character("tama").rules() == Rules.standard)
     }
 }
+
+struct FixedStepTests {
+    /// 画面の速さ（1 フレームの長さ）が違っても、同じ打ち方なら同じところに止まる。ヒントの打ち方がずれないため
+    @Test(arguments: [1.0 / 60, 1.0 / 120, 1.0 / 47])
+    func sameShotSameResultAtAnyFrameRate(frame: Double) {
+        var a = GameEngine(seed: 21), b = GameEngine(seed: 21)
+        let shot = Shot(angle: -1.2, power: 0.8)
+        a.shoot(shot); _ = a.runUntilStopped()
+        b.shoot(shot)
+        var t = 0.0
+        while b.isMoving, t < 20 { _ = b.advance(by: frame); t += frame }
+        #expect(a.head.distance(to: b.head) < 0.001)
+        #expect(a.eaten == b.eaten)
+    }
+
+    @Test func bumpersWaitWhileTheHeadRests() {
+        var e = GameEngine(seed: 3)
+        let t = e.time
+        _ = e.advance(by: 2)
+        #expect(e.time == t)
+        #expect(e.clock > t)
+    }
+}

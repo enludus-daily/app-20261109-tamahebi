@@ -163,3 +163,36 @@ struct ProgressTests {
         #expect(Progress.day(before: "2026-03-01") == "2026-02-28")
     }
 }
+
+struct HintTests {
+    @Test func firstHintOfTheDayIsFree() {
+        var p = Progress()
+        #expect(p.hintPrice(for: "2-8", day: "2026-11-10", isPro: false) == .freeToday)
+        let ok = p.unlockHint(for: "2-8", day: "2026-11-10", isPro: false)
+        #expect(ok)
+        #expect(p.snacks == Progress.startingSnacks)
+        #expect(p.hintPrice(for: "2-8", day: "2026-11-10", isPro: false) == .owned)
+        #expect(p.hintPrice(for: "2-9", day: "2026-11-10", isPro: false) == .snacks(Progress.hintCost))
+        #expect(p.hintPrice(for: "2-9", day: "2026-11-11", isPro: false) == .freeToday)
+    }
+
+    @Test func laterHintsCostSnacks() {
+        var p = Progress()
+        _ = p.unlockHint(for: "1-1", day: "d", isPro: false)
+        let ok = p.unlockHint(for: "1-2", day: "d", isPro: false)
+        #expect(ok)
+        #expect(p.snacks == Progress.startingSnacks - Progress.hintCost)
+        p.snacks = 5
+        let poor = p.unlockHint(for: "1-3", day: "d", isPro: false)
+        #expect(!poor)
+        #expect(!p.hintedStages.contains("1-3"))
+    }
+
+    @Test func proHintsAreFree() {
+        var p = Progress()
+        _ = p.unlockHint(for: "1-1", day: "d", isPro: false)
+        let ok = p.unlockHint(for: "1-2", day: "d", isPro: true)
+        #expect(ok)
+        #expect(p.snacks == Progress.startingSnacks)
+    }
+}
