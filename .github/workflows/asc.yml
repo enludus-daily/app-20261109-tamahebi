@@ -26,9 +26,9 @@ concurrency:
 jobs:
   asc:
     if: github.repository != 'enludus-daily/daily-app-template'
-    uses: enludus-daily/daily-actions/.github/workflows/ios-asc.yml@920afee484b854647b6b0d429f11eaec44cf49fa # daily-actions 2026-11-10-resubmit
+    uses: enludus-daily/daily-actions/.github/workflows/ios-asc.yml@37039871350ea51fa19d8976a9926fd93f7ae98e # daily-actions 2026-11-10-errors
     with:
-      actions-sha: 920afee484b854647b6b0d429f11eaec44cf49fa
+      actions-sha: 37039871350ea51fa19d8976a9926fd93f7ae98e
       command: ${{ inputs.command }}
       confirm-version: ${{ inputs.confirm-version }}
       # 1.0 は審査中。次のアップデートの版（project.yml の MARKETING_VERSION と同じ）
