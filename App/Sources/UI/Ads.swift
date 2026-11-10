@@ -33,8 +33,8 @@ final class AdMobRewarded: NSObject, RewardedAds, FullScreenContentDelegate {
     static let productionUnit = "ca-app-pub-1806737602764042/3664570268"
     /// Google のテスト用のリワード広告（TestFlight と開発で使う。自分で本番の広告を見ると、不正な表示として扱われることがある）
     static let testUnit = "ca-app-pub-3940256099942544/1712485313"
-    /// 全画面広告の本番のユニット（本人が AdMob で作ったら入れる。空のあいだ、App Store のビルドでは出さない）
-    static let productionInterstitialUnit = ""
+    /// 全画面広告の本番のユニット（3 回遊ぶごと。Pro は出さない）
+    static let productionInterstitialUnit = "ca-app-pub-1806737602764042/8476758294"
     static let testInterstitialUnit = "ca-app-pub-3940256099942544/4411468910"
 
     private(set) var isReady = false
