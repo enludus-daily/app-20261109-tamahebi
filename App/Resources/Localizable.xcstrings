@@ -93,7 +93,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cleared in %1$@ shots (★3: %2$@ or fewer, ★2: %3$@ or fewer)"
+            "value": "%1$@ shots · ★3 in %2$@ · ★2 in %3$@"
           }
         },
         "ja": {

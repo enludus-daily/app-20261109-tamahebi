@@ -110,7 +110,8 @@ final class AppModel {
             startTutorial()
         }
         await store.load()
-        Task { await ads.prepare() }
+        // 広告の同意とトラッキングの許可は、チュートリアルを終えてからたずねる（はじめの操作の上に出さない）
+        if progress.tutorialDone { Task { await ads.prepare() } }
         progress.normalize(isPro: isPro, friendPack: hasFriendPack)
     }
 
@@ -216,6 +217,7 @@ final class AppModel {
 
     func finishTutorial() {
         if !progress.tutorialDone {
+            Task { await ads.prepare() }
             progress.tutorialDone = true
             progress.snacks += Self.tutorialGift
             showTutorialDone = true
