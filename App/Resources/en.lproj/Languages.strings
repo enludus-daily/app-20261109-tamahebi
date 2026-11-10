@@ -1,0 +1,2 @@
+/* このアプリの言語（XcodeGen に日本語と英語を知らせるため。文字は Localizable.xcstrings） */
+"language" = "English";

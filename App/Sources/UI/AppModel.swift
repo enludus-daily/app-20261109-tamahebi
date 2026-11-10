@@ -60,16 +60,28 @@ final class AppModel {
     var ownedCount: Int { Roster.all.filter(owns).count }
     var today: String { Progress.dayKey(Date()) }
 
+    /// 起動引数 -demo：YouTube の録画用に、見どころを人の操作なしで再生する（保存データは読み書きしない）
+    let isDemo = ProcessInfo.processInfo.arguments.contains("-demo")
+    /// デモで遊ぶステージ（からだで跳ね返る・2 こ続けてボーナスショットが 2 回・3 打で星 3）
+    static let demoStageID = "1-22"
+
     init(defaults: UserDefaults = .standard) {
         bundleID = Bundle.main.bundleIdentifier ?? "com.enludus.daily.006"
         let pro = ProductID.pro(bundleID: bundleID)
         // テスト・CI の撮影では広告を出さない
         let quiet = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
             || defaults.string(forKey: "screenshotScene") != nil
+            || ProcessInfo.processInfo.arguments.contains("-demo")
         ads = quiet ? NoAds() : AdMobRewarded()
         store = PurchaseStore(productIDs: [pro, ProductID.pack("worlds", bundleID: bundleID), ProductID.pack("friends", bundleID: bundleID)],
                               proProductIDs: [pro])
-        if let data = defaults.data(forKey: Self.key), let p = try? JSONDecoder().decode(Progress.self, from: data) {
+        if ProcessInfo.processInfo.arguments.contains("-demo") {
+            // 見本のデータ（保存しない）
+            var p = Progress()
+            p.tutorialDone = true
+            p.owned = ["tama", "mint", "soda", "momo", "kurosuke", "wataame", "kirari"]
+            progress = p
+        } else if let data = defaults.data(forKey: Self.key), let p = try? JSONDecoder().decode(Progress.self, from: data) {
             progress = p
         } else {
             progress = Progress()
@@ -85,10 +97,15 @@ final class AppModel {
     }
 
     private func save() {
+        guard !isDemo else { return }
         if let data = try? JSONEncoder().encode(progress) { UserDefaults.standard.set(data, forKey: Self.key) }
     }
 
     func onLaunch() async {
+        if isDemo {
+            startDemo()
+            return
+        }
         if !progress.tutorialDone, route == .home, game == nil, UserDefaults.standard.string(forKey: "screenshotScene") == nil {
             startTutorial()
         }
@@ -163,6 +180,18 @@ final class AppModel {
     func playStage(_ s: Stage) {
         guard isUnlocked(s) else { showPro = isLockedBehindPurchase(StageBook.world(s.world)); return }
         play(.stage(s))
+    }
+
+    // MARK: デモ（-demo）
+
+    func startDemo() {
+        guard let s = book.first(where: { $0.id == Self.demoStageID }) else { return }
+        var rules = Rules.standard
+        rules.bumpersWaitWhileResting = true
+        let g = GameModel(mode: .stage(s), character: Roster.character(Roster.starterID), rules: rules, table: .blue, demo: true)
+        game = g
+        route = .game
+        Task { await g.runDemo() }
     }
 
     // MARK: チュートリアル

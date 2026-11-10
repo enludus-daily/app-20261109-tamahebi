@@ -13,7 +13,7 @@ struct BannerSlot: View {
         }
         .frame(height: height)
         .background(Theme.cream.opacity(0.6))
-        .accessibilityLabel("広告")
+        .accessibilityLabel(String(localized: "広告"))
     }
 }
 

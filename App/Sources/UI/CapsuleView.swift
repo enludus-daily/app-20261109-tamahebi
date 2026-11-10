@@ -17,7 +17,7 @@ struct CapsuleView: View {
             HStack {
                 BackButton { app.route = .home }
                 Spacer()
-                Text("カプセル").font(Theme.title(24)).foregroundStyle(Theme.ink)
+                Text(String(localized: "カプセル")).font(Theme.title(24)).foregroundStyle(Theme.ink)
                 Spacer()
                 Pill {
                     SnackIcon()
@@ -91,7 +91,7 @@ struct CapsuleView: View {
             .offset(y: -10)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("カプセルの機械")
+        .accessibilityLabel(String(localized: "カプセルの機械"))
     }
 
     private func capsuleBall(_ color: Color, size: CGFloat) -> some View {
@@ -105,7 +105,7 @@ struct CapsuleView: View {
 
     private func reveal(_ r: PullResult) -> some View {
         VStack(spacing: 8) {
-            Text(r.isNew ? "あたらしいなかま！" : (r.levelUp != nil ? "なかよし度アップ！" : "また会えたね")).font(Theme.title(18)).foregroundStyle(Theme.ink)
+            Text(r.isNew ? String(localized: "あたらしいなかま！") : (r.levelUp != nil ? String(localized: "なかよし度アップ！") : String(localized: "また会えたね"))).font(Theme.title(18)).foregroundStyle(Theme.ink)
             CharacterPortrait(character: r.character.wearing(app.progress.costume(of: r.character)), face: .happy).frame(width: 200, height: 150)
             if !r.isNew {
                 HStack(spacing: 6) {
@@ -123,14 +123,14 @@ struct CapsuleView: View {
                 .padding(.horizontal, 10).padding(.vertical, 2)
                 .background(Capsule().fill(Theme.rarity(r.character.rarity)))
             Text(r.character.line).font(Theme.body(14)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
-            Label("とくい：\(r.character.perk.label(level: app.progress.level(of: r.character)))", systemImage: "sparkle").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
+            Label(String(localized: "とくい：") + r.character.perk.label(level: app.progress.level(of: r.character)), systemImage: "sparkle").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
             if r.refund > 0 {
-                HStack(spacing: 4) { SnackIcon(size: 16); Text("おかえし +\(r.refund)").font(Theme.label(13)) }.foregroundStyle(Theme.ink)
+                HStack(spacing: 4) { SnackIcon(size: 16); Text(String(localized: "おかえし +\(L.s(r.refund))")).font(Theme.label(13)) }.foregroundStyle(Theme.ink)
             }
             HStack(spacing: 10) {
-                Button("この子にする") { app.select(r.character); Feedback.tap(); withAnimation { phase = .idle; result = nil } }
+                Button(String(localized: "この子にする")) { app.select(r.character); Feedback.tap(); withAnimation { phase = .idle; result = nil } }
                     .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
-                Button("とじる") { withAnimation { phase = .idle; result = nil } }
+                Button(String(localized: "とじる")) { withAnimation { phase = .idle; result = nil } }
                     .buttonStyle(ChunkyButtonStyle())
             }
         }
@@ -146,7 +146,7 @@ struct CapsuleView: View {
                 turn()
             } label: {
                 HStack(spacing: 8) {
-                    Text("まわす")
+                    Text(String(localized: "まわす"))
                     SnackIcon(size: 20)
                     Text("\(Progress.capsuleCost)").monospacedDigit()
                 }
@@ -155,13 +155,13 @@ struct CapsuleView: View {
             .disabled(!app.progress.canPull() || phase != .idle)
             .frame(maxWidth: 340)
             if !app.progress.canPull() && phase == .idle {
-                Text("おやつは遊ぶとたまるよ。きょうの台の1回目は +\(Progress.dailyFirstPlayBonus)")
+                Text(String(localized: "おやつは遊ぶとたまるよ。きょうの台の1回目は +\(L.s(Progress.dailyFirstPlayBonus))"))
                     .font(Theme.body(12)).foregroundStyle(Theme.ink)
             }
             if phase == .dropped {
-                Text("カプセルをタップしてあけよう").font(Theme.label(14)).foregroundStyle(Theme.ink)
+                Text(String(localized: "カプセルをタップしてあけよう")).font(Theme.label(14)).foregroundStyle(Theme.ink)
             }
-            Button("出るなかまと確率") { showRates = true }
+            Button(String(localized: "出るなかまと確率")) { showRates = true }
                 .font(Theme.label(13)).foregroundStyle(Theme.ink).underline()
         }
     }
@@ -193,12 +193,12 @@ struct RatesSheet: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                Text("出るなかまと確率").font(Theme.title(22)).foregroundStyle(Theme.ink)
-                Text("カプセルは遊んでためたおやつだけで回せます。お金では回せません。同じ子にもう一度会うと、なかよし度が上がります（Lv5 まで。Lv2・Lv4 できせかえ、Lv3・Lv5 でとくいが強くなる）。Lv5 の子に会ったときは、おやつが \(Progress.maxLevelRefund) 返ってきます。Pro 限定のなかまはカプセルからは出ません。")
+                Text(String(localized: "出るなかまと確率")).font(Theme.title(22)).foregroundStyle(Theme.ink)
+                Text(String(localized: "カプセルは遊んでためたおやつだけで回せます。お金では回せません。同じ子にもう一度会うと、なかよし度が上がります（Lv5 まで。Lv2・Lv4 できせかえ、Lv3・Lv5 でとくいが強くなる）。Lv5 の子に会ったときは、おやつが \(L.s(Progress.maxLevelRefund)) 返ってきます。Pro 限定のなかまはカプセルからは出ません。"))
                     .font(Theme.body(13)).foregroundStyle(Theme.inkSoft)
                 ForEach([Rarity.superRare, .rare, .common], id: \.self) { r in
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("\(r.label)（合計 \(Int(r.pullRate * 100))%）").font(Theme.label(15)).foregroundStyle(Theme.ink)
+                        Text(String(localized: "\(L.s(r.label))（合計 \(L.s(L.pct(Int(r.pullRate * 100))))）")).font(Theme.label(15)).foregroundStyle(Theme.ink)
                         ForEach(Roster.capsulePool.filter { $0.rarity == r }) { c in
                             HStack {
                                 Text(c.name)

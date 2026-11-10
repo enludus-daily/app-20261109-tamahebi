@@ -25,11 +25,13 @@ concurrency:
 jobs:
   asc:
     if: github.repository != 'enludus-daily/daily-app-template'
-    uses: enludus-daily/daily-actions/.github/workflows/ios-asc.yml@bca23af796c0fea2a2c4e000d983b2b4f761c972 # daily-actions 2026-11-10-submit-first-iap
+    uses: enludus-daily/daily-actions/.github/workflows/ios-asc.yml@a0ca60b3ea6cc3d70d408726434d4e3321123963 # daily-actions 2026-11-10-english
     with:
-      actions-sha: bca23af796c0fea2a2c4e000d983b2b4f761c972
+      actions-sha: a0ca60b3ea6cc3d70d408726434d4e3321123963
       command: ${{ inputs.command }}
       confirm-version: ${{ inputs.confirm-version }}
+      # 1.0 は審査中。次のアップデートの版（project.yml の MARKETING_VERSION と同じ）
+      version: "1.1.0"
       guard-disabled: ${{ vars.DAILY_GUARD_DISABLED == 'true' && 'true' || 'false' }}
     secrets:
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}

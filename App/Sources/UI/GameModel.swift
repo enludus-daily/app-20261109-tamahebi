@@ -47,7 +47,11 @@ final class GameModel {
 
     static let maxPull: CGFloat = 120
 
-    init(mode: PlayMode, character: Character, rules: Rules, table: TableTheme, hintMode: Bool = false) {
+    /// デモの再生中（指の丸を描く。人の操作は受けない）
+    let isDemo: Bool
+
+    init(mode: PlayMode, character: Character, rules: Rules, table: TableTheme, hintMode: Bool = false, demo: Bool = false) {
+        self.isDemo = demo
         self.mode = mode
         self.character = character
         self.table = table
@@ -120,8 +124,8 @@ final class GameModel {
     var goalText: String? {
         guard let s = mode.stage else { return nil }
         switch s.goal.kind {
-        case .eatAll: return "のこり \(engine.balls.count) こ"
-        case .eatEight: return engine.ateEight ? "8 番 OK！" : "8 番球をねらえ"
+        case .eatAll: return String(localized: "のこり \(L.s(engine.balls.count)) こ")
+        case .eatEight: return engine.ateEight ? String(localized: "8 番 OK！") : String(localized: "8 番球をねらえ")
         case .score: return "\(engine.score) / \(s.goal.target)"
         }
     }
@@ -129,7 +133,7 @@ final class GameModel {
     // MARK: 操作
 
     func beginAim(at p: CGPoint) {
-        guard engine.canShoot, summary == nil else { return }
+        guard !isDemo, engine.canShoot, summary == nil else { return }
         aimStart = p
         aimNow = p
         lastPowerStep = 0
@@ -210,7 +214,7 @@ final class GameModel {
                 let a = Double(k) / 10 * 2 * .pi
                 sparks.append(Spark(at: c, velocity: CGVector(dx: cos(a) * 120, dy: sin(a) * 120), color: Color(hex: 0xF7A9C4), born: clock, ring: false))
             }
-            pop("パキッ", at: c, color: Color(hex: 0xF7A9C4))
+            pop(String(localized: "パキッ"), at: c, color: Color(hex: 0xF7A9C4))
         case .pad(let at):
             Feedback.shot(power: 0.7)
             sparks.append(Spark(at: CGPoint(x: at.x, y: at.y), velocity: .zero, color: .white, born: clock, ring: true))
@@ -228,7 +232,7 @@ final class GameModel {
             }
         case .ghostAwake:
             Feedback.bonus()
-            pop("ゴースト球がおきた！", at: CGPoint(x: engine.head.x, y: engine.head.y - 26), color: Color(hex: 0xC3B1EE))
+            pop(String(localized: "ゴースト球がおきた！"), at: CGPoint(x: engine.head.x, y: engine.head.y - 26), color: Color(hex: 0xC3B1EE))
         case .eat(let number, let combo, let points, let at):
             Feedback.eat(combo: combo)
             setFace(.happy, for: 0.7)
@@ -240,13 +244,13 @@ final class GameModel {
             }
         case .bonusShot:
             Feedback.bonus()
-            pop("ボーナスショット +1", at: center, color: Theme.sun, big: true)
+            pop(String(localized: "ボーナスショット +1"), at: center, color: Theme.sun, big: true)
         case .stopped(let ateAny):
             if !ateAny, !engine.isFinished { setFace(.oops, for: 0.9); Feedback.miss() }
         case .cleared:
             Feedback.finished()
             setFace(.full, for: 3)
-            pop("クリア！", at: center, color: Theme.sun, big: true)
+            pop(String(localized: "クリア！"), at: center, color: Theme.sun, big: true)
             onFinish?(self)
         case .failed:
             Feedback.miss()
@@ -261,6 +265,37 @@ final class GameModel {
     func setSummary(_ s: Summary) { summary = s }
 
     // MARK: 撮影用
+
+    /// デモ：ステージの ★3 の打ち方を、指で引くように見せてから打つ（15〜20 秒）
+    func runDemo() async {
+        guard let s = mode.stage else { return }
+        try? await Task.sleep(for: .milliseconds(1400))
+        for shot in s.solution {
+            guard engine.canShoot else { break }
+            let h = CGPoint(x: engine.head.x, y: engine.head.y)
+            let d = Vec.angle(shot.angle)
+            // 頭の少し横から指を置き、打つ向きと反対へ引く
+            let start = CGPoint(x: min(max(h.x + 40, 40), engine.rules.width - 40), y: min(max(h.y + 30, 60), engine.rules.height - 60))
+            let end = CGPoint(x: start.x - d.x * shot.power * Self.maxPull, y: start.y - d.y * shot.power * Self.maxPull)
+            aimStart = start
+            aimNow = start
+            for i in 1...24 {
+                let t = Double(i) / 24
+                let e = 1 - pow(1 - t, 3)
+                aimNow = CGPoint(x: start.x + (end.x - start.x) * e, y: start.y + (end.y - start.y) * e)
+                try? await Task.sleep(for: .milliseconds(32))
+            }
+            try? await Task.sleep(for: .milliseconds(350))
+            aimStart = nil
+            aimNow = nil
+            if engine.shoot(shot) {
+                Feedback.shot(power: shot.power)
+                setFace(.zoom, for: 0.2)
+            }
+            while engine.isMoving { try? await Task.sleep(for: .milliseconds(50)) }
+            try? await Task.sleep(for: .milliseconds(500))
+        }
+    }
 
     func demoAim() {
         let h = CGPoint(x: engine.head.x, y: engine.head.y)

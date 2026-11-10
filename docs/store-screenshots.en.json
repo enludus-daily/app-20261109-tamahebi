@@ -1,0 +1,38 @@
+{
+  "_doc": "英語のストア用スクリーンショット（.github/workflows/store-screenshots.yml の en）。数は「〜以上」で書く",
+  "device": "iPhone 17 Pro Max",
+  "background": "#FFD966",
+  "text": "#3A2340",
+  "shots": [
+    {
+      "scene": "game",
+      "title": "Pull back. Let go.",
+      "subtitle": "Your trail becomes your body,\nand your body bounces you back"
+    },
+    {
+      "scene": "worlds",
+      "title": "800+ stages",
+      "subtitle": "Ghost balls, ice, warps,\nwobbly bumpers..."
+    },
+    {
+      "scene": "hint",
+      "title": "Stuck? Peek at the guide",
+      "subtitle": "See the 3-star shot, one move at a time"
+    },
+    {
+      "scene": "result",
+      "title": "Fewer shots, more stars",
+      "subtitle": "Gobble, grow, and bounce"
+    },
+    {
+      "scene": "collection",
+      "title": "20+ buddies",
+      "subtitle": "Meet them again to level up"
+    },
+    {
+      "scene": "daily",
+      "title": "A new table every day",
+      "subtitle": "Everyone plays the same Daily Table.\nBeat their score!"
+    }
+  ]
+}

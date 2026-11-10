@@ -1,0 +1,5021 @@
+{
+  "sourceLanguage": "ja",
+  "version": "1.0",
+  "strings": {
+    "%@ しっぱい": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ failed"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ しっぱい"
+          }
+        }
+      }
+    },
+    "%@ で見る": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ で見る"
+          }
+        }
+      }
+    },
+    "%@ で買う": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buy for %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ で買う"
+          }
+        }
+      }
+    },
+    "%@ のおてほん": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guide for %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ のおてほん"
+          }
+        }
+      }
+    },
+    "%@ クリア": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ cleared"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ クリア"
+          }
+        }
+      }
+    },
+    "%@ 打でクリア（★3 は %@ 打・★2 は %@ 打まで）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cleared in %1$@ shots (★3: %2$@ or fewer, ★2: %3$@ or fewer)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 打でクリア（★3 は %@ 打・★2 は %@ 打まで）"
+          }
+        }
+      }
+    },
+    "%@ 点とろう": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Score %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 点とろう"
+          }
+        }
+      }
+    },
+    "%@、%@、なかよし Lv%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@, Buddy Lv%3$@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@、%@、なかよし Lv%@"
+          }
+        }
+      }
+    },
+    "%@、%@、星 %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@, %3$@ stars"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@、%@、星 %@"
+          }
+        }
+      }
+    },
+    "%@れんぞく": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "×%@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@れんぞく"
+          }
+        }
+      }
+    },
+    "%@日れんぞく": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@-day streak"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@日れんぞく"
+          }
+        }
+      }
+    },
+    "%@（合計 %@）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ (%2$@ total)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@（合計 %@）"
+          }
+        }
+      }
+    },
+    "1 回で 2 こ続けて食べると、ショットが 1 回ふえる。まっすぐ強めに打とう": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eat two balls in one shot to earn a bonus shot. Aim straight and pull hard!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 回で 2 こ続けて食べると、ショットが 1 回ふえる。まっすぐ強めに打とう"
+          }
+        }
+      }
+    },
+    "2 倍！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doubled!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2 倍！"
+          }
+        }
+      }
+    },
+    "8 番 OK！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8-ball OK!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 番 OK！"
+          }
+        }
+      }
+    },
+    "8 番球が出やすく、ステージで 8 番を食べるとショット +1": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More 8-balls, and +1 shot for each 8-ball in stages"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 番球が出やすく、ステージで 8 番を食べるとショット +1"
+          }
+        }
+      }
+    },
+    "8 番球のにおいがわかるらしい。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can sniff out an 8-ball."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 番球のにおいがわかるらしい。"
+          }
+        }
+      }
+    },
+    "8 番球をねらえ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go for the 8-ball"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 番球をねらえ"
+          }
+        }
+      }
+    },
+    "8 番球を食べよう": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eat the 8-ball"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 番球を食べよう"
+          }
+        }
+      }
+    },
+    "8 番球を食べればクリア。ほかの球は食べなくてもいい": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eat the 8-ball to clear. The others are optional."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 番球を食べればクリア。ほかの球は食べなくてもいい"
+          }
+        }
+      }
+    },
+    "Pro がなくても遊べます": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Pro needed"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro がなくても遊べます"
+          }
+        }
+      }
+    },
+    "Pro でつづき": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue with Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro でつづき"
+          }
+        }
+      }
+    },
+    "Pro ならヒントはいつも無料": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hints are always free with Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro ならヒントはいつも無料"
+          }
+        }
+      }
+    },
+    "Pro 限定": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro only"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro 限定"
+          }
+        }
+      }
+    },
+    "★3: %@打": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "★3: %@ shots"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "★3: %@打"
+          }
+        }
+      }
+    },
+    "、Pro": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "、Pro"
+          }
+        }
+      }
+    },
+    "、えらんでいる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", selected"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "、えらんでいる"
+          }
+        }
+      }
+    },
+    "、なかよし Lv%@ で使える": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", unlocks at Lv%@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "、なかよし Lv%@ で使える"
+          }
+        }
+      }
+    },
+    "、まだ遊べない": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", locked"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "、まだ遊べない"
+          }
+        }
+      }
+    },
+    "、ワールドパック": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", World Pack"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "、ワールドパック"
+          }
+        }
+      }
+    },
+    "あお": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blue"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あお"
+          }
+        }
+      }
+    },
+    "あお以外は Pro": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All but blue need Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あお以外は Pro"
+          }
+        }
+      }
+    },
+    "あきらめが悪い。もう 1 回だけ！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never gives up. Just one more shot!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あきらめが悪い。もう 1 回だけ！"
+          }
+        }
+      }
+    },
+    "あそびかた %@/%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How to play %1$@/%2$@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あそびかた %@/%@"
+          }
+        }
+      }
+    },
+    "あそびかた、クリア！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tutorial complete!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あそびかた、クリア！"
+          }
+        }
+      }
+    },
+    "あそびかたをもう一度": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replay the tutorial"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あそびかたをもう一度"
+          }
+        }
+      }
+    },
+    "あたらしいなかま！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New buddy!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あたらしいなかま！"
+          }
+        }
+      }
+    },
+    "あつい一打で、台をかけぬける。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One hot shot across the table."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あつい一打で、台をかけぬける。"
+          }
+        }
+      }
+    },
+    "あとちょっと…もう一回！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So close... try again!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あとちょっと…もう一回！"
+          }
+        }
+      }
+    },
+    "あとで": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あとで"
+          }
+        }
+      }
+    },
+    "ありがとう！使えるようになりました": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thank you! It's all yours."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ありがとう！使えるようになりました"
+          }
+        }
+      }
+    },
+    "いい感じ！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nice!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いい感じ！"
+          }
+        }
+      }
+    },
+    "いちばんの連続": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best combo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いちばんの連続"
+          }
+        }
+      }
+    },
+    "いちばん人気": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Most popular"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いちばん人気"
+          }
+        }
+      }
+    },
+    "いっしょに遊んでいる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Playing together"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いっしょに遊んでいる"
+          }
+        }
+      }
+    },
+    "いつもの": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Classic"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いつもの"
+          }
+        }
+      }
+    },
+    "いまのおやつ %@。一度開けたステージは、ずっと見られます": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You have %@ snacks. Once opened, a stage's guide stays open."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いまのおやつ %@。一度開けたステージは、ずっと見られます"
+          }
+        }
+      }
+    },
+    "いまは購入できません": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Purchases unavailable right now"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いまは購入できません"
+          }
+        }
+      }
+    },
+    "うごくバンパー": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wobbly Bumpers"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "うごくバンパー"
+          }
+        }
+      }
+    },
+    "おかえし +%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refund +%@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おかえし +%@"
+          }
+        }
+      }
+    },
+    "おてほんを見る": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the guide"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おてほんを見る"
+          }
+        }
+      }
+    },
+    "おてほんを見る（Pro は無料）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the guide (free with Pro)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おてほんを見る（Pro は無料）"
+          }
+        }
+      }
+    },
+    "おてほん中": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Showing the guide"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おてほん中"
+          }
+        }
+      }
+    },
+    "おてほん：強さ %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guide: power %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おてほん：強さ %@"
+          }
+        }
+      }
+    },
+    "おなかいっぱい！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So full!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おなかいっぱい！"
+          }
+        }
+      }
+    },
+    "おみせ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shop"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おみせ"
+          }
+        }
+      }
+    },
+    "おやつ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open for"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おやつ"
+          }
+        }
+      }
+    },
+    "おやつ %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snacks %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おやつ %@"
+          }
+        }
+      }
+    },
+    "おやつ %@ をプレゼント。カプセルでなかまを呼べるよ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Here are %@ snacks. Use them in the capsule machine to meet new buddies."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おやつ %@ をプレゼント。カプセルでなかまを呼べるよ"
+          }
+        }
+      }
+    },
+    "おやつ +%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snacks +%@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おやつ +%@"
+          }
+        }
+      }
+    },
+    "おやつが %@ 要ります（いま %@）。あしたの無料ヒントを待つか、ステージやきょうの台でおやつをためよう": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You need %1$@ snacks (you have %2$@). Wait for tomorrow's free hint, or earn snacks in stages and the daily table."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おやつが %@ 要ります（いま %@）。あしたの無料ヒントを待つか、ステージやきょうの台でおやつをためよう"
+          }
+        }
+      }
+    },
+    "おやつがずっと 2 倍": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Double snacks forever"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おやつがずっと 2 倍"
+          }
+        }
+      }
+    },
+    "おやつは遊ぶとたまるよ。きょうの台の1回目は +%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Earn snacks by playing. Your first daily table each day gives +%@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おやつは遊ぶとたまるよ。きょうの台の1回目は +%@"
+          }
+        }
+      }
+    },
+    "おやつをためこむのがとくい。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expert snack hoarder."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おやつをためこむのがとくい。"
+          }
+        }
+      }
+    },
+    "おやつ三姉妹の三女。おやつ集めの名人。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Youngest Sweet Sister. Snack-collecting pro."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おやつ三姉妹の三女。おやつ集めの名人。"
+          }
+        }
+      }
+    },
+    "おやつ三姉妹の次女。かたいものもパキッ。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Middle Sweet Sister. Snaps hard things."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おやつ三姉妹の次女。かたいものもパキッ。"
+          }
+        }
+      }
+    },
+    "おやつ三姉妹の長女。ぷるんと加速。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eldest Sweet Sister. Wobbles into speed."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おやつ三姉妹の長女。ぷるんと加速。"
+          }
+        }
+      }
+    },
+    "かそく床で、もっと速く飛びだす": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faster launch off boost pads"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "かそく床で、もっと速く飛びだす"
+          }
+        }
+      }
+    },
+    "かそく床で、もっと速く飛びだす（いちばん速い）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fastest launch off boost pads"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "かそく床で、もっと速く飛びだす（いちばん速い）"
+          }
+        }
+      }
+    },
+    "かそく床の台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boost Pads"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "かそく床の台"
+          }
+        }
+      }
+    },
+    "かそく床の矢印の先を、よそく線で見てみよう。ユズはもっと速く飛ぶ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow the boost pad arrows with the guide line. Yuzu flies even faster."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "かそく床の矢印の先を、よそく線で見てみよう。ユズはもっと速く飛ぶ"
+          }
+        }
+      }
+    },
+    "かたいブロックに強い（Lv3 で、どれも 1 回でこわす）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tough on hard blocks (one-hit breaks at Lv3)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "かたいブロックに強い（Lv3 で、どれも 1 回でこわす）"
+          }
+        }
+      }
+    },
+    "かたい頭が自まん。ブロックはまかせて。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proud of a hard head. Leave the blocks to me."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "かたい頭が自まん。ブロックはまかせて。"
+          }
+        }
+      }
+    },
+    "からだクッション": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body Bounce"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "からだクッション"
+          }
+        }
+      }
+    },
+    "かんぺき！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perfect!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "かんぺき！"
+          }
+        }
+      }
+    },
+    "きせかえ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outfit"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きせかえ"
+          }
+        }
+      }
+    },
+    "きせかえ「%@」": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ outfit"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きせかえ「%@」"
+          }
+        }
+      }
+    },
+    "きせかえ「よるいろ」": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Midnight outfit"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きせかえ「よるいろ」"
+          }
+        }
+      }
+    },
+    "きせかえ「パステル」": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pastel outfit"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きせかえ「パステル」"
+          }
+        }
+      }
+    },
+    "きょうの1回目 +%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First play today +%@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きょうの1回目 +%@"
+          }
+        }
+      }
+    },
+    "きょうのベスト": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's best"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きょうのベスト"
+          }
+        }
+      }
+    },
+    "きょうのベスト %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's best %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きょうのベスト %@"
+          }
+        }
+      }
+    },
+    "きょうの台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily table"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きょうの台"
+          }
+        }
+      }
+    },
+    "きょうの台で 8 番球（30 点）が出やすい": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More 8-balls (30 pts) on the Daily Table"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きょうの台で 8 番球（30 点）が出やすい"
+          }
+        }
+      }
+    },
+    "きょうの台はまだ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily table not played yet"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きょうの台はまだ"
+          }
+        }
+      }
+    },
+    "きょうの台を、みどり・すもも・よるに": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Green, plum, or night for the Daily Table"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きょうの台を、みどり・すもも・よるに"
+          }
+        }
+      }
+    },
+    "きょうの無料ヒントで見る": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use today's free hint"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きょうの無料ヒントで見る"
+          }
+        }
+      }
+    },
+    "けっこう食べた！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That was tasty!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "けっこう食べた！"
+          }
+        }
+      }
+    },
+    "こおりの台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ice Rink"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "こおりの台"
+          }
+        }
+      }
+    },
+    "こおりの台でもすべりにくい": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keeps a grip on ice"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "こおりの台でもすべりにくい"
+          }
+        }
+      }
+    },
+    "こおりの台でもすべりにくい（つよい）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grips ice like glue"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "こおりの台でもすべりにくい（つよい）"
+          }
+        }
+      }
+    },
+    "こおりの台はよくすべる。弱めに打とう。かべでも跳ね返る": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ice is slippery, so pull softly. Walls bounce you too."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "こおりの台はよくすべる。弱めに打とう。かべでも跳ね返る"
+          }
+        }
+      }
+    },
+    "こおりはすべる。弱めに引いてみよう。ミントはすべりにくい": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ice is slippery. Try a softer pull. Minty keeps her grip."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "こおりはすべる。弱めに引いてみよう。ミントはすべりにくい"
+          }
+        }
+      }
+    },
+    "このワールドでは %@ が活やく": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ shines in this world"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このワールドでは %@ が活やく"
+          }
+        }
+      }
+    },
+    "この子で遊ぶ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play with this buddy"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この子で遊ぶ"
+          }
+        }
+      }
+    },
+    "この子にする": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick this buddy"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この子にする"
+          }
+        }
+      }
+    },
+    "ころがれ！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roll!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ころがれ！"
+          }
+        }
+      }
+    },
+    "ころがれ！タマヘビ %@\n%@ %@てん（%@こ / 最大%@れんぞく）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamahebi %1$@\n%2$@ %3$@ pts (%4$@ balls / best combo ×%5$@)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ころがれ！タマヘビ %@\n%@ %@てん（%@こ / 最大%@れんぞく）"
+          }
+        }
+      }
+    },
+    "こわれるブロック": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Breakable Blocks"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "こわれるブロック"
+          }
+        }
+      }
+    },
+    "こわれるブロックは当てるとこわれる。白い線のブロックは 2 回": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blocks break when you hit them. Ones with a white line take two hits."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "こわれるブロックは当てるとこわれる。白い線のブロックは 2 回"
+          }
+        }
+      }
+    },
+    "こわれるブロックを、どれも 1 回でこわす": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Breaks any block in one hit"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "こわれるブロックを、どれも 1 回でこわす"
+          }
+        }
+      }
+    },
+    "すけている球はゴースト球。からだで跳ね返ったあとだけ食べられる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See-through balls are ghosts. Bounce off your body first, then gobble them."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すけている球はゴースト球。からだで跳ね返ったあとだけ食べられる"
+          }
+        }
+      }
+    },
+    "すずしい顔で、こおりの上もへっちゃら。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cool as ice, even on ice."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すずしい顔で、こおりの上もへっちゃら。"
+          }
+        }
+      }
+    },
+    "すもも": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plum"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すもも"
+          }
+        }
+      }
+    },
+    "ぜんぶの仕掛けが出てくる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every trick at once"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ぜんぶの仕掛けが出てくる"
+          }
+        }
+      }
+    },
+    "ぜんぶの仕掛けが出てくる。なかまのとくいも使おう": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every trick shows up here. Lean on your buddies' knacks."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ぜんぶの仕掛けが出てくる。なかまのとくいも使おう"
+          }
+        }
+      }
+    },
+    "ぜんぶ食べよう": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eat them all"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ぜんぶ食べよう"
+          }
+        }
+      }
+    },
+    "たべた球": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Balls eaten"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "たべた球"
+          }
+        }
+      }
+    },
+    "つぎへ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "つぎへ"
+          }
+        }
+      }
+    },
+    "とくいがいちばん強くなる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strongest knack"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "とくいがいちばん強くなる"
+          }
+        }
+      }
+    },
+    "とくいが強くなった": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Knack powered up"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "とくいが強くなった"
+          }
+        }
+      }
+    },
+    "とくいが強くなる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stronger knack"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "とくいが強くなる"
+          }
+        }
+      }
+    },
+    "とくい：": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Knack: "
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "とくい："
+          }
+        }
+      }
+    },
+    "とくい：かそく床・ブロック・おやつ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Knacks: boost pads, blocks, snacks"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "とくい：かそく床・ブロック・おやつ"
+          }
+        }
+      }
+    },
+    "とくになし。まっすぐな子（Lv5 でおやつ +%@）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No knack, just honest rolling (+%@ snacks at Lv5)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "とくになし。まっすぐな子（Lv5 でおやつ +%@）"
+          }
+        }
+      }
+    },
+    "とじる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "とじる"
+          }
+        }
+      }
+    },
+    "どのステージでも ★3 のおてほんを見られる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See the 3-star guide on any stage"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "どのステージでも ★3 のおてほんを見られる"
+          }
+        }
+      }
+    },
+    "どれも 1 回買えば、ずっと使えます": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buy once, keep forever"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "どれも 1 回買えば、ずっと使えます"
+          }
+        }
+      }
+    },
+    "なかま": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buddies"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なかま"
+          }
+        }
+      }
+    },
+    "なかま %@/%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buddies %1$@/%2$@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なかま %@/%@"
+          }
+        }
+      }
+    },
+    "なかま 3 匹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3 buddies"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なかま 3 匹"
+          }
+        }
+      }
+    },
+    "なかまをよぶ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meet buddies"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なかまをよぶ"
+          }
+        }
+      }
+    },
+    "なかまパック：おやつ三姉妹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buddy Pack: Sweet Sisters"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なかまパック：おやつ三姉妹"
+          }
+        }
+      }
+    },
+    "なかよし Lv%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buddy Lv%@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なかよし Lv%@"
+          }
+        }
+      }
+    },
+    "なかよし Lv5：おやつ +%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buddy Lv5: +%@ snacks"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なかよし Lv5：おやつ +%@"
+          }
+        }
+      }
+    },
+    "なかよし度アップ！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buddy level up!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なかよし度アップ！"
+          }
+        }
+      }
+    },
+    "なかよし最大！とくいがいちばん強い": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best buddies! Knack at max"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なかよし最大！とくいがいちばん強い"
+          }
+        }
+      }
+    },
+    "なんでもひとのみ。口の大きさは台いちばん。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swallows anything. Biggest mouth on the table."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なんでもひとのみ。口の大きさは台いちばん。"
+          }
+        }
+      }
+    },
+    "のこり %@ こ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ left"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "のこり %@ こ"
+          }
+        }
+      }
+    },
+    "のこり %@ ショット": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ shots left"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "のこり %@ ショット"
+          }
+        }
+      }
+    },
+    "のんびり屋。いちど転がると、なかなか止まらない。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easygoing. Once rolling, hard to stop."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "のんびり屋。いちど転がると、なかなか止まらない。"
+          }
+        }
+      }
+    },
+    "はじめから長く、食べるとよく伸びる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starts long, grows fast"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "はじめから長く、食べるとよく伸びる"
+          }
+        }
+      }
+    },
+    "はじめから長く、食べるとよく伸びる（もっと）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starts extra long, grows a lot"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "はじめから長く、食べるとよく伸びる（もっと）"
+          }
+        }
+      }
+    },
+    "はじめてのクリア": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First clear"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "はじめてのクリア"
+          }
+        }
+      }
+    },
+    "ひっぱって、はなす！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pull back and let go!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ひっぱって、はなす！"
+          }
+        }
+      }
+    },
+    "ぴったり！はなして": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perfect! Let go"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ぴったり！はなして"
+          }
+        }
+      }
+    },
+    "ふつう": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Common"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ふつう"
+          }
+        }
+      }
+    },
+    "まずは球を食べるところから": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start by gobbling balls"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まずは球を食べるところから"
+          }
+        }
+      }
+    },
+    "また会えたね": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nice to see you again"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "また会えたね"
+          }
+        }
+      }
+    },
+    "まだおなかすいてる…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Still hungry..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まだおなかすいてる…"
+          }
+        }
+      }
+    },
+    "まだ会っていない%@のなかま": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unmet %@ buddy"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まだ会っていない%@のなかま"
+          }
+        }
+      }
+    },
+    "まだ会っていないなかま": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unmet buddy"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まだ会っていないなかま"
+          }
+        }
+      }
+    },
+    "まわす": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spin"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まわす"
+          }
+        }
+      }
+    },
+    "みどり": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Green"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "みどり"
+          }
+        }
+      }
+    },
+    "もう一回": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Again"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "もう一回"
+          }
+        }
+      }
+    },
+    "もう一度読みこむ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "もう一度読みこむ"
+          }
+        }
+      }
+    },
+    "もう動けない〜！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can't move anymore!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "もう動けない〜！"
+          }
+        }
+      }
+    },
+    "もどる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "もどる"
+          }
+        }
+      }
+    },
+    "もらえるおやつ +%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ snacks"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "もらえるおやつ +%@"
+          }
+        }
+      }
+    },
+    "やりなおす": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "やりなおす"
+          }
+        }
+      }
+    },
+    "よくすべる台と、かべ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slippery felt and walls"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よくすべる台と、かべ"
+          }
+        }
+      }
+    },
+    "よく転がる（とまりにくい）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rolls farther"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よく転がる（とまりにくい）"
+          }
+        }
+      }
+    },
+    "よく転がる（とまりにくい）（もっと）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rolls and rolls and rolls"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よく転がる（とまりにくい）（もっと）"
+          }
+        }
+      }
+    },
+    "よそく線が 1 回ぶん長い": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guide line shows 1 more bounce"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よそく線が 1 回ぶん長い"
+          }
+        }
+      }
+    },
+    "よそく線が 2 回ぶん長い": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guide line shows 2 more bounces"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よそく線が 2 回ぶん長い"
+          }
+        }
+      }
+    },
+    "よそく線を見ながら、2 こまとめて食べるとショットが増えるよ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eat two balls in one shot to earn an extra shot."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よそく線を見ながら、2 こまとめて食べるとショットが増えるよ"
+          }
+        }
+      }
+    },
+    "よる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よる"
+          }
+        }
+      }
+    },
+    "よるいろ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Midnight"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よるいろ"
+          }
+        }
+      }
+    },
+    "よるのごちゃまぜ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Midnight Mix"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よるのごちゃまぜ"
+          }
+        }
+      }
+    },
+    "わかった": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Got it"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "わかった"
+          }
+        }
+      }
+    },
+    "イシマル": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pebble"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "イシマル"
+          }
+        }
+      }
+    },
+    "オーロラ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aurora"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オーロラ"
+          }
+        }
+      }
+    },
+    "カスタード": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custard"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カスタード"
+          }
+        }
+      }
+    },
+    "カスタード・チョコ・マッチャ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custard, Choco, Matcha"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カスタード・チョコ・マッチャ"
+          }
+        }
+      }
+    },
+    "カプセル": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capsule"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カプセル"
+          }
+        }
+      }
+    },
+    "カプセルからは出ない子たち。なかよし Lv3 から": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never in the capsule. Start at buddy level 3."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カプセルからは出ない子たち。なかよし Lv3 から"
+          }
+        }
+      }
+    },
+    "カプセルの機械": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capsule machine"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カプセルの機械"
+          }
+        }
+      }
+    },
+    "カプセルは遊んでためたおやつだけで回せます。お金では回せません。同じ子にもう一度会うと、なかよし度が上がります（Lv5 まで。Lv2・Lv4 できせかえ、Lv3・Lv5 でとくいが強くなる）。Lv5 の子に会ったときは、おやつが %@ 返ってきます。Pro 限定のなかまはカプセルからは出ません。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The capsule only takes snacks you earn by playing. It cannot be bought with money. Meeting the same friend again raises buddy level (up to Lv5: costumes at Lv2 and Lv4, stronger knacks at Lv3 and Lv5). Meeting a Lv5 friend gives back %@ snacks. Pro and pack buddies never come from the capsule."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カプセルは遊んでためたおやつだけで回せます。お金では回せません。同じ子にもう一度会うと、なかよし度が上がります（Lv5 まで。Lv2・Lv4 できせかえ、Lv3・Lv5 でとくいが強くなる）。Lv5 の子に会ったときは、おやつが %@ 返ってきます。Pro 限定のなかまはカプセルからは出ません。"
+          }
+        }
+      }
+    },
+    "カプセルをタップしてあけよう": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the capsule to open it"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カプセルをタップしてあけよう"
+          }
+        }
+      }
+    },
+    "カプセルを倍回せる。なかよし度が早く上がる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twice the capsule spins. Level buddies faster."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カプセルを倍回せる。なかよし度が早く上がる"
+          }
+        }
+      }
+    },
+    "カプセルを回す（おやつ %@）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spin the capsule (%@ snacks)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カプセルを回す（おやつ %@）"
+          }
+        }
+      }
+    },
+    "キャラメル": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caramel"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャラメル"
+          }
+        }
+      }
+    },
+    "キラリ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twinkle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キラリ"
+          }
+        }
+      }
+    },
+    "ギンガ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cosmo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ギンガ"
+          }
+        }
+      }
+    },
+    "ギンガ・サクラ・ホムラ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cosmo, Sakura, Blaze"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ギンガ・サクラ・ホムラ"
+          }
+        }
+      }
+    },
+    "クリア！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cleared!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クリア！"
+          }
+        }
+      }
+    },
+    "クロスケ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kuro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クロスケ"
+          }
+        }
+      }
+    },
+    "コピーした": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "コピーした"
+          }
+        }
+      }
+    },
+    "ゴマ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sesame"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ゴマ"
+          }
+        }
+      }
+    },
+    "ゴースト球が、クッションやバンパーで跳ねても目をさます": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any bounce wakes ghost balls"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ゴースト球が、クッションやバンパーで跳ねても目をさます"
+          }
+        }
+      }
+    },
+    "ゴースト球がおきた！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ghosts are awake!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ゴースト球がおきた！"
+          }
+        }
+      }
+    },
+    "ゴースト球とだけは、なぜか仲よし。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Somehow best friends with ghost balls."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ゴースト球とだけは、なぜか仲よし。"
+          }
+        }
+      }
+    },
+    "ゴースト球と仲よし（Lv3 で、クッションでも目をさます）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friends with ghosts (any bounce wakes them at Lv3)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ゴースト球と仲よし（Lv3 で、クッションでも目をさます）"
+          }
+        }
+      }
+    },
+    "ゴースト球は、からだで跳ねてから": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bounce off yourself to wake ghost balls"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ゴースト球は、からだで跳ねてから"
+          }
+        }
+      }
+    },
+    "ゴースト球は、からだで跳ね返ったあとに食べられるよ。モモが仲よし": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ghost balls can only be eaten after bouncing off your body. Momo gets along with them."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ゴースト球は、からだで跳ね返ったあとに食べられるよ。モモが仲よし"
+          }
+        }
+      }
+    },
+    "サクラ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sakura"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "サクラ"
+          }
+        }
+      }
+    },
+    "スキップ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スキップ"
+          }
+        }
+      }
+    },
+    "ステージ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stages"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ステージ"
+          }
+        }
+      }
+    },
+    "ステージ %@ へ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play stage %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ステージ %@ へ"
+          }
+        }
+      }
+    },
+    "ステージののこりショット +1": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+1 shot in stages"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ステージののこりショット +1"
+          }
+        }
+      }
+    },
+    "ステージののこりショット +2": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+2 shots in stages"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ステージののこりショット +2"
+          }
+        }
+      }
+    },
+    "ステージの一覧へ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stage list"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ステージの一覧へ"
+          }
+        }
+      }
+    },
+    "ステージへ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go to stages"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ステージへ"
+          }
+        }
+      }
+    },
+    "ステージをえらぶ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a stage"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ステージをえらぶ"
+          }
+        }
+      }
+    },
+    "ステージ一覧": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All stages"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ステージ一覧"
+          }
+        }
+      }
+    },
+    "スネーク × ビリヤード": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snake × Billiards"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スネーク × ビリヤード"
+          }
+        }
+      }
+    },
+    "スーパーレア": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Super Rare"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スーパーレア"
+          }
+        }
+      }
+    },
+    "ソーダ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soda"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソーダ"
+          }
+        }
+      }
+    },
+    "タイミングをはかって打つ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time your shot"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タイミングをはかって打つ"
+          }
+        }
+      }
+    },
+    "タマ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tama"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タマ"
+          }
+        }
+      }
+    },
+    "タマヘビ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamahebi"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タマヘビ"
+          }
+        }
+      }
+    },
+    "タマヘビ Pro": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamahebi Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タマヘビ Pro"
+          }
+        }
+      }
+    },
+    "チョコ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choco"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "チョコ"
+          }
+        }
+      }
+    },
+    "ネオン": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neon"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ネオン"
+          }
+        }
+      }
+    },
+    "ハッカ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frosty"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ハッカ"
+          }
+        }
+      }
+    },
+    "バナーと、遊んだあとの全画面広告がなくなる（見たいときの動画は選べる）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No banners or full-screen ads (you can still choose videos)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バナーと、遊んだあとの全画面広告がなくなる（見たいときの動画は選べる）"
+          }
+        }
+      }
+    },
+    "バンパーが動いている。よそく線がとおる時に打とう": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The bumpers move. Shoot when the guide line is clear."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バンパーが動いている。よそく線がとおる時に打とう"
+          }
+        }
+      }
+    },
+    "バンパーが動いている。よそく線は、いま打ったときの線": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The bumpers move. The guide line shows a shot taken right now."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バンパーが動いている。よそく線は、いま打ったときの線"
+          }
+        }
+      }
+    },
+    "バンパーで、よりはずむ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extra bounce off bumpers"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バンパーで、よりはずむ"
+          }
+        }
+      }
+    },
+    "バンパーで、よりはずむ（もっと）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Super bouncy off bumpers"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バンパーで、よりはずむ（もっと）"
+          }
+        }
+      }
+    },
+    "バンパーに当たると、ぴかっと光る。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lights up on every bumper."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バンパーに当たると、ぴかっと光る。"
+          }
+        }
+      }
+    },
+    "パキッ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crack!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パキッ"
+          }
+        }
+      }
+    },
+    "パステル": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pastel"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パステル"
+          }
+        }
+      }
+    },
+    "パック": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pack"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パック"
+          }
+        }
+      }
+    },
+    "パックでつづき": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue with pack"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パックでつづき"
+          }
+        }
+      }
+    },
+    "パック限定": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pack only"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パック限定"
+          }
+        }
+      }
+    },
+    "ヒント": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hint"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ヒント"
+          }
+        }
+      }
+    },
+    "ヒントがいつでも無料": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free hints, always"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ヒントがいつでも無料"
+          }
+        }
+      }
+    },
+    "ビリヤード場": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pool Hall"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ビリヤード場"
+          }
+        }
+      }
+    },
+    "ピンクのブロックは当てるとこわれる。イシマルはかたいブロックに強い": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pink blocks break when you hit them. Pebble is great at hard blocks."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ピンクのブロックは当てるとこわれる。イシマルはかたいブロックに強い"
+          }
+        }
+      }
+    },
+    "ブロックは当てるとこわれる。こわして道を作る": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smash blocks to open a path"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ブロックは当てるとこわれる。こわして道を作る"
+          }
+        }
+      }
+    },
+    "ブロックをこわして道を作る": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smash blocks to open a path"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ブロックをこわして道を作る"
+          }
+        }
+      }
+    },
+    "ホムラ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blaze"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ホムラ"
+          }
+        }
+      }
+    },
+    "ホームへ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ホームへ"
+          }
+        }
+      }
+    },
+    "ボーナスショット +1": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bonus shot +1"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ボーナスショット +1"
+          }
+        }
+      }
+    },
+    "マッチャ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matcha"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "マッチャ"
+          }
+        }
+      }
+    },
+    "ミルク": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milky"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ミルク"
+          }
+        }
+      }
+    },
+    "ミント": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minty"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ミント"
+          }
+        }
+      }
+    },
+    "モモ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Momo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "モモ"
+          }
+        }
+      }
+    },
+    "ユズ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yuzu"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ユズ"
+          }
+        }
+      }
+    },
+    "ラムネ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fizz"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ラムネ"
+          }
+        }
+      }
+    },
+    "ランダム台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Random table"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ランダム台"
+          }
+        }
+      }
+    },
+    "ルリ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lapis"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ルリ"
+          }
+        }
+      }
+    },
+    "レア": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rare"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レア"
+          }
+        }
+      }
+    },
+    "レモン": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lemmy"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レモン"
+          }
+        }
+      }
+    },
+    "ワタアメ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Floss"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワタアメ"
+          }
+        }
+      }
+    },
+    "ワープから出るとき、はやくなる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speeds up out of warps"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワープから出るとき、はやくなる"
+          }
+        }
+      }
+    },
+    "ワープから出るとき、はやくなる（もっと）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoots out of warps even faster"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワープから出るとき、はやくなる（もっと）"
+          }
+        }
+      }
+    },
+    "ワープの台": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warp Holes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワープの台"
+          }
+        }
+      }
+    },
+    "ワープの台・うごくバンパー・よるのごちゃまぜ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warp Holes, Wobbly Bumpers, Midnight Mix"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワープの台・うごくバンパー・よるのごちゃまぜ"
+          }
+        }
+      }
+    },
+    "ワールド %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "World %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワールド %@"
+          }
+        }
+      }
+    },
+    "ワールド %@ %@、星 %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "World %1$@ %2$@, %3$@ stars"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワールド %@ %@、星 %@"
+          }
+        }
+      }
+    },
+    "ワールド 1〜3（%@ ステージ）・きょうの台・カプセル・%@ 匹のなかまは、買わなくてもずっと遊べます。広告は、画面の下のバナーと、遊んだあとにときどき出る全画面広告（どちらも Pro で消える）と、ヒントやおやつ 2 倍のために自分で選んで見る動画です。おやつ（ゲーム内のポイント）は売っていません。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Worlds 1–3 (%1$@ stages), the Daily Table, the capsule, and %2$@ buddies are free forever. Ads: a banner at the bottom and an occasional full-screen ad after playing (Pro removes both), plus videos you choose to watch for hints or double snacks. Snacks are never sold."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワールド 1〜3（%@ ステージ）・きょうの台・カプセル・%@ 匹のなかまは、買わなくてもずっと遊べます。広告は、画面の下のバナーと、遊んだあとにときどき出る全画面広告（どちらも Pro で消える）と、ヒントやおやつ 2 倍のために自分で選んで見る動画です。おやつ（ゲーム内のポイント）は売っていません。"
+          }
+        }
+      }
+    },
+    "ワールド 3 のあとから遊べる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play right after World 3"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワールド 3 のあとから遊べる"
+          }
+        }
+      }
+    },
+    "ワールド 4〜6（%@ ステージ）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Worlds 4–6 (%@ stages)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワールド 4〜6（%@ ステージ）"
+          }
+        }
+      }
+    },
+    "ワールド 7〜8 で活やく。マッチャはおやつ +%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Great in Worlds 7–8. Matcha earns +%@ snacks."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワールド 7〜8 で活やく。マッチャはおやつ +%@"
+          }
+        }
+      }
+    },
+    "ワールド 7：かそく床の台（%@）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "World 7: Boost Pads (%@)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワールド 7：かそく床の台（%@）"
+          }
+        }
+      }
+    },
+    "ワールド 8：こわれるブロック（%@）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "World 8: Breakable Blocks (%@)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワールド 8：こわれるブロック（%@）"
+          }
+        }
+      }
+    },
+    "ワールドパック": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "World Pack"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワールドパック"
+          }
+        }
+      }
+    },
+    "先のことまで、ひんやり見とおす。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sees far ahead, coolly."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "先のことまで、ひんやり見とおす。"
+          }
+        }
+      }
+    },
+    "出るなかまと確率": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buddies and odds"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "出るなかまと確率"
+          }
+        }
+      }
+    },
+    "動画を見ておやつ 2 倍": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch a video to double snacks"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "動画を見ておやつ 2 倍"
+          }
+        }
+      }
+    },
+    "動画を見て開ける": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch a video to open"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "動画を見て開ける"
+          }
+        }
+      }
+    },
+    "口が大きく、球を食べやすい": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Big mouth, easy gobbling"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "口が大きく、球を食べやすい"
+          }
+        }
+      }
+    },
+    "口が大きく、球を食べやすい（もっと大きい）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A truly enormous mouth"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "口が大きく、球を食べやすい（もっと大きい）"
+          }
+        }
+      }
+    },
+    "台。ひっぱって離すと、%@が転がります": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Table. Pull back and release to roll %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "台。ひっぱって離すと、%@が転がります"
+          }
+        }
+      }
+    },
+    "台のいろ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Table color"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "台のいろ"
+          }
+        }
+      }
+    },
+    "台のいろ 3 種": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3 table colors"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "台のいろ 3 種"
+          }
+        }
+      }
+    },
+    "台のどこでもひっぱって、はなすと転がる。球を食べよう": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pull back anywhere, let go to roll. Gobble the balls!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "台のどこでもひっぱって、はなすと転がる。球を食べよう"
+          }
+        }
+      }
+    },
+    "台の上を、すべるように泳ぐ。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glides across the felt like water."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "台の上を、すべるように泳ぐ。"
+          }
+        }
+      }
+    },
+    "台の王さま。おやつがざくざく。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Table royalty. Snacks pour in."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "台の王さま。おやつがざくざく。"
+          }
+        }
+      }
+    },
+    "夜の台で、星の線をたどる。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traces starlight across the night table."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "夜の台で、星の線をたどる。"
+          }
+        }
+      }
+    },
+    "夜空のいろを、からだにまとう。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wears the colors of the night sky."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "夜空のいろを、からだにまとう。"
+          }
+        }
+      }
+    },
+    "広告": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Advertisement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "広告"
+          }
+        }
+      }
+    },
+    "広告が出ない": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No ads"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "広告が出ない"
+          }
+        }
+      }
+    },
+    "広告のプライバシー設定": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ad privacy settings"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "広告のプライバシー設定"
+          }
+        }
+      }
+    },
+    "復元しました": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restored"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "復元しました"
+          }
+        }
+      }
+    },
+    "復元できる購入が見つかりませんでした": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No purchases to restore"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "復元できる購入が見つかりませんでした"
+          }
+        }
+      }
+    },
+    "持っています": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Owned"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "持っています"
+          }
+        }
+      }
+    },
+    "新しい仕掛け": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New tricks"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しい仕掛け"
+          }
+        }
+      }
+    },
+    "星 %@ こ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ stars"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "星 %@ こ"
+          }
+        }
+      }
+    },
+    "星がふえた": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More stars"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "星がふえた"
+          }
+        }
+      }
+    },
+    "春のように、のびのびと。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stretches out like spring."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "春のように、のびのびと。"
+          }
+        }
+      }
+    },
+    "最初からやりなおして、★3 の打ち方を 1 打ずつピンクの線で見せます。指を置いたところから、ピンクの丸まで引くと「ぴったり」になります。おてほんの間は、なかまのとくいはお休みです。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart the stage and see the 3-star shots one by one as a pink line. Pull from where you touch to the pink circle to lock in. Buddy knacks are turned off while the guide is on."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初からやりなおして、★3 の打ち方を 1 打ずつピンクの線で見せます。指を置いたところから、ピンクの丸まで引くと「ぴったり」になります。おてほんの間は、なかまのとくいはお休みです。"
+          }
+        }
+      }
+    },
+    "朝いちばんに起きて、大きな口であくび。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First one up, with the biggest yawn."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "朝いちばんに起きて、大きな口であくび。"
+          }
+        }
+      }
+    },
+    "次の Lv%@：%@（カプセルでもう一度会うと上がる）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next, Lv%1$@: %2$@ (meet again in the capsule to level up)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次の Lv%@：%@（カプセルでもう一度会うと上がる）"
+          }
+        }
+      }
+    },
+    "無料ヒントは 1 日 1 回。一度開けたステージは、ずっと見られます": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One free hint a day. Once opened, a stage's guide stays open."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無料ヒントは 1 日 1 回。一度開けたステージは、ずっと見られます"
+          }
+        }
+      }
+    },
+    "球がだいすき。ころがるのは、もっとすき。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loves balls. Loves rolling even more."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "球がだいすき。ころがるのは、もっとすき。"
+          }
+        }
+      }
+    },
+    "画面のどこでもいいので、指を置いて下に引っぱって、はなそう。ピンクの丸まで引くと「ぴったり」": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch anywhere, pull back, and let go. Pull to the pink circle for a perfect shot."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "画面のどこでもいいので、指を置いて下に引っぱって、はなそう。ピンクの丸まで引くと「ぴったり」"
+          }
+        }
+      }
+    },
+    "矢印の床で、ぎゅんと加速": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ride the arrows and zoom"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "矢印の床で、ぎゅんと加速"
+          }
+        }
+      }
+    },
+    "矢印の床に乗ると、ぎゅんと加速": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ride the arrows and zoom"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "矢印の床に乗ると、ぎゅんと加速"
+          }
+        }
+      }
+    },
+    "矢印の床に乗ると、矢印の向きにぎゅんと飛びだす": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roll over an arrow pad to zoom off in its direction."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "矢印の床に乗ると、矢印の向きにぎゅんと飛びだす"
+          }
+        }
+      }
+    },
+    "矢印を見ると、つい乗りたくなる。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can't resist a shiny arrow."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "矢印を見ると、つい乗りたくなる。"
+          }
+        }
+      }
+    },
+    "穴に入ると、もう片方から出る": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In one hole, out the other"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "穴に入ると、もう片方から出る"
+          }
+        }
+      }
+    },
+    "穴に入ると、もう片方の穴から同じ向きで出てくる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go into one hole and pop out of the other, still heading the same way."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "穴に入ると、もう片方の穴から同じ向きで出てくる"
+          }
+        }
+      }
+    },
+    "穴の出口の向きをよそく線で見てみよう。ソーダは出口で加速する": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check where the exit hole sends you with the guide line. Soda speeds up out of holes."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "穴の出口の向きをよそく線で見てみよう。ソーダは出口で加速する"
+          }
+        }
+      }
+    },
+    "穴をくぐると、しゅわっと加速する。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pops out of every hole with a fizz."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "穴をくぐると、しゅわっと加速する。"
+          }
+        }
+      }
+    },
+    "結果をコピー": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy result"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "結果をコピー"
+          }
+        }
+      }
+    },
+    "購入できませんでした。時間をおいてもう一度お試しください": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The purchase didn't go through. Please try again later."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入できませんでした。時間をおいてもう一度お試しください"
+          }
+        }
+      }
+    },
+    "購入の承認を待っています": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for approval"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入の承認を待っています"
+          }
+        }
+      }
+    },
+    "購入を復元": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore purchases"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入を復元"
+          }
+        }
+      }
+    },
+    "通ったあとはタマのからだ。からだに当たると跳ね返る。すけている球は、からだで跳ねてから食べられる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your trail becomes Tama's body, and it bounces you back. Ghost balls wake up after a body bounce."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通ったあとはタマのからだ。からだに当たると跳ね返る。すけている球は、からだで跳ねてから食べられる"
+          }
+        }
+      }
+    },
+    "限定のなかま 3 匹（なかよし Lv3 から）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3 exclusive buddies (start at Lv3)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "限定のなかま 3 匹（なかよし Lv3 から）"
+          }
+        }
+      }
+    },
+    "食べるたびに、ふわっとふくらむ。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puffs up with every bite."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "食べるたびに、ふわっとふくらむ。"
+          }
+        }
+      }
+    },
+    "黄色いバンパーに当たると、よくはずむ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yellow bumpers give you an extra bounce."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "黄色いバンパーに当たると、よくはずむ"
+          }
+        }
+      }
+    }
+  }
+}

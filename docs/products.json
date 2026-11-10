@@ -18,7 +18,7 @@
         {
           "locale": "en-US",
           "name": "Tamahebi Pro",
-          "description": "300+ stages, no ads, 3 friends, 2x snacks"
+          "description": "300+ stages, no ads, free hints, 3 buddies"
         }
       ]
     },
@@ -39,7 +39,7 @@
         {
           "locale": "en-US",
           "name": "World Pack",
-          "description": "100+ stages: boost pads and breakable blocks"
+          "description": "100+ stages with boost pads and blocks"
         }
       ]
     },
@@ -59,8 +59,8 @@
         },
         {
           "locale": "en-US",
-          "name": "Friend Pack",
-          "description": "3 sweet friends, starting at friendship Lv3"
+          "name": "Buddy Pack: Sweet Sisters",
+          "description": "3 sweet buddies that start at buddy level 3"
         }
       ]
     }

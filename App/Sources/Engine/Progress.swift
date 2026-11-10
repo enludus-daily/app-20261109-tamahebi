@@ -22,10 +22,10 @@ struct PullResult: Equatable, Sendable {
     var unlocked: String? {
         guard let l = levelUp else { return nil }
         switch l {
-        case 2: return "きせかえ「\(Costume.pastel.label)」"
-        case 3: return "とくいが強くなった"
-        case 4: return "きせかえ「\(Costume.night.label)」"
-        case 5: return "なかよし最大！とくいがいちばん強い"
+        case 2: return String(localized: "きせかえ「\(L.s(Costume.pastel.label))」")
+        case 3: return String(localized: "とくいが強くなった")
+        case 4: return String(localized: "きせかえ「\(L.s(Costume.night.label))」")
+        case 5: return String(localized: "なかよし最大！とくいがいちばん強い")
         default: return nil
         }
     }
@@ -42,10 +42,10 @@ enum TableTheme: String, Codable, CaseIterable, Sendable {
     case blue, green, plum, night
     var label: String {
         switch self {
-        case .blue: "あお"
-        case .green: "みどり"
-        case .plum: "すもも"
-        case .night: "よる"
+        case .blue: String(localized: "あお")
+        case .green: String(localized: "みどり")
+        case .plum: String(localized: "すもも")
+        case .night: String(localized: "よる")
         }
     }
     var isPro: Bool { self != .blue }

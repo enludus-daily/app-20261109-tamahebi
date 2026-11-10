@@ -24,10 +24,10 @@ struct ResultCard: View {
     }
     private var line: String {
         if stage != nil {
-            if !cleared { return "あとちょっと…もう一回！" }
-            return ["", "クリア！", "いい感じ！", "かんぺき！"][stars]
+            if !cleared { return String(localized: "あとちょっと…もう一回！") }
+            return ["", String(localized: "クリア！"), String(localized: "いい感じ！"), String(localized: "かんぺき！")][stars]
         }
-        return ["まだおなかすいてる…", "けっこう食べた！", "おなかいっぱい！", "もう動けない〜！"][stars]
+        return [String(localized: "まだおなかすいてる…"), String(localized: "けっこう食べた！"), String(localized: "おなかいっぱい！"), String(localized: "もう動けない〜！")][stars]
     }
 
     var body: some View {
@@ -42,10 +42,10 @@ struct ResultCard: View {
                 .frame(width: 150, height: 110)
             starRow
             if let s = stage {
-                Text(cleared ? "\(s.id) クリア" : "\(s.id) しっぱい")
+                Text(cleared ? String(localized: "\(L.s(s.id)) クリア") : String(localized: "\(L.s(s.id)) しっぱい"))
                     .font(Theme.title(30)).foregroundStyle(Theme.ink)
                 if cleared {
-                    Text("\(game.engine.shotsTaken) 打でクリア（★3 は \(s.par3) 打・★2 は \(s.par2) 打まで）")
+                    Text(String(localized: "\(L.s(game.engine.shotsTaken)) 打でクリア（★3 は \(L.s(s.par3)) 打・★2 は \(L.s(s.par2)) 打まで）"))
                         .font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
                 } else {
                     Text(hint(for: s)).font(Theme.body(13)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
@@ -55,9 +55,9 @@ struct ResultCard: View {
                     .font(Theme.title(52)).monospacedDigit()
                     .foregroundStyle(Theme.ink)
                 Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 3) {
-                    row("たべた球", "\(game.engine.eaten)こ")
-                    row("いちばんの連続", "\(game.engine.bestCombo)れんぞく")
-                    if game.mode.isDaily { row("きょうのベスト", "\(app.progress.best(on: dayKey) ?? game.engine.score)") }
+                    row(String(localized: "たべた球"), "\(game.engine.eaten)")
+                    row(String(localized: "いちばんの連続"), String(localized: "\(L.s(game.engine.bestCombo))れんぞく"))
+                    if game.mode.isDaily { row(String(localized: "きょうのベスト"), "\(app.progress.best(on: dayKey) ?? game.engine.score)") }
                 }
                 .font(Theme.body(13))
             }
@@ -86,37 +86,37 @@ struct ResultCard: View {
             }
         }
         .accessibilityElement()
-        .accessibilityLabel("星 \(stars) こ")
+        .accessibilityLabel(String(localized: "星 \(L.s(stars)) こ"))
     }
 
     @ViewBuilder private var buttons: some View {
         if let s = stage {
             HStack(spacing: 10) {
-                Button(cleared ? "もう一回" : "やりなおす") { app.continueFromResult { app.replay() } }
+                Button(cleared ? String(localized: "もう一回") : String(localized: "やりなおす")) { app.continueFromResult { app.replay() } }
                     .buttonStyle(ChunkyButtonStyle(fill: cleared ? Theme.cream : Theme.mint, text: cleared ? Theme.ink : .white))
                 if cleared, let next = app.stage(after: s) {
                     if app.isUnlocked(next) {
-                        Button("つぎへ") { app.continueFromResult { app.playStage(next) } }
+                        Button(String(localized: "つぎへ")) { app.continueFromResult { app.playStage(next) } }
                             .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
                     } else {
-                        Button(StageBook.world(next.world).isPack ? "パックでつづき" : "Pro でつづき") { app.showPro = true }
+                        Button(StageBook.world(next.world).isPack ? String(localized: "パックでつづき") : String(localized: "Pro でつづき")) { app.showPro = true }
                             .buttonStyle(ChunkyButtonStyle(fill: Theme.sun))
                     }
                 }
             }
             if app.progress.canPull() {
-                Button("カプセルを回す（おやつ \(app.progress.snacks)）") { app.continueFromResult { app.route = .capsule } }
+                Button(String(localized: "カプセルを回す（おやつ \(L.s(app.progress.snacks))）")) { app.continueFromResult { app.route = .capsule } }
                     .font(Theme.label(13)).foregroundStyle(Theme.ink).underline()
             }
         } else {
             HStack(spacing: 10) {
-                Button("もう一回") { app.continueFromResult { app.replay() } }
+                Button(String(localized: "もう一回")) { app.continueFromResult { app.replay() } }
                     .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
                 if app.progress.canPull() {
-                    Button("なかまをよぶ") { app.continueFromResult { app.route = .capsule } }
+                    Button(String(localized: "なかまをよぶ")) { app.continueFromResult { app.route = .capsule } }
                         .buttonStyle(ChunkyButtonStyle())
                 } else {
-                    Button(copied ? "コピーした" : "結果をコピー") { copy() }
+                    Button(copied ? String(localized: "コピーした") : String(localized: "結果をコピー")) { copy() }
                         .buttonStyle(ChunkyButtonStyle())
                 }
             }
@@ -125,14 +125,14 @@ struct ResultCard: View {
 
     private func hint(for s: Stage) -> String {
         if s.balls.contains(where: { $0.kind == .ghost }) && game.engine.balls.contains(where: { $0.kind == .ghost }) {
-            return "ゴースト球は、からだで跳ね返ったあとに食べられるよ。モモが仲よし"
+            return String(localized: "ゴースト球は、からだで跳ね返ったあとに食べられるよ。モモが仲よし")
         }
-        if s.ice { return "こおりはすべる。弱めに引いてみよう。ミントはすべりにくい" }
-        if !s.warps.isEmpty { return "穴の出口の向きをよそく線で見てみよう。ソーダは出口で加速する" }
-        if s.bumpers.contains(where: { $0.amplitude > 0 }) { return "バンパーが動いている。よそく線がとおる時に打とう" }
-        if !s.pads.isEmpty { return "かそく床の矢印の先を、よそく線で見てみよう。ユズはもっと速く飛ぶ" }
-        if s.walls.contains(where: { $0.breakable }) { return "ピンクのブロックは当てるとこわれる。イシマルはかたいブロックに強い" }
-        return "よそく線を見ながら、2 こまとめて食べるとショットが増えるよ"
+        if s.ice { return String(localized: "こおりはすべる。弱めに引いてみよう。ミントはすべりにくい") }
+        if !s.warps.isEmpty { return String(localized: "穴の出口の向きをよそく線で見てみよう。ソーダは出口で加速する") }
+        if s.bumpers.contains(where: { $0.amplitude > 0 }) { return String(localized: "バンパーが動いている。よそく線がとおる時に打とう") }
+        if !s.pads.isEmpty { return String(localized: "かそく床の矢印の先を、よそく線で見てみよう。ユズはもっと速く飛ぶ") }
+        if s.walls.contains(where: { $0.breakable }) { return String(localized: "ピンクのブロックは当てるとこわれる。イシマルはかたいブロックに強い") }
+        return String(localized: "よそく線を見ながら、2 こまとめて食べるとショットが増えるよ")
     }
 
     private var dayKey: String { if case .daily(let d) = game.mode { d } else { "" } }
@@ -147,16 +147,16 @@ struct ResultCard: View {
     @ViewBuilder private var snackLine: some View {
         let (total, note): (Int, String?) = {
             switch summary {
-            case .daily(let r): return (r.total, r.dailyBonus > 0 ? "きょうの1回目 +\(r.dailyBonus)" : nil)
-            case .stage(let r): return (r.snacks, r.isFirstClear ? "はじめてのクリア" : (r.snacks > 0 ? "星がふえた" : nil))
+            case .daily(let r): return (r.total, r.dailyBonus > 0 ? String(localized: "きょうの1回目 +\(L.s(r.dailyBonus))") : nil)
+            case .stage(let r): return (r.snacks, r.isFirstClear ? String(localized: "はじめてのクリア") : (r.snacks > 0 ? String(localized: "星がふえた") : nil))
             }
         }()
         if total > 0 {
             HStack(spacing: 6) {
                 SnackIcon(size: 18)
-                Text("おやつ +\(doubled ? total * 2 : total)").font(Theme.label(15)).foregroundStyle(Theme.ink)
+                Text(String(localized: "おやつ +\(L.s(doubled ? total * 2 : total))")).font(Theme.label(15)).foregroundStyle(Theme.ink)
                     .contentTransition(.numericText())
-                if let note { Text(doubled ? "2 倍！" : note).font(Theme.body(11)).foregroundStyle(Theme.inkSoft) }
+                if let note { Text(doubled ? String(localized: "2 倍！") : note).font(Theme.body(11)).foregroundStyle(Theme.inkSoft) }
             }
             .padding(.horizontal, 12).padding(.vertical, 6)
             .background(Capsule().fill(Theme.sun.opacity(0.45)))
@@ -170,7 +170,7 @@ struct ResultCard: View {
                         }
                     }
                 } label: {
-                    Label("動画を見ておやつ 2 倍", systemImage: "play.rectangle.fill")
+                    Label(String(localized: "動画を見ておやつ 2 倍"), systemImage: "play.rectangle.fill")
                 }
                 .font(Theme.label(13)).foregroundStyle(Theme.ink)
                 .padding(.horizontal, 12).padding(.vertical, 6)
@@ -182,8 +182,9 @@ struct ResultCard: View {
 
     private func copy() {
         let s = stars
-        let title = game.mode.isDaily ? dayKey : "ランダム台"
-        UIPasteboard.general.string = "ころがれ！タマヘビ \(title)\n\(String(repeating: "★", count: s))\(String(repeating: "☆", count: 3 - s)) \(game.engine.score)てん（\(game.engine.eaten)こ / 最大\(game.engine.bestCombo)れんぞく）"
+        let title = game.mode.isDaily ? dayKey : String(localized: "ランダム台")
+        let starText = String(repeating: "★", count: s) + String(repeating: "☆", count: 3 - s)
+        UIPasteboard.general.string = String(localized: "ころがれ！タマヘビ \(L.s(title))\n\(L.s(starText)) \(L.s(game.engine.score))てん（\(L.s(game.engine.eaten))こ / 最大\(L.s(game.engine.bestCombo))れんぞく）")
         copied = true
         Feedback.tap()
     }

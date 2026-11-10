@@ -10,7 +10,7 @@ struct WorldsView: View {
             HStack {
                 BackButton { app.route = .home }
                 Spacer()
-                Text("ステージ").font(Theme.title(24)).foregroundStyle(Theme.ink)
+                Text(String(localized: "ステージ")).font(Theme.title(24)).foregroundStyle(Theme.ink)
                 Spacer()
                 Pill {
                     Image(systemName: "star.fill").foregroundStyle(Theme.ink)
@@ -44,7 +44,7 @@ struct WorldsView: View {
                     MiniTable(stage: first, felt: Color(hex: w.felt))
                         .opacity(open || proLocked ? 1 : 0.55)
                     if proLocked {
-                        Label(w.isPack ? "パック" : "Pro", systemImage: "lock.fill").font(Theme.label(13)).foregroundStyle(Theme.ink)
+                        Label(w.isPack ? String(localized: "パック") : "Pro", systemImage: "lock.fill").font(Theme.label(13)).foregroundStyle(Theme.ink)
                             .padding(.horizontal, 10).padding(.vertical, 4)
                             .background(Capsule().fill(Theme.rarity(.pro)))
                             .overlay(Capsule().stroke(Theme.ink, lineWidth: 2))
@@ -53,7 +53,7 @@ struct WorldsView: View {
                     }
                 }
                 .frame(height: 120)
-                Text("ワールド \(w.id)").font(Theme.body(11)).foregroundStyle(Theme.inkSoft)
+                Text(String(localized: "ワールド \(L.s(w.id))")).font(Theme.body(11)).foregroundStyle(Theme.inkSoft)
                 Text(w.name).font(Theme.label(16)).foregroundStyle(Theme.ink).lineLimit(1).minimumScaleFactor(0.8)
                 Text(w.detail).font(Theme.body(11)).foregroundStyle(Theme.inkSoft).lineLimit(2, reservesSpace: true)
                 HStack(spacing: 4) {
@@ -67,7 +67,7 @@ struct WorldsView: View {
             .background(RoundedRectangle(cornerRadius: 20).fill(Theme.ink).offset(y: 4))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("ワールド \(w.id) \(w.name)、星 \(stars)\(proLocked ? (w.isPack ? "、ワールドパック" : "、Pro") : (open ? "" : "、まだ遊べない"))")
+        .accessibilityLabel(String(localized: "ワールド \(L.s(w.id)) \(L.s(w.name))、星 \(L.s(stars))") + (proLocked ? (w.isPack ? String(localized: "、ワールドパック") : ", Pro") : (open ? "" : String(localized: "、まだ遊べない"))))
     }
 }
 
@@ -83,7 +83,7 @@ struct StagesView: View {
                 BackButton { app.route = .worlds }
                 Spacer()
                 VStack(spacing: 0) {
-                    Text("ワールド \(w.id)").font(Theme.body(11)).foregroundStyle(Theme.inkSoft)
+                    Text(String(localized: "ワールド \(L.s(w.id))")).font(Theme.body(11)).foregroundStyle(Theme.inkSoft)
                     Text(w.name).font(Theme.title(22)).foregroundStyle(Theme.ink)
                 }
                 Spacer()
@@ -145,7 +145,7 @@ struct StagesView: View {
         }
         .buttonStyle(.plain)
         .disabled(!open)
-        .accessibilityLabel("\(s.id)、\(s.goal.label)、星 \(stars)\(open ? "" : "、まだ遊べない")")
+        .accessibilityLabel(String(localized: "\(L.s(s.id))、\(L.s(s.goal.label))、星 \(L.s(stars))") + (open ? "" : String(localized: "、まだ遊べない")))
     }
 
     /// このワールドで役に立つなかま
@@ -157,7 +157,7 @@ struct StagesView: View {
                 HStack(spacing: 12) {
                     CharacterPortrait(character: c, face: .happy, showBody: false).frame(width: 64, height: 52)
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("このワールドでは \(c.name) が活やく").font(Theme.label(14)).foregroundStyle(Theme.ink)
+                        Text(String(localized: "このワールドでは \(L.s(c.name)) が活やく")).font(Theme.label(14)).foregroundStyle(Theme.ink)
                         Text(c.perk.label(level: 1)).font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
                     }
                     Spacer(minLength: 0)

@@ -15,9 +15,9 @@ struct Goal: Equatable, Codable, Sendable {
 
     var label: String {
         switch kind {
-        case .eatAll: "ぜんぶ食べよう"
-        case .eatEight: "8 番球を食べよう"
-        case .score: "\(target) 点とろう"
+        case .eatAll: String(localized: "ぜんぶ食べよう")
+        case .eatEight: String(localized: "8 番球を食べよう")
+        case .score: String(localized: "\(L.s(target)) 点とろう")
         }
     }
 }
@@ -79,14 +79,14 @@ struct World: Identifiable, Equatable, Sendable {
 
 enum StageBook {
     static let worlds: [World] = [
-        World(id: 1, name: "ビリヤード場", detail: "まずは球を食べるところから", access: .free, felt: 0x3D7CC0),
-        World(id: 2, name: "からだクッション", detail: "ゴースト球は、からだで跳ねてから", access: .free, felt: 0x3F9A73),
-        World(id: 3, name: "こおりの台", detail: "よくすべる台と、かべ", access: .free, felt: 0x5C8FB0),
-        World(id: 4, name: "ワープの台", detail: "穴に入ると、もう片方から出る", access: .pro, felt: 0x8A5A8C),
-        World(id: 5, name: "うごくバンパー", detail: "タイミングをはかって打つ", access: .pro, felt: 0x9A6B4F),
-        World(id: 6, name: "よるのごちゃまぜ", detail: "ぜんぶの仕掛けが出てくる", access: .pro, felt: 0x2E3A66),
-        World(id: 7, name: "かそく床の台", detail: "矢印の床に乗ると、ぎゅんと加速", access: .pack, felt: 0x4F8F8F),
-        World(id: 8, name: "こわれるブロック", detail: "ブロックは当てるとこわれる。こわして道を作る", access: .pack, felt: 0x7A6A9A),
+        World(id: 1, name: String(localized: "ビリヤード場"), detail: String(localized: "まずは球を食べるところから"), access: .free, felt: 0x3D7CC0),
+        World(id: 2, name: String(localized: "からだクッション"), detail: String(localized: "ゴースト球は、からだで跳ねてから"), access: .free, felt: 0x3F9A73),
+        World(id: 3, name: String(localized: "こおりの台"), detail: String(localized: "よくすべる台と、かべ"), access: .free, felt: 0x5C8FB0),
+        World(id: 4, name: String(localized: "ワープの台"), detail: String(localized: "穴に入ると、もう片方から出る"), access: .pro, felt: 0x8A5A8C),
+        World(id: 5, name: String(localized: "うごくバンパー"), detail: String(localized: "タイミングをはかって打つ"), access: .pro, felt: 0x9A6B4F),
+        World(id: 6, name: String(localized: "よるのごちゃまぜ"), detail: String(localized: "ぜんぶの仕掛けが出てくる"), access: .pro, felt: 0x2E3A66),
+        World(id: 7, name: String(localized: "かそく床の台"), detail: String(localized: "矢印の床に乗ると、ぎゅんと加速"), access: .pack, felt: 0x4F8F8F),
+        World(id: 8, name: String(localized: "こわれるブロック"), detail: String(localized: "ブロックは当てるとこわれる。こわして道を作る"), access: .pack, felt: 0x7A6A9A),
     ]
 
     static func decode(_ data: Data) throws -> [Stage] {

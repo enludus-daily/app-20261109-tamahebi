@@ -36,7 +36,41 @@
 - Pro はバナーと全画面広告を出さない。動画（ヒント・おやつ 2 倍）は選んだときだけ
 - 本番のユニット：リワード `…/3664570268`・全画面 `…/8476758294`・バナー `…/1244748497`。TestFlight と開発はテスト広告
 
-## 世界観と見た目
+## 英語対応（1.1.0。本人の希望 2026-11-10：海外向けの YouTube と海外の App Store）
+
+- 画面の文字は `App/Resources/Localizable.xcstrings`（日本語がキー、英語が訳。295 件）。Info.plist の文字は `InfoPlist.xcstrings`。stages.json のヒントもカタログで訳す（`L.data`）
+- 文に差しこむ値は `L.s` で文字にして入れる（キーの形がいつも `%@` になり、型で変わらない）。`%` は文に書かず `L.pct`
+- 抜けの確かめ方：`python3 scripts/check-strings.py`（コードのキーとカタログ）、`Tests/LocalizationTests.swift`（ビルドされた en.lproj）
+- 英語の画面：CI の画面の名前に `@en`（`-AppleLanguages (en) -AppleLocale en_US`）
+
+### 呼び名の対応表
+
+| 日本語 | 英語 | 理由 |
+|---|---|---|
+| おやつ | Snacks | 食べるゲームなので、ポイントも食べ物のまま |
+| おてほん | Guide | 「答え」より軽く、線で見せる中身に合う |
+| とくい | Knack | Skill より遊び心があり、短い |
+| なかよし度 | Buddy level | なかま＝Buddies に合わせる |
+| なかま | Buddies | Friends より、いっしょに遊ぶ相棒の感じ |
+| きせかえ | Outfit | Costume より日常的 |
+| カプセル | Capsule | そのまま通じる |
+| きょうの台 | Daily Table | ビリヤード台の table と「毎日の」 |
+| おみせ | Shop | 短い |
+| ゴースト球 | Ghost ball | そのまま |
+| よそく線 | Guide line | |
+| ボーナスショット | Bonus shot | |
+
+なかま：タマ Tama・ミント Minty・ソーダ Soda・レモン Lemmy・モモ Momo・ラムネ Fizz・ゴマ Sesame・ユズ Yuzu・クロスケ Kuro・ワタアメ Floss・ハッカ Frosty・キャラメル Caramel・イシマル Pebble・ルリ Lapis・キラリ Twinkle・ネオン Neon・オーロラ Aurora・ミルク Milky・ギンガ Cosmo・サクラ Sakura・ホムラ Blaze・カスタード Custard・チョコ Choco・マッチャ Matcha（おやつ三姉妹 = Sweet Sisters）
+
+ワールド：ビリヤード場 Pool Hall・からだクッション Body Bounce・こおりの台 Ice Rink・ワープの台 Warp Holes・うごくバンパー Wobbly Bumpers・よるのごちゃまぜ Midnight Mix・かそく床の台 Boost Pads・こわれるブロック Breakable Blocks。おだい：ぜんぶ食べよう Eat them all・8 番球を食べよう Eat the 8-ball
+
+## デモで見せる流れ（起動引数 `-demo`。保存データは読み書きしない。約 17 秒）
+
+1. ステージ 1-22 の台が出る → 指の丸が台を引っぱり、よそく線とキューが伸びて、タマが転がる
+2. 通った跡の胴体にぶつかって跳ね返り、2 こ続けて食べて「ボーナスショット +1」（3 打のうち 2 回）
+3. 3 打目で最後の球を食べて「クリア！」→ 星 3 の結果の札
+
+
 
 - このアプリでは「ビリヤード台」が画面の枠になり、「ビリヤードの球」がキャラクターの頭とエサになる
 - からし色のストライプの地、木の縁と青いラシャの台、すもも色（黒は使わない）の太い線、押すと沈むボタン

@@ -33,7 +33,7 @@ struct CollectionView: View {
         HStack {
             BackButton { app.route = .home }
             Spacer()
-            Text("なかま").font(Theme.title(24)).foregroundStyle(Theme.ink)
+            Text(String(localized: "なかま")).font(Theme.title(24)).foregroundStyle(Theme.ink)
             Spacer()
             Pill {
                 SnackIcon()
@@ -72,14 +72,14 @@ struct CollectionView: View {
             .overlay(RoundedRectangle(cornerRadius: 18).stroke(Theme.ink, lineWidth: selected ? 4 : Theme.line))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(owned ? "\(c.name)、\(c.rarity.label)、なかよし Lv\(level)\(selected ? "、えらんでいる" : "")" : "まだ会っていない\(c.rarity.label)のなかま")
+        .accessibilityLabel(owned ? String(localized: "\(L.s(c.name))、\(L.s(c.rarity.label))、なかよし Lv\(L.s(level))") + (selected ? String(localized: "、えらんでいる") : "") : String(localized: "まだ会っていない\(L.s(c.rarity.label))のなかま"))
     }
 
     private var tablePicker: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("台のいろ").font(Theme.label(16)).foregroundStyle(Theme.ink)
-                if !app.isPro { Text("あお以外は Pro").font(Theme.body(12)).foregroundStyle(Theme.inkSoft) }
+                Text(String(localized: "台のいろ")).font(Theme.label(16)).foregroundStyle(Theme.ink)
+                if !app.isPro { Text(String(localized: "あお以外は Pro")).font(Theme.body(12)).foregroundStyle(Theme.inkSoft) }
             }
             HStack(spacing: 10) {
                 ForEach(TableTheme.allCases, id: \.self) { t in
@@ -98,7 +98,7 @@ struct CollectionView: View {
                         }
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("台のいろ \(t.label)\(locked ? "、Pro" : "")")
+                    .accessibilityLabel(String(localized: "台のいろ") + " \(t.label)" + (locked ? String(localized: "、Pro") : ""))
                 }
             }
         }
@@ -126,13 +126,13 @@ struct CharacterDetail: View {
                         .padding(.horizontal, 10).padding(.vertical, 2)
                         .background(Capsule().fill(Theme.rarity(character.rarity)))
                     Hearts(level: level, size: 13)
-                    Text("なかよし Lv\(level)").font(Theme.label(12)).foregroundStyle(Theme.ink)
+                    Text(String(localized: "なかよし Lv\(L.s(level))")).font(Theme.label(12)).foregroundStyle(Theme.ink)
                 }
                 Text(character.line).font(Theme.body(15)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
-                Label("とくい：\(character.perk.label(level: level))", systemImage: "sparkle")
+                Label(String(localized: "とくい：") + character.perk.label(level: level), systemImage: "sparkle")
                     .font(Theme.body(13)).foregroundStyle(Theme.ink).multilineTextAlignment(.leading)
                 if level < Roster.maxLevel && character.rarity != .pro {
-                    Text("次の Lv\(level + 1)：\(nextUnlock(level + 1))（カプセルでもう一度会うと上がる）")
+                    Text(String(localized: "次の Lv\(L.s(level + 1))：\(L.s(nextUnlock(level + 1)))（カプセルでもう一度会うと上がる）"))
                         .font(Theme.body(12)).foregroundStyle(Theme.inkSoft).multilineTextAlignment(.center)
                 }
                 HStack(spacing: 10) {
@@ -153,10 +153,10 @@ struct CharacterDetail: View {
                         }
                         .buttonStyle(.plain)
                         .disabled(!ok)
-                        .accessibilityLabel("きせかえ \(k.label)\(ok ? "" : "、なかよし Lv\(k.requiredLevel) で使える")")
+                        .accessibilityLabel(String(localized: "きせかえ") + " \(k.label)" + (ok ? "" : String(localized: "、なかよし Lv\(L.s(k.requiredLevel)) で使える")))
                     }
                 }
-                Button(app.progress.selected == character.id ? "いっしょに遊んでいる" : "この子で遊ぶ") {
+                Button(app.progress.selected == character.id ? String(localized: "いっしょに遊んでいる") : String(localized: "この子で遊ぶ")) {
                     app.select(character)
                     Feedback.bonus()
                     dismiss()
@@ -171,10 +171,10 @@ struct CharacterDetail: View {
 
     private func nextUnlock(_ l: Int) -> String {
         switch l {
-        case 2: "きせかえ「パステル」"
-        case 3: "とくいが強くなる"
-        case 4: "きせかえ「よるいろ」"
-        default: "とくいがいちばん強くなる"
+        case 2: String(localized: "きせかえ「パステル」")
+        case 3: String(localized: "とくいが強くなる")
+        case 4: String(localized: "きせかえ「よるいろ」")
+        default: String(localized: "とくいがいちばん強くなる")
         }
     }
 }
@@ -206,6 +206,6 @@ struct BackButton: View {
                 .overlay(Circle().stroke(Theme.ink, lineWidth: Theme.line))
                 .background(Circle().fill(Theme.ink).offset(y: 3))
         }
-        .accessibilityLabel("もどる")
+        .accessibilityLabel(String(localized: "もどる"))
     }
 }

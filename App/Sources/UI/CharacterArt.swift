@@ -300,6 +300,6 @@ struct CharacterPortrait: View {
                                       look: CGVector(dx: 0.6, dy: 0.5), t: t)
             }
         }
-        .accessibilityLabel(silhouette ? "まだ会っていないなかま" : character.name)
+        .accessibilityLabel(silhouette ? String(localized: "まだ会っていないなかま") : character.name)
     }
 }

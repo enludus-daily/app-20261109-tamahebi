@@ -23,16 +23,16 @@ struct GameView: View {
                     }
                     .frame(width: w * scale, height: h * scale)
                     .gesture(drag(scale: scale))
-                    .accessibilityLabel("台。ひっぱって離すと、\(game.character.name)が転がります")
+                    .accessibilityLabel(String(localized: "台。ひっぱって離すと、\(L.s(game.character.name))が転がります"))
                     if let s = game.mode.stage, s.world == 0, let text = s.hint {
-                        CoachCard(stage: s, text: text, total: app.tutorial.count) { app.finishTutorial() }
+                        CoachCard(stage: s, text: L.data(text), total: app.tutorial.count) { app.finishTutorial() }
                             .padding(.horizontal, 14)
                             .padding(.top, 34 * scale)
                             .frame(width: w * scale, height: h * scale, alignment: .top)
                             .allowsHitTesting(true)
                     }
                     if let s = game.mode.stage, s.world != 0, showIntro, game.engine.shotsTaken == 0, let hint = s.hint {
-                        IntroCard(stage: s, hint: hint) { withAnimation { showIntro = false } }
+                        IntroCard(stage: s, hint: L.data(hint)) { withAnimation { showIntro = false } }
                             .padding(24)
                             .transition(.scale(scale: 0.9).combined(with: .opacity))
                     }
@@ -98,17 +98,17 @@ struct GameView: View {
                 Text(g).font(Theme.label(13)).monospacedDigit().foregroundStyle(Theme.ink)
                     .contentTransition(.numericText())
             }
-            Text("★3: \(s.par3)打").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
+            Text(String(localized: "★3: \(L.s(s.par3))打")).font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
             if game.hintMode {
                 if game.offPath {
-                    Button("やりなおす") { app.replay() }
+                    Button(String(localized: "やりなおす")) { app.replay() }
                         .font(Theme.label(12)).foregroundStyle(Theme.ink)
                         .padding(.horizontal, 8).padding(.vertical, 4)
                         .background(Capsule().fill(Color(hex: 0xF7A9C4)))
                 } else {
                     Image(systemName: "lightbulb.fill").font(.system(size: 13, weight: .bold)).foregroundStyle(Theme.ink)
                         .frame(width: 30, height: 30)
-                        .accessibilityLabel("おてほん中")
+                        .accessibilityLabel(String(localized: "おてほん中"))
                         .padding(.horizontal, 8).padding(.vertical, 4)
                         .background(Capsule().fill(Color(hex: 0xF7A9C4).opacity(0.6)))
                 }
@@ -119,7 +119,7 @@ struct GameView: View {
                         .background(Circle().fill(Theme.sun))
                         .overlay(Circle().stroke(Theme.ink, lineWidth: 2))
                 }
-                .accessibilityLabel("ヒント")
+                .accessibilityLabel(String(localized: "ヒント"))
             }
         }
         .padding(.horizontal, 4)
@@ -144,7 +144,7 @@ struct GameView: View {
                 Spacer(minLength: 0)
             }
             .accessibilityElement()
-            .accessibilityLabel("のこり \(game.engine.shotsLeft) ショット")
+            .accessibilityLabel(String(localized: "のこり \(L.s(game.engine.shotsLeft)) ショット"))
             Pill {
                 Text("★").font(Theme.label(14)).foregroundStyle(Color(hex: 0xE07A70))
                 Text("\(game.engine.score)")
@@ -161,7 +161,7 @@ struct GameView: View {
                     .overlay(Circle().stroke(Theme.ink, lineWidth: Theme.line))
                     .background(Circle().fill(Theme.ink).offset(y: 3))
             }
-            .accessibilityLabel(game.mode.stage == nil ? "ホームへ" : "ステージの一覧へ")
+            .accessibilityLabel(game.mode.stage == nil ? String(localized: "ホームへ") : String(localized: "ステージの一覧へ"))
         }
     }
 }
@@ -178,11 +178,11 @@ struct CoachCard: View {
             CharacterPortrait(character: Roster.character("tama"), face: .happy, showBody: false)
                 .frame(width: 52, height: 44)
             VStack(alignment: .leading, spacing: 4) {
-                Text("あそびかた \(stage.index + 1)/\(total)").font(Theme.label(11)).foregroundStyle(Theme.inkSoft)
+                Text(String(localized: "あそびかた \(L.s(stage.index + 1))/\(L.s(total))")).font(Theme.label(11)).foregroundStyle(Theme.inkSoft)
                 Text(text).font(Theme.label(14)).foregroundStyle(Theme.ink).fixedSize(horizontal: false, vertical: true)
             }
             Spacer(minLength: 0)
-            Button("スキップ", action: skip).font(Theme.label(11)).foregroundStyle(Theme.inkSoft).underline()
+            Button(String(localized: "スキップ"), action: skip).font(Theme.label(11)).foregroundStyle(Theme.inkSoft).underline()
         }
         .padding(12)
         .background(RoundedRectangle(cornerRadius: 18).fill(Theme.cream))
@@ -202,7 +202,7 @@ struct IntroCard: View {
             Text("\(stage.id)  \(StageBook.world(stage.world).name)").font(Theme.label(13)).foregroundStyle(Theme.inkSoft)
             Text(stage.goal.label).font(Theme.title(24)).foregroundStyle(Theme.ink)
             Text(hint).font(Theme.body(15)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
-            Button("わかった", action: close).buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
+            Button(String(localized: "わかった"), action: close).buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
         }
         .frame(maxWidth: 300)
         .card()
@@ -232,6 +232,11 @@ struct TableCanvas: View {
             drawBalls(&ctx)
             let aim = game.aim
             if let h = game.hintShot, let hp = game.hintPreview { drawHint(&ctx, shot: h, preview: hp) }
+            if game.isDemo, let f = game.aimNow {
+                // デモ：指の位置
+                ctx.fill(CharacterArt.circle(f, 16), with: .color(.white.opacity(0.85)))
+                ctx.stroke(CharacterArt.circle(f, 16), with: .color(Theme.ink), lineWidth: 3)
+            }
             if let a = aim, let pv = game.preview { drawGuide(&ctx, preview: pv, aim: a) }
             drawSnake(&ctx, aim: aim)
             drawSparks(&ctx)
@@ -485,7 +490,7 @@ struct TableCanvas: View {
             }
         }
         if !game.isAiming {
-            let label = "おてほん：強さ \(Int((shot.power * 100).rounded()))%"
+            let label = String(localized: "おてほん：強さ \(L.s(L.pct(Int((shot.power * 100).rounded()))))")
             let font = Font.system(size: 13, weight: .black, design: .rounded)
             let at = CGPoint(x: min(max(h.x, 90), game.engine.rules.width - 90), y: max(h.y - 34, 20))
             for (dx, dy) in [(-1.5, 0.0), (1.5, 0), (0, -1.5), (0, 1.5)] {
@@ -496,9 +501,9 @@ struct TableCanvas: View {
             let font = Font.system(size: 15, weight: .black, design: .rounded)
             let at = CGPoint(x: game.engine.rules.width / 2, y: game.engine.rules.height - 44)
             for (dx, dy) in [(-1.5, 0.0), (1.5, 0), (0, -1.5), (0, 1.5)] {
-                ctx.draw(Text("ぴったり！はなして").font(font).foregroundStyle(Theme.ink), at: CGPoint(x: at.x + dx, y: at.y + dy))
+                ctx.draw(Text(String(localized: "ぴったり！はなして")).font(font).foregroundStyle(Theme.ink), at: CGPoint(x: at.x + dx, y: at.y + dy))
             }
-            ctx.draw(Text("ぴったり！はなして").font(font).foregroundStyle(pink), at: at)
+            ctx.draw(Text(String(localized: "ぴったり！はなして")).font(font).foregroundStyle(pink), at: at)
         }
     }
 
@@ -525,7 +530,7 @@ struct TableCanvas: View {
         let finger = CharacterArt.circle(CGPoint(x: h.x + 10, y: fy), 13)
         ctx.fill(finger, with: .color(.white.opacity(alpha)))
         ctx.stroke(finger, with: .color(Theme.ink.opacity(alpha)), lineWidth: 3)
-        let label = "ひっぱって、はなす！"
+        let label = String(localized: "ひっぱって、はなす！")
         let font = Font.system(size: 16, weight: .black, design: .rounded)
         for (dx, dy) in [(-2.0, 0.0), (2, 0), (0, -2), (0, 2)] {
             ctx.draw(Text(label).font(font).foregroundStyle(Theme.ink), at: CGPoint(x: game.engine.rules.width / 2 + dx, y: h.y - 48 + dy))
@@ -551,39 +556,39 @@ struct HintSheet: View {
             Image(systemName: "lightbulb.fill").font(.system(size: 30, weight: .bold)).foregroundStyle(Theme.ink)
                 .frame(width: 60, height: 60).background(Circle().fill(Theme.sun))
                 .overlay(Circle().stroke(Theme.ink, lineWidth: 3))
-            Text("\(stage.id) のおてほん").font(Theme.title(22)).foregroundStyle(Theme.ink)
-            Text("最初からやりなおして、★3 の打ち方を 1 打ずつピンクの線で見せます。指を置いたところから、ピンクの丸まで引くと「ぴったり」になります。おてほんの間は、なかまのとくいはお休みです。")
+            Text(String(localized: "\(L.s(stage.id)) のおてほん")).font(Theme.title(22)).foregroundStyle(Theme.ink)
+            Text(String(localized: "最初からやりなおして、★3 の打ち方を 1 打ずつピンクの線で見せます。指を置いたところから、ピンクの丸まで引くと「ぴったり」になります。おてほんの間は、なかまのとくいはお休みです。"))
                 .font(Theme.body(14)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
             Group {
                 switch price {
                 case .owned:
-                    Button("おてほんを見る") { open() }.buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
+                    Button(String(localized: "おてほんを見る")) { open() }.buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
                 case .pro:
-                    Button("おてほんを見る（Pro は無料）") { open() }.buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
+                    Button(String(localized: "おてほんを見る（Pro は無料）")) { open() }.buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
                 case .freeToday:
-                    Button("きょうの無料ヒントで見る") { open() }.buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
-                    Text("無料ヒントは 1 日 1 回。一度開けたステージは、ずっと見られます").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
+                    Button(String(localized: "きょうの無料ヒントで見る")) { open() }.buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
+                    Text(String(localized: "無料ヒントは 1 日 1 回。一度開けたステージは、ずっと見られます")).font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
                 case .snacks(let n):
                     Button { open() } label: {
-                        HStack(spacing: 6) { Text("おやつ"); SnackIcon(size: 18); Text("\(n) で見る") }
+                        HStack(spacing: 6) { Text(String(localized: "おやつ")); SnackIcon(size: 18); Text(String(localized: "\(L.s(n)) で見る")) }
                     }
                     .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
-                    Text("いまのおやつ \(app.progress.snacks)。一度開けたステージは、ずっと見られます").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
+                    Text(String(localized: "いまのおやつ \(L.s(app.progress.snacks))。一度開けたステージは、ずっと見られます")).font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
                 case .tooFewSnacks(let n):
-                    Text("おやつが \(n) 要ります（いま \(app.progress.snacks)）。あしたの無料ヒントを待つか、ステージやきょうの台でおやつをためよう")
+                    Text(String(localized: "おやつが \(L.s(n)) 要ります（いま \(L.s(app.progress.snacks))）。あしたの無料ヒントを待つか、ステージやきょうの台でおやつをためよう"))
                         .font(Theme.body(13)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
                 }
                 if needsPaying(price), app.ads.isReady {
                     Button {
                         Task { if await app.watchAdForHint(stage) { Feedback.bonus(); close() } }
                     } label: {
-                        Label("動画を見て開ける", systemImage: "play.rectangle.fill")
+                        Label(String(localized: "動画を見て開ける"), systemImage: "play.rectangle.fill")
                     }
                     .buttonStyle(ChunkyButtonStyle(fill: Theme.sun))
                 }
             }
             if !app.isPro {
-                Button("Pro ならヒントはいつも無料") { close(); app.showPro = true }
+                Button(String(localized: "Pro ならヒントはいつも無料")) { close(); app.showPro = true }
                     .font(Theme.label(13)).foregroundStyle(Theme.ink).underline()
             }
         }

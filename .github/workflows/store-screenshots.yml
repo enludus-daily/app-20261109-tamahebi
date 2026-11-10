@@ -1,5 +1,5 @@
 # 手動（workflow_dispatch）で、ストア用のスクリーンショットを撮って加工し、App Store Connect に入れる。
-# 画面と見出しは docs/store-screenshots.json。upload を外すと、artifact（store-screenshots）だけ作る。
+# 日本語は docs/store-screenshots.json、英語は docs/store-screenshots.en.json（英語の画面で撮って en-US に入れる）。
 name: Store screenshots
 on:
   workflow_dispatch:
@@ -15,14 +15,32 @@ concurrency:
   group: store-screenshots
   cancel-in-progress: false
 jobs:
-  screenshots:
+  ja:
     if: github.repository != 'enludus-daily/daily-app-template'
-    uses: enludus-daily/daily-actions/.github/workflows/ios-store-screenshots.yml@bca23af796c0fea2a2c4e000d983b2b4f761c972 # daily-actions 2026-11-10-submit-first-iap
+    uses: enludus-daily/daily-actions/.github/workflows/ios-store-screenshots.yml@a0ca60b3ea6cc3d70d408726434d4e3321123963 # daily-actions 2026-11-10-english
     with:
-      actions-sha: bca23af796c0fea2a2c4e000d983b2b4f761c972
+      actions-sha: a0ca60b3ea6cc3d70d408726434d4e3321123963
       scheme: Tamahebi
       runs-on: xcode-27
       xcode-version: "27.1"
+      upload: ${{ inputs.upload }}
+      guard-disabled: ${{ vars.DAILY_GUARD_DISABLED == 'true' && 'true' || 'false' }}
+    secrets:
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_P8: ${{ secrets.ASC_P8 }}
+  en:
+    needs: [ja]
+    if: github.repository != 'enludus-daily/daily-app-template'
+    uses: enludus-daily/daily-actions/.github/workflows/ios-store-screenshots.yml@a0ca60b3ea6cc3d70d408726434d4e3321123963 # daily-actions 2026-11-10-english
+    with:
+      actions-sha: a0ca60b3ea6cc3d70d408726434d4e3321123963
+      scheme: Tamahebi
+      runs-on: xcode-27
+      xcode-version: "27.1"
+      config-file: docs/store-screenshots.en.json
+      locale: en-US
+      app-language: en
       upload: ${{ inputs.upload }}
       guard-disabled: ${{ vars.DAILY_GUARD_DISABLED == 'true' && 'true' || 'false' }}
     secrets:
