@@ -16,7 +16,7 @@
 
 ## してはいけないこと
 
-- 審査への提出、App プライバシーの申告、年齢区分・アプリ本体の価格・配信地域の変更（本人が行う）。App 内課金の商品の削除・審査への提出も本人。App Store Connect の設定を asc.yml / TestFlight の配信以外の方法で変えること
+- 審査への提出（**このアプリだけの例外**：本人が TestFlight で確かめて「OK」と言ったときだけ、`asc.yml` の `submit` で出してよい。2026-11-10 本人の許可）、App プライバシーの申告、年齢区分・アプリ本体の価格・配信地域の変更（本人が行う）。App 内課金の商品の削除・審査への提出も本人。App Store Connect の設定を asc.yml / TestFlight の配信以外の方法で変えること
 - `git push --no-verify`、フック・検査・上限の無効化、ワークフローの daily-actions の SHA の変更やガードを通らない CI の追加、`DAILY_GUARD_DISABLED` などの Variables / Secrets の変更
 - daily-actions・テンプレート・ほかのアプリのリポジトリへの push
 - 秘密情報・個人情報をコード・Issue・ログ・コミットメッセージに書くこと

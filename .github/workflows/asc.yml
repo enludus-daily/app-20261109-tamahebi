@@ -2,15 +2,20 @@
 #   metadata   : docs/app-store.json の名前・説明・カテゴリ・URL などを入れ、提出用のバージョンにビルドを選ぶ（提出はしない）
 #   distribute : いちばん新しいビルドを内部テストのグループに配信する（アップロードはしない）
 #   products   : docs/products.json の App 内課金（買い切り・自動更新サブスク）と価格を作る（提出はしない）
+#   submit     : 提出用のバージョン（confirm-version と同じ版）と App 内課金を審査に出す。本人が「出して」と言ったときだけ
 name: App Store Connect
 on:
   workflow_dispatch:
     inputs:
       command:
-        description: metadata・distribute・products
+        description: metadata・distribute・products・submit
         type: choice
-        options: [metadata, distribute, products]
+        options: [metadata, distribute, products, submit]
         default: metadata
+      confirm-version:
+        description: submit のとき出すバージョン（本人が「出して」と言ったときだけ）
+        type: string
+        default: ""
 permissions:
   contents: read
   actions: read
@@ -20,10 +25,11 @@ concurrency:
 jobs:
   asc:
     if: github.repository != 'enludus-daily/daily-app-template'
-    uses: enludus-daily/daily-actions/.github/workflows/ios-asc.yml@1065caf75ae93254ba41ca35eb0bc8ef0dfe81ba # daily-actions 2026-11-05-fixed-signing-cert
+    uses: enludus-daily/daily-actions/.github/workflows/ios-asc.yml@22e982ccf6d4acd9aa3213a97f60ddf492ab0381 # daily-actions 2026-11-10-submit-screenshots
     with:
-      actions-sha: 1065caf75ae93254ba41ca35eb0bc8ef0dfe81ba
+      actions-sha: 22e982ccf6d4acd9aa3213a97f60ddf492ab0381
       command: ${{ inputs.command }}
+      confirm-version: ${{ inputs.confirm-version }}
       guard-disabled: ${{ vars.DAILY_GUARD_DISABLED == 'true' && 'true' || 'false' }}
     secrets:
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}

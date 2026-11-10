@@ -1,0 +1,31 @@
+# 手動（workflow_dispatch）で、ストア用のスクリーンショットを撮って加工し、App Store Connect に入れる。
+# 画面と見出しは docs/store-screenshots.json。upload を外すと、artifact（store-screenshots）だけ作る。
+name: Store screenshots
+on:
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: App Store Connect に入れる
+        type: boolean
+        default: true
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: store-screenshots
+  cancel-in-progress: false
+jobs:
+  screenshots:
+    if: github.repository != 'enludus-daily/daily-app-template'
+    uses: enludus-daily/daily-actions/.github/workflows/ios-store-screenshots.yml@22e982ccf6d4acd9aa3213a97f60ddf492ab0381 # daily-actions 2026-11-10-submit-screenshots
+    with:
+      actions-sha: 22e982ccf6d4acd9aa3213a97f60ddf492ab0381
+      scheme: Tamahebi
+      runs-on: xcode-27
+      xcode-version: "27.1"
+      upload: ${{ inputs.upload }}
+      guard-disabled: ${{ vars.DAILY_GUARD_DISABLED == 'true' && 'true' || 'false' }}
+    secrets:
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_P8: ${{ secrets.ASC_P8 }}

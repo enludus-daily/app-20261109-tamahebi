@@ -1,0 +1,14 @@
+{
+  "_doc": "ストア用のスクリーンショット（.github/workflows/store-screenshots.yml）。scene はアプリの -screenshotScene の名前。10 枚まで",
+  "device": "iPhone 17 Pro Max",
+  "background": "#FFD966",
+  "text": "#3A2340",
+  "shots": [
+    {"scene": "game", "title": "ひっぱって、はなす", "subtitle": "通った跡がタマのからだ。\nからだに当たると跳ね返る"},
+    {"scene": "worlds", "title": "840 ステージ", "subtitle": "ゴースト球・こおり・ワープ・\nうごくバンパー…"},
+    {"scene": "hint", "title": "詰まったら「おてほん」", "subtitle": "星 3 の打ち方を 1 打ずつ見せる"},
+    {"scene": "result", "title": "少ない打数で星 3 つ", "subtitle": "食べて、伸びて、跳ね返る"},
+    {"scene": "collection", "title": "なかま 24 匹", "subtitle": "同じ子に会うと、なかよし度アップ"},
+    {"scene": "daily", "title": "毎日かわる「きょうの台」", "subtitle": "だれが遊んでも同じ台で、点を競う"}
+  ]
+}
