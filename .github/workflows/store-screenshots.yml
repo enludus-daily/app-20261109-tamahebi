@@ -17,9 +17,9 @@ concurrency:
 jobs:
   ja:
     if: github.repository != 'enludus-daily/daily-app-template'
-    uses: enludus-daily/daily-actions/.github/workflows/ios-store-screenshots.yml@a0ca60b3ea6cc3d70d408726434d4e3321123963 # daily-actions 2026-11-10-english
+    uses: enludus-daily/daily-actions/.github/workflows/ios-store-screenshots.yml@ccf013987db23185af0d99c471070a8931f45d20 # daily-actions 2026-11-10-withdraw
     with:
-      actions-sha: a0ca60b3ea6cc3d70d408726434d4e3321123963
+      actions-sha: ccf013987db23185af0d99c471070a8931f45d20
       scheme: Tamahebi
       runs-on: xcode-27
       xcode-version: "27.1"
@@ -32,9 +32,9 @@ jobs:
   en:
     needs: [ja]
     if: github.repository != 'enludus-daily/daily-app-template'
-    uses: enludus-daily/daily-actions/.github/workflows/ios-store-screenshots.yml@a0ca60b3ea6cc3d70d408726434d4e3321123963 # daily-actions 2026-11-10-english
+    uses: enludus-daily/daily-actions/.github/workflows/ios-store-screenshots.yml@ccf013987db23185af0d99c471070a8931f45d20 # daily-actions 2026-11-10-withdraw
     with:
-      actions-sha: a0ca60b3ea6cc3d70d408726434d4e3321123963
+      actions-sha: ccf013987db23185af0d99c471070a8931f45d20
       scheme: Tamahebi
       runs-on: xcode-27
       xcode-version: "27.1"

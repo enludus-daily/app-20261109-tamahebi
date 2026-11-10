@@ -3,14 +3,15 @@
 #   distribute : いちばん新しいビルドを内部テストのグループに配信する（アップロードはしない）
 #   products   : docs/products.json の App 内課金（買い切り・自動更新サブスク）と価格を作る（提出はしない）
 #   submit     : 提出用のバージョン（confirm-version と同じ版）と App 内課金を審査に出す。本人が「出して」と言ったときだけ
+#   withdraw   : 審査待ち・審査中のものを取り下げる。本人が「取り下げて」と言ったときだけ
 name: App Store Connect
 on:
   workflow_dispatch:
     inputs:
       command:
-        description: metadata・distribute・products・submit
+        description: metadata・distribute・products・submit・withdraw
         type: choice
-        options: [metadata, distribute, products, submit]
+        options: [metadata, distribute, products, submit, withdraw]
         default: metadata
       confirm-version:
         description: submit のとき出すバージョン（本人が「出して」と言ったときだけ）
@@ -25,13 +26,13 @@ concurrency:
 jobs:
   asc:
     if: github.repository != 'enludus-daily/daily-app-template'
-    uses: enludus-daily/daily-actions/.github/workflows/ios-asc.yml@a0ca60b3ea6cc3d70d408726434d4e3321123963 # daily-actions 2026-11-10-english
+    uses: enludus-daily/daily-actions/.github/workflows/ios-asc.yml@ccf013987db23185af0d99c471070a8931f45d20 # daily-actions 2026-11-10-withdraw
     with:
-      actions-sha: a0ca60b3ea6cc3d70d408726434d4e3321123963
+      actions-sha: ccf013987db23185af0d99c471070a8931f45d20
       command: ${{ inputs.command }}
       confirm-version: ${{ inputs.confirm-version }}
       # 1.0 は審査中。次のアップデートの版（project.yml の MARKETING_VERSION と同じ）
-      version: "1.1.0"
+      version: "1.0"
       guard-disabled: ${{ vars.DAILY_GUARD_DISABLED == 'true' && 'true' || 'false' }}
     secrets:
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
