@@ -81,6 +81,7 @@ struct Progress: Codable, Equatable, Sendable {
     /// ヒントを開けたステージ（一度開けたら、そのステージではずっと見られる）
     var hintedStages: Set<String> = []
     var lastFreeHintDay: String?
+    var tutorialDone = false
 
     init() {}
 
@@ -104,6 +105,7 @@ struct Progress: Codable, Equatable, Sendable {
         table = try c.decodeIfPresent(TableTheme.self, forKey: .table) ?? .blue
         hintedStages = try c.decodeIfPresent(Set<String>.self, forKey: .hintedStages) ?? []
         lastFreeHintDay = try c.decodeIfPresent(String.self, forKey: .lastFreeHintDay)
+        tutorialDone = try c.decodeIfPresent(Bool.self, forKey: .tutorialDone) ?? false
     }
 
     // MARK: ヒント
@@ -216,18 +218,28 @@ struct Progress: Codable, Equatable, Sendable {
 
     /// ステージを遊べるか：1 つ前のステージを解いている（各ワールドの 1 番目は、前のワールドの最後を解いている）。Pro のワールドは Pro が要る
     /// ワールド 7〜8（ワールドパック）は、パックがあればワールド 1〜3 を解いたあとから遊べる（Pro のワールドを飛ばせる）
+    /// ワールドの中は順番に。ワールドの 1 番目は、前のワールドの 12 番目（はじめの章）を解いていれば開く
+    /// （どのワールドも 120 ステージあるので、前を全部解かなくても次の仕掛けに進める）
+    static func gateStage(forWorld w: Int) -> String? {
+        switch w {
+        case 1: nil
+        case 2...6: "\(w - 1)-12"
+        case 7: "3-12"
+        case 8: "7-12"
+        default: nil
+        }
+    }
+
     func isUnlocked(_ stage: Stage, in book: [Stage], isPro: Bool, worldPack: Bool = false) -> Bool {
         let w = StageBook.world(stage.world)
         if w.isPro && !isPro { return false }
         if w.isPack && !worldPack { return false }
-        guard let i = book.firstIndex(where: { $0.id == stage.id }) else { return false }
-        if i == 0 { return true }
-        if stage.index == 0, w.isPack {
-            // パックのワールドの最初：ワールド 3 の最後を解いていればよい
-            return book.contains { $0.id == "3-12" && self.stars(of: $0.id) > 0 }
-                && (stage.world == 7 || self.stars(of: book[i - 1].id) > 0)
+        if stage.index == 0 {
+            guard let gate = Self.gateStage(forWorld: stage.world) else { return true }
+            return self.stars(of: gate) > 0
         }
-        return self.stars(of: book[i - 1].id) > 0
+        guard let prev = book.first(where: { $0.world == stage.world && $0.index == stage.index - 1 }) else { return false }
+        return self.stars(of: prev.id) > 0
     }
 
     func totalStars(world: Int, in book: [Stage]) -> Int {

@@ -54,6 +54,8 @@ struct HomeView: View {
                         .buttonStyle(ChunkyButtonStyle())
                 }
                 todayLine
+                Button("あそびかたをもう一度") { app.startTutorial() }
+                    .font(Theme.label(12)).foregroundStyle(Theme.inkSoft).underline()
                 HStack(spacing: 10) {
                     Button { app.route = .collection } label: {
                         Label("なかま \(app.ownedCount)/\(Roster.all.count)", systemImage: "person.2.fill")
@@ -71,6 +73,12 @@ struct HomeView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
+        .alert("あそびかた、クリア！", isPresented: Binding(get: { app.showTutorialDone }, set: { app.showTutorialDone = $0 })) {
+            Button("ステージへ") { if let n = app.nextStage { app.playStage(n) } }
+            Button("あとで", role: .cancel) {}
+        } message: {
+            Text("おやつ \(AppModel.tutorialGift) をプレゼント。カプセルでなかまを呼べるよ")
+        }
     }
 
     private var todayLine: some View {

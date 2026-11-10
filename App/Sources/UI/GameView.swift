@@ -24,7 +24,14 @@ struct GameView: View {
                     .frame(width: w * scale, height: h * scale)
                     .gesture(drag(scale: scale))
                     .accessibilityLabel("台。ひっぱって離すと、\(game.character.name)が転がります")
-                    if game.hintShot != nil, !game.isAiming, game.summary == nil, !(showIntro && game.mode.stage?.hint != nil) {
+                    if let s = game.mode.stage, s.world == 0, let text = s.hint {
+                        CoachCard(stage: s, text: text, total: app.tutorial.count) { app.finishTutorial() }
+                            .padding(.horizontal, 14)
+                            .padding(.top, 34 * scale)
+                            .frame(width: w * scale, height: h * scale, alignment: .top)
+                            .allowsHitTesting(true)
+                    }
+                    if game.hintShot != nil, game.mode.stage?.world != 0, !game.isAiming, game.summary == nil, !(showIntro && game.mode.stage?.hint != nil) {
                         VStack {
                             Spacer()
                             Button {
@@ -38,7 +45,7 @@ struct GameView: View {
                         }
                         .frame(width: w * scale, height: h * scale)
                     }
-                    if let s = game.mode.stage, showIntro, game.engine.shotsTaken == 0, let hint = s.hint {
+                    if let s = game.mode.stage, s.world != 0, showIntro, game.engine.shotsTaken == 0, let hint = s.hint {
                         IntroCard(stage: s, hint: hint) { withAnimation { showIntro = false } }
                             .padding(24)
                             .transition(.scale(scale: 0.9).combined(with: .opacity))
@@ -65,6 +72,15 @@ struct GameView: View {
         .onAppear {
             game.onFinish = { g in
                 let r = app.finish(g)
+                if let s = g.mode.stage, s.world == 0 {
+                    // チュートリアル：結果の札は出さず、次へ（しっぱいならやりなおし）
+                    let cleared: Bool = { if case .cleared = g.engine.outcome { true } else { false } }()
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .milliseconds(cleared ? 1300 : 900))
+                        if cleared { app.advanceTutorial(after: s) } else { app.replay() }
+                    }
+                    return
+                }
                 Task { @MainActor in
                     try? await Task.sleep(for: .milliseconds(700))
                     g.setSummary(r)
@@ -151,7 +167,7 @@ struct GameView: View {
                     .animation(.snappy, value: game.engine.score)
             }
             .accessibilityElement(children: .combine)
-            Button { app.leaveGame() } label: {
+            Button { if app.isInTutorial { app.finishTutorial() } else { app.leaveGame() } } label: {
                 Image(systemName: game.mode.stage == nil ? "house.fill" : "square.grid.3x3.fill").font(.system(size: 15, weight: .bold))
                     .foregroundStyle(Theme.ink)
                     .frame(width: 38, height: 38)
@@ -161,6 +177,31 @@ struct GameView: View {
             }
             .accessibilityLabel(game.mode.stage == nil ? "ホームへ" : "ステージの一覧へ")
         }
+    }
+}
+
+/// チュートリアルの先生の札（台の上にずっと出す）
+struct CoachCard: View {
+    let stage: Stage
+    let text: String
+    let total: Int
+    let skip: () -> Void
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 10) {
+            CharacterPortrait(character: Roster.character("tama"), face: .happy, showBody: false)
+                .frame(width: 52, height: 44)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("あそびかた \(stage.index + 1)/\(total)").font(Theme.label(11)).foregroundStyle(Theme.inkSoft)
+                Text(text).font(Theme.label(14)).foregroundStyle(Theme.ink).fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 0)
+            Button("スキップ", action: skip).font(Theme.label(11)).foregroundStyle(Theme.inkSoft).underline()
+        }
+        .padding(12)
+        .background(RoundedRectangle(cornerRadius: 18).fill(Theme.cream))
+        .overlay(RoundedRectangle(cornerRadius: 18).stroke(Theme.ink, lineWidth: Theme.line))
+        .accessibilityElement(children: .combine)
     }
 }
 

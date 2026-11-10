@@ -92,11 +92,11 @@ struct ResultCard: View {
     @ViewBuilder private var buttons: some View {
         if let s = stage {
             HStack(spacing: 10) {
-                Button(cleared ? "もう一回" : "やりなおす") { app.replay() }
+                Button(cleared ? "もう一回" : "やりなおす") { app.continueFromResult { app.replay() } }
                     .buttonStyle(ChunkyButtonStyle(fill: cleared ? Theme.cream : Theme.mint, text: cleared ? Theme.ink : .white))
                 if cleared, let next = app.stage(after: s) {
                     if app.isUnlocked(next) {
-                        Button("つぎへ") { app.playStage(next) }
+                        Button("つぎへ") { app.continueFromResult { app.playStage(next) } }
                             .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
                     } else {
                         Button(StageBook.world(next.world).isPack ? "パックでつづき" : "Pro でつづき") { app.showPro = true }
@@ -105,15 +105,15 @@ struct ResultCard: View {
                 }
             }
             if app.progress.canPull() {
-                Button("カプセルを回す（おやつ \(app.progress.snacks)）") { app.route = .capsule }
+                Button("カプセルを回す（おやつ \(app.progress.snacks)）") { app.continueFromResult { app.route = .capsule } }
                     .font(Theme.label(13)).foregroundStyle(Theme.ink).underline()
             }
         } else {
             HStack(spacing: 10) {
-                Button("もう一回") { app.replay() }
+                Button("もう一回") { app.continueFromResult { app.replay() } }
                     .buttonStyle(ChunkyButtonStyle(fill: Theme.mint, text: .white))
                 if app.progress.canPull() {
-                    Button("なかまをよぶ") { app.route = .capsule }
+                    Button("なかまをよぶ") { app.continueFromResult { app.route = .capsule } }
                         .buttonStyle(ChunkyButtonStyle())
                 } else {
                     Button(copied ? "コピーした" : "結果をコピー") { copy() }

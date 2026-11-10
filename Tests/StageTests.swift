@@ -3,20 +3,31 @@ import Testing
 @testable import Tamahebi
 
 struct StageTests {
-    static func book() throws -> [Stage] {
+    static func all() throws -> [Stage] {
         let url = try #require(Bundle.main.url(forResource: "stages", withExtension: "json") ?? StageTests.fallbackURL)
         return try StageBook.decode(Data(contentsOf: url))
     }
+    /// ワールド 1〜8（チュートリアルをのぞく）
+    static func book() throws -> [Stage] { try all().filter { $0.world > 0 } }
     /// アプリの外（Linux のパッケージ）で動かすとき
     static var fallbackURL: URL? {
         ProcessInfo.processInfo.environment["STAGES_JSON"].map { URL(fileURLWithPath: $0) }
     }
 
-    @Test func thereAreEightWorldsOfTwelve() throws {
+    @Test func freeAndProHave360StagesEach() throws {
         let book = try Self.book()
-        #expect(book.count == 96)
-        for w in 1...8 { #expect(book.filter { $0.world == w }.count == 12) }
-        #expect(Set(book.map(\.id)).count == 96)
+        for w in 1...6 { #expect(book.filter { $0.world == w }.count == 120) }
+        for w in 7...8 { #expect(book.filter { $0.world == w }.count == 60) }
+        #expect(book.filter { !StageBook.world($0.world).isPro && !StageBook.world($0.world).isPack }.count == 360)
+        #expect(book.filter { StageBook.world($0.world).isPro }.count == 360)
+        #expect(Set(book.map(\.id)).count == book.count)
+    }
+
+    @Test func tutorialHasThreeEasyStages() throws {
+        let t = try Self.all().filter { $0.world == 0 }
+        #expect(t.map(\.id) == ["T-1", "T-2", "T-3"])
+        #expect(t.allSatisfy { $0.hint != nil && !$0.solution.isEmpty })
+        #expect(t[2].balls.contains { $0.kind == .ghost })
     }
 
     @Test func everyStageHasRoomAndPar() throws {
@@ -34,13 +45,14 @@ struct StageTests {
         #expect(book.filter { $0.world == 4 }.allSatisfy { !$0.warps.isEmpty })
         #expect(book.filter { $0.world == 5 }.allSatisfy { $0.bumpers.contains { $0.amplitude > 0 } })
         #expect(book.filter { $0.world == 7 }.allSatisfy { !$0.pads.isEmpty })
+        #expect(book.filter { $0.world == 3 }.allSatisfy { $0.ice && !$0.walls.isEmpty })
         #expect(book.filter { $0.world == 8 }.allSatisfy { $0.walls.contains { $0.breakable } })
     }
 
     /// 生成のときに見つけた打ち方を再生すると、どのステージも解ける
     @Test func storedSolutionsClearEveryStage() throws {
         var failed: [String] = []
-        for s in try Self.book() {
+        for s in try Self.all() {
             var e = GameEngine(stage: s)
             for shot in s.solution where !e.isFinished {
                 e.shoot(shot)
@@ -92,8 +104,13 @@ struct StageTests {
         #expect(!p.isUnlocked(book[1], in: book, isPro: false))
         p.stageStars[book[0].id] = 1
         #expect(p.isUnlocked(book[1], in: book, isPro: false))
+        // 次のワールドは、前のワールドの 12 番目を解けば開く（全部でなくてよい）
+        let two = try #require(book.first { $0.id == "2-1" })
+        #expect(!p.isUnlocked(two, in: book, isPro: false))
+        p.stageStars["1-12"] = 1
+        #expect(p.isUnlocked(two, in: book, isPro: false))
         let firstPro = try #require(book.first { $0.world == 4 })
-        for s in book where s.world < 4 { p.stageStars[s.id] = 1 }
+        p.stageStars["3-12"] = 1
         #expect(!p.isUnlocked(firstPro, in: book, isPro: false))
         #expect(p.isUnlocked(firstPro, in: book, isPro: true))
         // ワールドパックは Pro がなくても、ワールド 3 のあとから

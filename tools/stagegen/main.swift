@@ -15,9 +15,13 @@ struct Gen {
     mutating func i(_ a: Int, _ b: Int) -> Int { a + Int(rng.unit() * Double(b - a + 1)) }
     mutating func chance(_ p: Double) -> Bool { rng.unit() < p }
 
-    mutating func candidate(world w: Int, index k: Int) -> Stage {
-        let d = Double(k) / 11
-        var s = Stage(id: "\(w)-\(k + 1)", world: w, index: k, head: .zero, body: [], balls: [], goal: Goal(kind: .eatAll), shots: 0, par3: 0, par2: 0)
+    mutating func candidate(world w: Int, index: Int) -> Stage {
+        // はじめの 12 は前の版と同じ難しさ（星の記録が変わらないように）。13 番目からは 12 ずつの山をくり返す
+        let p = index < 12 ? index : (index - 12) % 12
+        let d = index < 12 ? Double(index) / 11 : min(1, 0.35 + Double(p) / 11 * 0.65)
+        let k = index < 12 ? index : 4 + p * 8 / 12   // 下の「k が何番目より後なら」の決まりを、山の中の位置で使う
+        let late = index >= 60
+        var s = Stage(id: "\(w)-\(index + 1)", world: w, index: index, head: .zero, body: [], balls: [], goal: Goal(kind: .eatAll), shots: 0, par3: 0, par2: 0)
         // 頭とからだ
         s.head = Vec(x: r(70, 290), y: r(300, 500))
         let bodyLen = w == 2 ? r(150, 230) : r(80, 140)
@@ -100,7 +104,8 @@ struct Gen {
         for _ in 0..<nPad {
             if let p = spot(Pad.radius, s) { s.pads.append(Pad(center: p, angle: Double(i(0, 7)) * .pi / 4)) }
         }
-        let eightGoal = (w == 1 && (k == 6 || k == 10)) || (w == 6 && (k == 3 || k == 7))
+        let eightGoal = (w == 1 && (p == 6 || p == 10)) || (w == 6 && (p == 3 || p == 7))
+        if late && nBall < 6 && chance(0.5) { nBall += 1 }
         for n in 0..<nBall {
             if let p = spot(10, s) {
                 let ghost = n < nGhost
@@ -213,10 +218,38 @@ let hints: [String: String] = [
 
 let solver = Solver()
 var out: [Stage] = []
+
+// チュートリアル（ワールド 0）：配置は手で決め、打ち方だけ探す。おてほん（ピンクの線）を見せながら遊ばせる
+let tutorials: [Stage] = [
+    Stage(id: "T-1", world: 0, index: 0, head: Vec(x: 180, y: 430), body: [Vec(x: 180, y: 530)],
+          balls: [StageBall(center: Vec(x: 180, y: 220), number: 1)],
+          goal: Goal(kind: .eatAll), shots: 3, par3: 1, par2: 2,
+          hint: "画面のどこでもいいので、指を置いて下に引っぱって、はなそう。ピンクの丸まで引くと「ぴったり」"),
+    Stage(id: "T-2", world: 0, index: 1, head: Vec(x: 180, y: 470), body: [Vec(x: 180, y: 540)],
+          balls: [StageBall(center: Vec(x: 180, y: 350), number: 2), StageBall(center: Vec(x: 180, y: 200), number: 3)],
+          goal: Goal(kind: .eatAll), shots: 3, par3: 1, par2: 2,
+          hint: "1 回で 2 こ続けて食べると、ショットが 1 回ふえる。まっすぐ強めに打とう"),
+    Stage(id: "T-3", world: 0, index: 2, head: Vec(x: 120, y: 420), body: [Vec(x: 300, y: 260), Vec(x: 300, y: 420)],
+          balls: [StageBall(center: Vec(x: 250, y: 140), number: 4, kind: .ghost)],
+          goal: Goal(kind: .eatAll), shots: 4, par3: 2, par2: 3,
+          hint: "通ったあとはタマのからだ。からだに当たると跳ね返る。すけている球は、からだで跳ねてから食べられる"),
+]
+for var t in tutorials {
+    guard let sol = solver.solve(t, maxDepth: t.shots) else {
+        FileHandle.standardError.write("\(t.id) FAILED\n".data(using: .utf8)!); continue
+    }
+    t.solution = sol
+    t.par3 = sol.count
+    t.par2 = sol.count + 1
+    t.shots = max(t.shots, sol.count + 2)
+    out.append(t)
+    FileHandle.standardError.write("\(t.id) solved=\(sol.count)\n".data(using: .utf8)!)
+}
 let onlyWorld = CommandLine.arguments.count > 1 ? Int(CommandLine.arguments[1]) : nil
 for w in 1...8 {
     if let o = onlyWorld, o != w { continue }
-    for k in 0..<12 {
+    let count = w <= 6 ? 120 : 60
+    for k in 0..<count {
         var tries = 0
         var done = false
         while !done && tries < 60 {

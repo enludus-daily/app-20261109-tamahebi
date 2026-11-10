@@ -91,7 +91,21 @@ struct StagesView: View {
             }
             ScrollView {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3), spacing: 12) {
-                    ForEach(app.stages(in: world)) { s in tile(s, felt: Color(hex: w.felt)) }
+                    // 12 ステージごとに章の見出し
+                    let all = app.stages(in: world)
+                    ForEach(Array(stride(from: 0, to: all.count, by: 12)), id: \.self) { start in
+                        Section {
+                            ForEach(all[start..<min(start + 12, all.count)]) { s in tile(s, felt: Color(hex: w.felt)) }
+                        } header: {
+                            HStack {
+                                Text("\(world)-\(start + 1) 〜 \(world)-\(min(start + 12, all.count))").font(Theme.label(13)).foregroundStyle(Theme.ink)
+                                Spacer()
+                                let got = all[start..<min(start + 12, all.count)].reduce(0) { $0 + app.progress.stars(of: $1.id) }
+                                Label("\(got)/\(min(12, all.count - start) * 3)", systemImage: "star.fill").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
+                            }
+                            .padding(.top, start == 0 ? 0 : 10)
+                        }
+                    }
                 }
                 .padding(.vertical, 8)
                 friendTip(w)

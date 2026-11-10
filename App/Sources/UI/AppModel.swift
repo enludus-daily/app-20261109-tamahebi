@@ -35,6 +35,13 @@ final class AppModel {
     let ads: RewardedAds
     let bundleID: String
     let book: [Stage]
+    /// チュートリアル（ワールド 0。T-1〜T-3）
+    let tutorial: [Stage]
+    /// 遊び終わりの回数（全画面広告は 3 回ごと。Pro は出さない）
+    private(set) var playsSinceAd = 0
+    static let playsPerAd = 3
+    /// チュートリアルを終えた直後のお知らせ
+    var showTutorialDone = false
 
     var isPro: Bool { store.entitlements.isPro }
     var worldPackID: String { ProductID.pack("worlds", bundleID: bundleID) }
@@ -64,9 +71,11 @@ final class AppModel {
         }
         if let url = Bundle.main.url(forResource: "stages", withExtension: "json"),
            let data = try? Data(contentsOf: url), let b = try? StageBook.decode(data) {
-            book = b
+            book = b.filter { $0.world > 0 }
+            tutorial = b.filter { $0.world == 0 }
         } else {
             book = []
+            tutorial = []
         }
     }
 
@@ -75,6 +84,9 @@ final class AppModel {
     }
 
     func onLaunch() async {
+        if !progress.tutorialDone, route == .home, game == nil, UserDefaults.standard.string(forKey: "screenshotScene") == nil {
+            startTutorial()
+        }
         await store.load()
         Task { await ads.prepare() }
         progress.normalize(isPro: isPro, friendPack: hasFriendPack)
@@ -148,6 +160,48 @@ final class AppModel {
         play(.stage(s))
     }
 
+    // MARK: チュートリアル
+
+    func startTutorial() {
+        guard let first = tutorial.first else { progress.tutorialDone = true; return }
+        play(.stage(first), hint: true)
+    }
+
+    var isInTutorial: Bool { game?.mode.stage?.world == 0 }
+
+    /// チュートリアルの 1 つを解いたあと：次へ、最後なら終わり
+    func advanceTutorial(after s: Stage) {
+        if let i = tutorial.firstIndex(where: { $0.id == s.id }), i + 1 < tutorial.count {
+            play(.stage(tutorial[i + 1]), hint: true)
+        } else {
+            finishTutorial()
+        }
+    }
+
+    static let tutorialGift = 100
+
+    func finishTutorial() {
+        if !progress.tutorialDone {
+            progress.tutorialDone = true
+            progress.snacks += Self.tutorialGift
+            showTutorialDone = true
+        }
+        game = nil
+        route = .home
+    }
+
+    // MARK: 全画面広告（3 回遊ぶごと）
+
+    /// 結果のボタンから次へ進むとき。3 回遊び終えるごとに全画面広告をはさむ（Pro は出さない）
+    func continueFromResult(_ next: @escaping @MainActor () -> Void) {
+        guard !isPro, playsSinceAd >= Self.playsPerAd else { next(); return }
+        playsSinceAd = 0
+        Task {
+            await ads.showInterstitial()
+            next()
+        }
+    }
+
     func replay() {
         guard let g = game else { return playDaily() }
         if case .random = g.mode { playRandom() } else { play(g.mode, hint: g.hintMode) }
@@ -159,6 +213,7 @@ final class AppModel {
 
     /// 遊び終わりに GameModel から呼ばれる
     func finish(_ g: GameModel) -> GameModel.Summary {
+        if g.mode.stage?.world != 0 { playsSinceAd += 1 }
         if let s = g.mode.stage {
             let stars: Int = { if case .cleared(let n) = g.engine.outcome { n } else { 0 } }()
             let r = progress.recordStage(s.id, stars: stars, eaten: g.engine.eaten, isPro: isPro)
@@ -209,6 +264,8 @@ final class AppModel {
             sample()
             if let s = book.first(where: { $0.id == "2-4" }) { play(.stage(s)) }
             game?.demoAim()
+        case "tutorial":
+            if let t = tutorial.first { play(.stage(t), hint: true) }
         case "hint":
             sample()
             if let s = book.first(where: { $0.id == "2-8" }) { play(.stage(s), hint: true) }
