@@ -546,6 +546,14 @@ struct HintSheet: View {
                     Text("おやつが \(n) 要ります（いま \(app.progress.snacks)）。あしたの無料ヒントを待つか、ステージやきょうの台でおやつをためよう")
                         .font(Theme.body(13)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
                 }
+                if needsPaying(price), app.ads.isReady {
+                    Button {
+                        Task { if await app.watchAdForHint(stage) { Feedback.bonus(); close() } }
+                    } label: {
+                        Label("動画を見て開ける", systemImage: "play.rectangle.fill")
+                    }
+                    .buttonStyle(ChunkyButtonStyle(fill: Theme.sun))
+                }
             }
             if !app.isPro {
                 Button("Pro ならヒントはいつも無料") { close(); app.showPro = true }
@@ -557,5 +565,12 @@ struct HintSheet: View {
 
     private func open() {
         if app.playWithHint(stage) { Feedback.bonus(); close() }
+    }
+
+    private func needsPaying(_ p: Progress.HintPrice) -> Bool {
+        switch p {
+        case .snacks, .tooFewSnacks: true
+        default: false
+        }
     }
 }

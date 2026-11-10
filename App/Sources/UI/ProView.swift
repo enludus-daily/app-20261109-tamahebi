@@ -46,7 +46,11 @@ struct ProView: View {
                         message = (app.isPro || app.hasWorldPack || app.hasFriendPack) ? "復元しました" : "復元できる購入が見つかりませんでした" }
                 }
                 .font(Theme.label(14)).foregroundStyle(Theme.ink).underline()
-                Text("ワールド 1〜3（36 ステージ）・きょうの台・カプセル・18 匹のなかまは、買わなくてもずっと遊べます。おやつ（ゲーム内のポイント）は売っていません。")
+                if AdMobRewarded.needsPrivacyOptions {
+                    Button("広告のプライバシー設定") { Task { await AdMobRewarded.showPrivacyOptions() } }
+                        .font(Theme.label(13)).foregroundStyle(Theme.ink).underline()
+                }
+                Text("ワールド 1〜3（36 ステージ）・きょうの台・カプセル・18 匹のなかまは、買わなくてもずっと遊べます。広告は、ヒントやおやつ 2 倍のために自分で選んだときだけ出ます。おやつ（ゲーム内のポイント）は売っていません。")
                     .font(Theme.body(12)).foregroundStyle(Theme.inkSoft).multilineTextAlignment(.center)
             }
             .padding(20)

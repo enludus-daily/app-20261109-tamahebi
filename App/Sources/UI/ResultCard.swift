@@ -6,6 +6,7 @@ struct ResultCard: View {
     let summary: GameModel.Summary
     @State private var shownStars = 0
     @State private var copied = false
+    @State private var doubled = false
 
     private var stage: Stage? { game.mode.stage }
     private var cleared: Bool { if case .cleared = game.engine.outcome { true } else { false } }
@@ -153,12 +154,29 @@ struct ResultCard: View {
         if total > 0 {
             HStack(spacing: 6) {
                 SnackIcon(size: 18)
-                Text("おやつ +\(total)").font(Theme.label(15)).foregroundStyle(Theme.ink)
-                if let note { Text(note).font(Theme.body(11)).foregroundStyle(Theme.inkSoft) }
+                Text("おやつ +\(doubled ? total * 2 : total)").font(Theme.label(15)).foregroundStyle(Theme.ink)
+                    .contentTransition(.numericText())
+                if let note { Text(doubled ? "2 倍！" : note).font(Theme.body(11)).foregroundStyle(Theme.inkSoft) }
             }
             .padding(.horizontal, 12).padding(.vertical, 6)
             .background(Capsule().fill(Theme.sun.opacity(0.45)))
             .accessibilityElement(children: .combine)
+            if !doubled, app.ads.isReady {
+                Button {
+                    Task {
+                        if await app.watchAdForDouble(total) {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.5)) { doubled = true }
+                            Feedback.bonus()
+                        }
+                    }
+                } label: {
+                    Label("動画を見ておやつ 2 倍", systemImage: "play.rectangle.fill")
+                }
+                .font(Theme.label(13)).foregroundStyle(Theme.ink)
+                .padding(.horizontal, 12).padding(.vertical, 6)
+                .background(Capsule().fill(Theme.cream))
+                .overlay(Capsule().stroke(Theme.ink, lineWidth: 2))
+            }
         }
     }
 

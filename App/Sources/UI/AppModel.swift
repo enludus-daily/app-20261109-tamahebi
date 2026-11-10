@@ -32,6 +32,7 @@ final class AppModel {
     var showPro = false
     var game: GameModel?
     let store: PurchaseStore
+    let ads: RewardedAds
     let bundleID: String
     let book: [Stage]
 
@@ -50,6 +51,10 @@ final class AppModel {
     init(defaults: UserDefaults = .standard) {
         bundleID = Bundle.main.bundleIdentifier ?? "com.enludus.daily.006"
         let pro = ProductID.pro(bundleID: bundleID)
+        // テスト・CI の撮影では広告を出さない
+        let quiet = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+            || defaults.string(forKey: "screenshotScene") != nil
+        ads = quiet ? NoAds() : AdMobRewarded()
         store = PurchaseStore(productIDs: [pro, ProductID.pack("worlds", bundleID: bundleID), ProductID.pack("friends", bundleID: bundleID)],
                               proProductIDs: [pro])
         if let data = defaults.data(forKey: Self.key), let p = try? JSONDecoder().decode(Progress.self, from: data) {
@@ -71,6 +76,7 @@ final class AppModel {
 
     func onLaunch() async {
         await store.load()
+        Task { await ads.prepare() }
         progress.normalize(isPro: isPro, friendPack: hasFriendPack)
     }
 
@@ -103,6 +109,24 @@ final class AppModel {
         hintRules.bumpersWaitWhileResting = true
         game = GameModel(mode: mode, character: look, rules: hint ? hintRules : rules, table: progress.table, hintMode: hint)
         route = .game
+    }
+
+    // MARK: リワード広告
+
+    /// 動画を見て、そのステージのヒントを開ける
+    @discardableResult
+    func watchAdForHint(_ s: Stage) async -> Bool {
+        guard await ads.show() else { return false }
+        progress.hintedStages.insert(s.id)
+        play(.stage(s), hint: true)
+        return true
+    }
+
+    /// 動画を見て、さっきもらったおやつをもう一度もらう（2 倍）
+    func watchAdForDouble(_ amount: Int) async -> Bool {
+        guard amount > 0, await ads.show() else { return false }
+        progress.snacks += amount
+        return true
     }
 
     // MARK: ヒント

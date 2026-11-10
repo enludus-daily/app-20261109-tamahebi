@@ -27,9 +27,19 @@
 
 ## App プライバシーの答え（下書き。申告は本人。公開 API がない）
 
-- データの収集：**なし**（根拠：通信しない、解析・広告 SDK なし、保存は端末の UserDefaults だけ）
-- トラッキング：なし
-- Privacy manifest：`App/Resources/PrivacyInfo.xcprivacy`（UserDefaults: CA92.1）
+AdMob のリワード広告を入れた（2026-11-10、本人の許可）ため「データの収集なし」ではなくなった。Google の案内（https://developers.google.com/admob/ios/privacy/data-disclosure）に合わせた下書き：
+
+| データの種類 | 集める | 使い道 | ユーザーに結びつく | トラッキングに使う |
+|---|---|---|---|---|
+| 位置情報：おおよその位置 | はい（IP アドレスから） | 第三者の広告、分析 | いいえ | はい |
+| 識別子：デバイス ID（IDFA。許可したときだけ） | はい | 第三者の広告、分析 | いいえ | はい |
+| 使用状況データ：製品の操作・広告データ | はい | 第三者の広告、分析 | いいえ | はい |
+| 診断：クラッシュデータ・パフォーマンスデータ | はい | 第三者の広告、分析 | いいえ | いいえ |
+
+- トラッキング：あり（App Tracking Transparency の許可を出す。`NSUserTrackingUsageDescription` あり）
+- Privacy manifest：アプリの分は `App/Resources/PrivacyInfo.xcprivacy`（UserDefaults: CA92.1）。Google Mobile Ads SDK と UMP SDK は自分の manifest を持っている
+- `app-ads.txt`：App Store の「マーケティング URL」か「サポート URL」のドメインの直下に置く（本人）。GitHub のリポジトリ URL では置けないので、GitHub Pages などのサイトが要る
+- 年齢区分：広告あり
 
 ## スクリーンショット
 

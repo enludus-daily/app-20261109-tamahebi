@@ -13,10 +13,21 @@ settings:
     SWIFT_VERSION: "6.0"
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     DEAD_CODE_STRIPPING: YES
+# 広告（AdMob のリワード広告だけ）。本人の許可 2026-11-10。版は固定する
+packages:
+  GoogleMobileAds:
+    url: https://github.com/googleads/swift-package-manager-google-mobile-ads
+    exactVersion: 13.10.0
+  GoogleUserMessagingPlatform:
+    url: https://github.com/googleads/swift-package-manager-google-user-messaging-platform
+    exactVersion: 3.0.0
 targets:
   Tamahebi:
     type: application
     platform: iOS
+    dependencies:
+      - package: GoogleMobileAds
+      - package: GoogleUserMessagingPlatform
     sources:
       - path: App/Sources
       - path: App/Resources
@@ -34,6 +45,11 @@ targets:
           UIApplicationSupportsMultipleScenes: false
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
+        # AdMob のアプリ ID（秘密ではない。アプリの中に入る値）
+        GADApplicationIdentifier: ca-app-pub-1806737602764042~2150188942
+        NSUserTrackingUsageDescription: "あなたに合った広告を出すために使います。許可しなくても、広告の数は変わらず遊べます。"
+        SKAdNetworkItems:
+          - SKAdNetworkIdentifier: cstr6suwn9.skadnetwork
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.enludus.daily.006
