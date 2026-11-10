@@ -12,9 +12,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   ci:
-    uses: enludus-daily/daily-actions/.github/workflows/ios-ci.yml@22e982ccf6d4acd9aa3213a97f60ddf492ab0381 # daily-actions 2026-11-10-submit-screenshots
+    uses: enludus-daily/daily-actions/.github/workflows/ios-ci.yml@bca23af796c0fea2a2c4e000d983b2b4f761c972 # daily-actions 2026-11-10-submit-first-iap
     with:
-      actions-sha: 22e982ccf6d4acd9aa3213a97f60ddf492ab0381
+      actions-sha: bca23af796c0fea2a2c4e000d983b2b4f761c972
       scheme: Tamahebi
       # iPhone Duo の全画面の表示には Xcode 27.1（iOS 27.1 SDK）が要る（Apple Tech Talk「Prepare your app for iPhone Duo」）。
       # xcode-27 ランナーは GitHub で Preview 扱い（actions/runner-images #14404）。
