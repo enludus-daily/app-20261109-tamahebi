@@ -140,9 +140,29 @@ struct Gen {
     }
 }
 
+/// 数字を短くする（位置は 0.01、角度・速さは 0.00001）。長い小数が電話番号のように見えて、検査（scan）に引っかかるのを防ぐ。
+/// 解く前に丸めるので、丸めた値のままで解けることを確かめている
+func r2(_ v: Double) -> Double { (v * 100).rounded() / 100 }
+func r5(_ v: Double) -> Double { (v * 100_000).rounded() / 100_000 }
+func r2(_ v: Vec) -> Vec { Vec(x: r2(v.x), y: r2(v.y)) }
+func rounded(_ s: Stage) -> Stage {
+    var t = s
+    t.head = r2(s.head)
+    t.body = s.body.map(r2)
+    t.balls = s.balls.map { var b = $0; b.center = r2(b.center); return b }
+    t.bumpers = s.bumpers.map { b in
+        var c = b; c.center = r2(b.center); c.radius = r2(b.radius); c.axis = Vec(x: r5(b.axis.x), y: r5(b.axis.y))
+        c.amplitude = r2(b.amplitude); c.speed = r5(b.speed); c.phase = r5(b.phase); return c
+    }
+    t.walls = s.walls.map { var w = $0; w.a = r2(w.a); w.b = r2(w.b); return w }
+    t.warps = s.warps.map { var w = $0; w.a = r2(w.a); w.b = r2(w.b); return w }
+    t.pads = s.pads.map { var p = $0; p.center = r2(p.center); p.angle = r5(p.angle); return p }
+    return t
+}
+
 struct Solver {
     let rules = Rules.standard
-    static let angles = (0..<48).map { Double($0) * 2 * .pi / 48 }
+    static let angles = (0..<48).map { r5(Double($0) * 2 * .pi / 48) }
     static let powers = [0.3, 0.45, 0.6, 0.75, 0.9, 1.0]
 
     func progress(_ e: GameEngine) -> Double {
@@ -234,7 +254,7 @@ let tutorials: [Stage] = [
           goal: Goal(kind: .eatAll), shots: 4, par3: 2, par2: 3,
           hint: "通ったあとはタマのからだ。からだに当たると跳ね返る。すけている球は、からだで跳ねてから食べられる"),
 ]
-for var t in tutorials {
+for var t in tutorials.map(rounded) {
     guard let sol = solver.solve(t, maxDepth: t.shots) else {
         FileHandle.standardError.write("\(t.id) FAILED\n".data(using: .utf8)!); continue
     }
@@ -255,7 +275,7 @@ for w in 1...8 {
         while !done && tries < 60 {
             tries += 1
             var g = Gen(rng: SeededRandom(seed: SeededRandom.seed(from: "tamahebi-stage-\(w)-\(k)-\(tries)")))
-            var s = g.candidate(world: w, index: k)
+            var s = rounded(g.candidate(world: w, index: k))
             guard !s.balls.isEmpty else { continue }
             // ワールドの仕掛けが入っていない台は作り直す
             if w == 2 && !s.balls.contains(where: { $0.kind == .ghost }) { continue }
