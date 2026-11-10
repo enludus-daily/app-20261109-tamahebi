@@ -208,3 +208,14 @@ struct HintTests {
         #expect(p.snacks == Progress.startingSnacks)
     }
 }
+
+struct AdScheduleTests {
+    @Test func firstTenPlaysHaveNoAds() {
+        #expect((1...10).allSatisfy { !AdSchedule.shouldShowInterstitial(afterPlay: $0) })
+    }
+
+    @Test func thenEveryFifthPlay() {
+        let shown = (11...40).filter { AdSchedule.shouldShowInterstitial(afterPlay: $0) }
+        #expect(shown == [15, 20, 25, 30, 35, 40])
+    }
+}

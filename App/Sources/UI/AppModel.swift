@@ -37,9 +37,14 @@ final class AppModel {
     let book: [Stage]
     /// チュートリアル（ワールド 0。T-1〜T-3）
     let tutorial: [Stage]
-    /// 遊び終わりの回数（全画面広告は 3 回ごと。Pro は出さない）
-    private(set) var playsSinceAd = 0
-    static let playsPerAd = 3
+    /// 常に出すバナーの広告ユニット。Pro・チュートリアル中・広告が使えないときは nil
+    var bannerUnitID: String? {
+        guard !isPro, !isInTutorial, progress.tutorialDone else { return nil }
+        return ads.bannerUnitID
+    }
+
+    /// 次に結果から進むとき、全画面広告をはさむ（AdSchedule で決める。Pro は出さない）
+    private(set) var interstitialDue = false
     /// チュートリアルを終えた直後のお知らせ
     var showTutorialDone = false
 
@@ -192,10 +197,10 @@ final class AppModel {
 
     // MARK: 全画面広告（3 回遊ぶごと）
 
-    /// 結果のボタンから次へ進むとき。3 回遊び終えるごとに全画面広告をはさむ（Pro は出さない）
+    /// 結果のボタンから次へ進むとき。最初の 10 回は出さず、11 回目からは 5 回ごとに全画面広告をはさむ（Pro は出さない）
     func continueFromResult(_ next: @escaping @MainActor () -> Void) {
-        guard !isPro, playsSinceAd >= Self.playsPerAd else { next(); return }
-        playsSinceAd = 0
+        guard !isPro, interstitialDue else { next(); return }
+        interstitialDue = false
         Task {
             await ads.showInterstitial()
             next()
@@ -213,7 +218,10 @@ final class AppModel {
 
     /// 遊び終わりに GameModel から呼ばれる
     func finish(_ g: GameModel) -> GameModel.Summary {
-        if g.mode.stage?.world != 0 { playsSinceAd += 1 }
+        if g.mode.stage?.world != 0 {
+            progress.adPlays += 1
+            interstitialDue = AdSchedule.shouldShowInterstitial(afterPlay: progress.adPlays)
+        }
         if let s = g.mode.stage {
             let stars: Int = { if case .cleared(let n) = g.engine.outcome { n } else { 0 } }()
             let r = progress.recordStage(s.id, stars: stars, eaten: g.engine.eaten, isPro: isPro)

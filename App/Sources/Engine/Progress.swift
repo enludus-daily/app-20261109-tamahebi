@@ -82,6 +82,8 @@ struct Progress: Codable, Equatable, Sendable {
     var hintedStages: Set<String> = []
     var lastFreeHintDay: String?
     var tutorialDone = false
+    /// 全画面広告のために数える遊び終わりの回数（チュートリアルはのぞく）
+    var adPlays = 0
 
     init() {}
 
@@ -106,6 +108,7 @@ struct Progress: Codable, Equatable, Sendable {
         hintedStages = try c.decodeIfPresent(Set<String>.self, forKey: .hintedStages) ?? []
         lastFreeHintDay = try c.decodeIfPresent(String.self, forKey: .lastFreeHintDay)
         tutorialDone = try c.decodeIfPresent(Bool.self, forKey: .tutorialDone) ?? false
+        adPlays = try c.decodeIfPresent(Int.self, forKey: .adPlays) ?? 0
     }
 
     // MARK: ヒント

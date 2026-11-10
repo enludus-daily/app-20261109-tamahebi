@@ -26,7 +26,7 @@ struct ProView: View {
                 item(id: ProductID.pro(bundleID: app.bundleID), owned: app.isPro, title: "タマヘビ Pro", tag: "いちばん人気",
                      friends: Roster.proOnly) {
                     benefit("map.fill", "ワールド 4〜6（\(count(4...6)) ステージ）", "ワープの台・うごくバンパー・よるのごちゃまぜ")
-                    benefit("nosign", "遊んだあとの広告が出ない", "3 回ごとの全画面広告がなくなる（見たいときの動画は選べる）")
+                    benefit("nosign", "広告が出ない", "バナーと、遊んだあとの全画面広告がなくなる（見たいときの動画は選べる）")
                     benefit("lightbulb.fill", "ヒントがいつでも無料", "どのステージでも ★3 のおてほんを見られる")
                     benefit("person.3.fill", "限定のなかま 3 匹（なかよし Lv3 から）", "ギンガ・サクラ・ホムラ")
                     benefit("bag.fill", "おやつがずっと 2 倍", "カプセルを倍回せる。なかよし度が早く上がる")
@@ -51,7 +51,7 @@ struct ProView: View {
                     Button("広告のプライバシー設定") { Task { await AdMobRewarded.showPrivacyOptions() } }
                         .font(Theme.label(13)).foregroundStyle(Theme.ink).underline()
                 }
-                Text("ワールド 1〜3（\(count(1...3)) ステージ）・きょうの台・カプセル・\(Roster.capsulePool.count) 匹のなかまは、買わなくてもずっと遊べます。広告は、3 回遊ぶごとの全画面広告（Pro で消える）と、ヒントやおやつ 2 倍のために自分で選んで見る動画です。おやつ（ゲーム内のポイント）は売っていません。")
+                Text("ワールド 1〜3（\(count(1...3)) ステージ）・きょうの台・カプセル・\(Roster.capsulePool.count) 匹のなかまは、買わなくてもずっと遊べます。広告は、画面の下のバナーと、遊んだあとにときどき出る全画面広告（どちらも Pro で消える）と、ヒントやおやつ 2 倍のために自分で選んで見る動画です。おやつ（ゲーム内のポイント）は売っていません。")
                     .font(Theme.body(12)).foregroundStyle(Theme.inkSoft).multilineTextAlignment(.center)
             }
             .padding(20)

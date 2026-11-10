@@ -15,6 +15,8 @@ protocol RewardedAds: AnyObject {
     func show() async -> Bool
     /// 何回か遊んだあとの全画面広告（見終わる・閉じるまで待つ）。出せなければすぐ戻る
     func showInterstitial() async
+    /// バナーに使う広告ユニット（出せないときは nil）
+    var bannerUnitID: String? { get }
 }
 
 /// 広告を出さない（テスト・撮影・広告が使えないとき）
@@ -24,6 +26,7 @@ final class NoAds: RewardedAds {
     func prepare() async {}
     func show() async -> Bool { false }
     func showInterstitial() async {}
+    var bannerUnitID: String? { nil }
 }
 
 @MainActor
@@ -36,8 +39,19 @@ final class AdMobRewarded: NSObject, RewardedAds, FullScreenContentDelegate {
     /// 全画面広告の本番のユニット（3 回遊ぶごと。Pro は出さない）
     static let productionInterstitialUnit = "ca-app-pub-1806737602764042/8476758294"
     static let testInterstitialUnit = "ca-app-pub-3940256099942544/4411468910"
+    /// バナーの本番のユニット（本人が AdMob で作ったら入れる。空のあいだ、App Store のビルドでは出さない）
+    static let productionBannerUnit = ""
+    static let testBannerUnit = "ca-app-pub-3940256099942544/2435281174"
 
     private(set) var isReady = false
+    /// 同意がそろい、SDK を始めたあと（バナーを出してよい）
+    private(set) var canShowBanner = false
+
+    var bannerUnitID: String? {
+        guard canShowBanner else { return nil }
+        if usesTestAds { return Self.testBannerUnit }
+        return Self.productionBannerUnit.isEmpty ? nil : Self.productionBannerUnit
+    }
     @ObservationIgnored private var ad: RewardedAd?
     @ObservationIgnored private var interstitial: InterstitialAd?
     @ObservationIgnored private var started = false
@@ -67,6 +81,7 @@ final class AdMobRewarded: NSObject, RewardedAds, FullScreenContentDelegate {
                 _ = await ATTrackingManager.requestTrackingAuthorization()
             }
             _ = await MobileAds.shared.start()
+            canShowBanner = true
         }
         await load()
     }
