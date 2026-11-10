@@ -7,18 +7,18 @@
       "referenceName": "Pro",
       "price": 480,
       "familySharable": true,
-      "reviewNote": "Pro を買うと、ワールド4〜6（360ステージ）、遊んだあとの全画面広告なし、限定のなかま3匹（ギンガ・サクラ・ホムラ）、遊ぶともらえるおやつ（ゲーム内ポイント。販売はしていません）が2倍、台のいろ3種が使えます。ヒントもいつでも無料になります。ホーム右上の「おみせ」から買えます。",
+      "reviewNote": "Pro を買うと、ワールド4〜6（300以上のステージ）、遊んだあとの全画面広告なし、限定のなかま3匹（ギンガ・サクラ・ホムラ）、遊ぶともらえるおやつ（ゲーム内ポイント。販売はしていません）が2倍、台のいろ3種が使えます。ヒントもいつでも無料になります。ホーム右上の「おみせ」から買えます。",
       "reviewScreenshot": "docs/iap/paywall.png",
       "localizations": [
         {
           "locale": "ja",
           "name": "タマヘビ Pro",
-          "description": "追加360ステージ・広告なし・ヒント無料・限定なかま3匹・おやつ2倍"
+          "description": "追加300以上のステージ・広告なし・ヒント無料・限定なかま3匹・おやつ2倍"
         },
         {
           "locale": "en-US",
           "name": "Tamahebi Pro",
-          "description": "360 more stages, no ads, 3 friends, 2x snacks"
+          "description": "300+ stages, no ads, 3 friends, 2x snacks"
         }
       ]
     },
@@ -28,18 +28,18 @@
       "referenceName": "World Pack",
       "price": 240,
       "familySharable": true,
-      "reviewNote": "ワールドパックを買うと、ワールド7（かそく床）とワールド8（こわれるブロック）の120ステージが遊べます。ホーム右上の「おみせ」から買えます。",
+      "reviewNote": "ワールドパックを買うと、ワールド7（かそく床）とワールド8（こわれるブロック）の100以上のステージが遊べます。ホーム右上の「おみせ」から買えます。",
       "reviewScreenshot": "docs/iap/paywall.png",
       "localizations": [
         {
           "locale": "ja",
           "name": "ワールドパック",
-          "description": "ワールド7・8の120ステージ（かそく床・ブロック）"
+          "description": "ワールド7・8の100以上のステージ（かそく床・ブロック）"
         },
         {
           "locale": "en-US",
           "name": "World Pack",
-          "description": "120 stages: boost pads and breakable blocks"
+          "description": "100+ stages: boost pads and breakable blocks"
         }
       ]
     },

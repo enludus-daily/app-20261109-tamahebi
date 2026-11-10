@@ -25,7 +25,7 @@ struct ProView: View {
 
                 item(id: ProductID.pro(bundleID: app.bundleID), owned: app.isPro, title: "タマヘビ Pro", tag: "いちばん人気",
                      friends: Roster.proOnly) {
-                    benefit("map.fill", "ワールド 4〜6（360 ステージ）", "ワープの台・うごくバンパー・よるのごちゃまぜ")
+                    benefit("map.fill", "ワールド 4〜6（\(count(4...6)) ステージ）", "ワープの台・うごくバンパー・よるのごちゃまぜ")
                     benefit("nosign", "遊んだあとの広告が出ない", "3 回ごとの全画面広告がなくなる（見たいときの動画は選べる）")
                     benefit("lightbulb.fill", "ヒントがいつでも無料", "どのステージでも ★3 のおてほんを見られる")
                     benefit("person.3.fill", "限定のなかま 3 匹（なかよし Lv3 から）", "ギンガ・サクラ・ホムラ")
@@ -33,8 +33,8 @@ struct ProView: View {
                     benefit("square.grid.2x2.fill", "台のいろ 3 種", "きょうの台を、みどり・すもも・よるに")
                 }
                 item(id: app.worldPackID, owned: app.hasWorldPack, title: "ワールドパック", tag: "新しい仕掛け", friends: []) {
-                    benefit("arrow.right.circle.fill", "ワールド 7：かそく床の台（60）", "矢印の床で、ぎゅんと加速")
-                    benefit("square.split.diagonal.2x2.fill", "ワールド 8：こわれるブロック（60）", "ブロックをこわして道を作る")
+                    benefit("arrow.right.circle.fill", "ワールド 7：かそく床の台（\(count(7...7))）", "矢印の床で、ぎゅんと加速")
+                    benefit("square.split.diagonal.2x2.fill", "ワールド 8：こわれるブロック（\(count(8...8))）", "ブロックをこわして道を作る")
                     benefit("checkmark.circle.fill", "ワールド 3 のあとから遊べる", "Pro がなくても遊べます")
                 }
                 item(id: app.friendPackID, owned: app.hasFriendPack, title: "なかまパック：おやつ三姉妹", tag: "なかま 3 匹", friends: Roster.packOnly) {
@@ -51,7 +51,7 @@ struct ProView: View {
                     Button("広告のプライバシー設定") { Task { await AdMobRewarded.showPrivacyOptions() } }
                         .font(Theme.label(13)).foregroundStyle(Theme.ink).underline()
                 }
-                Text("ワールド 1〜3（360 ステージ）・きょうの台・カプセル・18 匹のなかまは、買わなくてもずっと遊べます。広告は、3 回遊ぶごとの全画面広告（Pro で消える）と、ヒントやおやつ 2 倍のために自分で選んで見る動画です。おやつ（ゲーム内のポイント）は売っていません。")
+                Text("ワールド 1〜3（\(count(1...3)) ステージ）・きょうの台・カプセル・\(Roster.capsulePool.count) 匹のなかまは、買わなくてもずっと遊べます。広告は、3 回遊ぶごとの全画面広告（Pro で消える）と、ヒントやおやつ 2 倍のために自分で選んで見る動画です。おやつ（ゲーム内のポイント）は売っていません。")
                     .font(Theme.body(12)).foregroundStyle(Theme.inkSoft).multilineTextAlignment(.center)
             }
             .padding(20)
@@ -120,6 +120,9 @@ struct ProView: View {
             .frame(maxWidth: .infinity)
         }
     }
+
+    /// ステージの数はデータから数える（ふえても書き直さなくてよい）
+    private func count(_ worlds: ClosedRange<Int>) -> Int { app.book.filter { worlds.contains($0.world) }.count }
 
     private func benefit(_ icon: String, _ title: String, _ detail: String) -> some View {
         HStack(alignment: .top, spacing: 12) {
