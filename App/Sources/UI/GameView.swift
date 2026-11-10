@@ -31,20 +31,6 @@ struct GameView: View {
                             .frame(width: w * scale, height: h * scale, alignment: .top)
                             .allowsHitTesting(true)
                     }
-                    if game.hintShot != nil, game.mode.stage?.world != 0, !game.isAiming, game.summary == nil, !(showIntro && game.mode.stage?.hint != nil) {
-                        VStack {
-                            Spacer()
-                            Button {
-                                game.shootHint()
-                            } label: {
-                                Label("おてほんで打つ（\(game.engine.shotsTaken + 1) 打目）", systemImage: "hand.point.up.left.fill")
-                            }
-                            .buttonStyle(ChunkyButtonStyle(fill: Color(hex: 0xF7A9C4), text: Theme.ink, height: 50))
-                            .frame(maxWidth: 280)
-                            .padding(.bottom, 44 * scale)
-                        }
-                        .frame(width: w * scale, height: h * scale)
-                    }
                     if let s = game.mode.stage, s.world != 0, showIntro, game.engine.shotsTaken == 0, let hint = s.hint {
                         IntroCard(stage: s, hint: hint) { withAnimation { showIntro = false } }
                             .padding(24)
@@ -566,7 +552,7 @@ struct HintSheet: View {
                 .frame(width: 60, height: 60).background(Circle().fill(Theme.sun))
                 .overlay(Circle().stroke(Theme.ink, lineWidth: 3))
             Text("\(stage.id) のおてほん").font(Theme.title(22)).foregroundStyle(Theme.ink)
-            Text("最初からやりなおして、★3 の打ち方を 1 打ずつピンクの線で見せます。「おてほんで打つ」ボタンでそのまま打てます。自分で引くときは、ピンクの丸まで指を動かすと「ぴったり」になります。おてほんの間は、なかまのとくいはお休みです。")
+            Text("最初からやりなおして、★3 の打ち方を 1 打ずつピンクの線で見せます。指を置いたところから、ピンクの丸まで引くと「ぴったり」になります。おてほんの間は、なかまのとくいはお休みです。")
                 .font(Theme.body(14)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
             Group {
                 switch price {
