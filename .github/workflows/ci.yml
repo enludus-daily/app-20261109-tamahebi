@@ -12,9 +12,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   ci:
-    uses: enludus-daily/daily-actions/.github/workflows/ios-ci.yml@37039871350ea51fa19d8976a9926fd93f7ae98e # daily-actions 2026-11-10-errors
+    uses: enludus-daily/daily-actions/.github/workflows/ios-ci.yml@f3499c1ca5ebfc370150e67875c39458fec5b8cd # daily-actions 2026-11-10-demo-video
     with:
-      actions-sha: 37039871350ea51fa19d8976a9926fd93f7ae98e
+      actions-sha: f3499c1ca5ebfc370150e67875c39458fec5b8cd
       scheme: Tamahebi
       # iPhone Duo の全画面の表示には Xcode 27.1（iOS 27.1 SDK）が要る（Apple Tech Talk「Prepare your app for iPhone Duo」）。
       # xcode-27 ランナーは GitHub で Preview 扱い（actions/runner-images #14404）。
@@ -24,4 +24,6 @@ jobs:
       screenshot-device: iPhone Duo
       # 撮る画面（アプリが起動引数 -screenshotScene <名前> で開く画面。@dark でダークモード）。手順書 9.5
       screenshot-scenes: tutorial launch worlds stages game hint result collection shop tutorial@en home@en worlds@en stages@en game@en hint@en result@en collection@en capsule@en shop@en daily@en
+      # YouTube の「AI ships an app a day」Day 1 用：起動引数 -demo の再生を英語で録る（artifact demo-video）
+      demo-video: en
       guard-disabled: ${{ vars.DAILY_GUARD_DISABLED == 'true' && 'true' || 'false' }}
