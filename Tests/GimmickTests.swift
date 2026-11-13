@@ -153,3 +153,9 @@ struct AreaTests {
         }
     }
 }
+
+struct AreaTitleTests {
+    @Test func everyAreaHasATitle() {
+        for a in AreaBook.all { #expect(!a.title.isEmpty, "\(a.world)-\(a.number)") }
+    }
+}

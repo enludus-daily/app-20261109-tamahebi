@@ -72,6 +72,7 @@ struct Area: Equatable, Sendable {
 
     var firstIndex: Int { (number - 1) * Self.size }
     var title: String {
+        if gimmicks.isEmpty { return String(localized: "きほん") }
         if gimmicks.count >= 3 { return String(localized: "ごちゃまぜ") }
         return gimmicks.map(\.label).joined(separator: " × ")
     }
