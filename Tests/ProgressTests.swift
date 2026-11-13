@@ -136,17 +136,95 @@ struct ProgressTests {
     }
 
     @Test func ratesAddUpToOne() {
-        let sum = Roster.capsulePool.map(Progress.rate(of:)).reduce(0, +)
+        for day in ["2026-11-13", "2026-11-20", "2027-01-01"] {
+            let sum = Roster.capsulePool.map { Progress.rate(of: $0, day: day) }.reduce(0, +)
+            #expect(abs(sum - 1) < 1e-9)
+        }
+        // 10 回目の確定（レア以上）でも合計は 1。ふつうは出ない
+        let pick = Progress.pickup(day: "2026-11-13")
+        let sum = Roster.capsulePool.map { Progress.rate(of: $0, pickup: pick, floor: .rare) }.reduce(0, +)
         #expect(abs(sum - 1) < 1e-9)
+        #expect(Roster.capsulePool.filter { $0.rarity == .common }.allSatisfy { Progress.rate(of: $0, pickup: pick, floor: .rare) == 0 })
     }
 
     @Test func drawFollowsTheRatesRoughly() {
         var rng = SeededRandom(seed: 99)
+        let pick = Progress.pickup(day: "2026-11-13")
         var counts: [Rarity: Int] = [:]
-        for _ in 0..<20_000 { counts[Progress.draw(using: &rng).rarity, default: 0] += 1 }
-        #expect(abs(Double(counts[.common] ?? 0) / 20_000 - 0.70) < 0.02)
-        #expect(abs(Double(counts[.superRare] ?? 0) / 20_000 - 0.05) < 0.01)
+        var picked = 0
+        for _ in 0..<40_000 {
+            let c = Progress.draw(using: &rng, pickup: pick)
+            counts[c.rarity, default: 0] += 1
+            if c.id == pick.id { picked += 1 }
+        }
+        #expect(abs(Double(counts[.common] ?? 0) / 40_000 - 0.70) < 0.02)
+        #expect(abs(Double(counts[.superRare] ?? 0) / 40_000 - 0.05) < 0.01)
+        #expect(abs(Double(picked) / 40_000 - 0.025) < 0.006)
         #expect(counts[.pro] == nil)
+    }
+
+    @Test func pickupChangesEveryMondayAndCyclesSuperRares() {
+        // 2026-11-16 は月曜
+        #expect(Progress.pickup(day: "2026-11-15").id != Progress.pickup(day: "2026-11-16").id)
+        #expect(Progress.pickup(day: "2026-11-16").id == Progress.pickup(day: "2026-11-22").id)
+        #expect(Progress.pickupDaysLeft(day: "2026-11-16") == 7)
+        #expect(Progress.pickupDaysLeft(day: "2026-11-22") == 1)
+        #expect(Progress.pickup(day: "2026-11-16").rarity == .superRare)
+        let weeks = (0..<Progress.superRares.count).map { Progress.pickup(day: Self.day(plusWeeks: $0)).id }
+        #expect(Set(weeks).count == Progress.superRares.count)
+        #expect(Progress.dayNumber("1970-01-01") == 0)
+        #expect(Progress.dayNumber("2026-11-13") == 20_770)
+    }
+
+    private static func day(plusWeeks w: Int) -> String {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = TimeZone(identifier: "UTC")!
+        let base = cal.date(from: DateComponents(year: 2026, month: 11, day: 16))!
+        return Progress.dayKey(cal.date(byAdding: .day, value: 7 * w, to: base)!, calendar: cal)
+    }
+
+    @Test func pityGivesThePickupOnTheFortiethPull() {
+        var p = Progress()
+        p.snacks = 1_000_000
+        p.sinceSuperRare = Progress.pityLimit - 1
+        #expect(p.pullsUntilPity == 1)
+        var rng = SeededRandom(seed: 1)
+        let r = try? #require(p.pull(using: &rng, day: "2026-11-13"))
+        #expect(r?.character.id == Progress.pickup(day: "2026-11-13").id)
+        #expect(r?.isPickup == true)
+        #expect(p.sinceSuperRare == 0)
+        #expect(p.pullsUntilPity == Progress.pityLimit)
+    }
+
+    @Test func pityCountsUpUntilASuperRare() {
+        var p = Progress()
+        p.snacks = 1_000_000
+        var rng = SeededRandom(seed: 5)
+        var expected = 0
+        for _ in 0..<200 {
+            let r = p.pull(using: &rng, day: "2026-11-13")!
+            expected = r.character.rarity == .superRare ? 0 : expected + 1
+            #expect(p.sinceSuperRare == expected)
+            #expect(p.sinceSuperRare < Progress.pityLimit)
+        }
+    }
+
+    @Test func tenPullsCostLessAndAlwaysHaveARareOrBetter() {
+        for seed in 1...300 {
+            var p = Progress()
+            p.snacks = Progress.tenPullCost
+            var rng = SeededRandom(seed: UInt32(seed))
+            let rs = try? #require(p.pullTen(using: &rng, day: "2026-11-13"))
+            #expect(rs?.count == 10)
+            #expect(rs?.contains { $0.character.rarity != .common } == true)
+            #expect(p.snacks == rs!.reduce(0) { $0 + $1.refund })
+        }
+        #expect(Progress.tenPullCost < Progress.capsuleCost * 10)
+        var poor = Progress()
+        poor.snacks = Progress.tenPullCost - 1
+        var rng = SeededRandom(seed: 1)
+        #expect(poor.pullTen(using: &rng) == nil)
+        #expect(poor.snacks == Progress.tenPullCost - 1)
     }
 
     @Test func proFriendsNeedPro() {

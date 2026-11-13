@@ -35,6 +35,8 @@ enum Mark: String, Codable, Sendable {
 enum Perk: String, Codable, Sendable {
     case none, grip, warpBoost, bigMouth, ghostFriend, extraShot, longGuide, grow, lucky8, bouncy, coins, bigCoins
     case padBoost, breaker, rolling
+    /// 1.1：新しい仕掛けに効くとくい
+    case mudWalker, springy
 
     /// レベルごとの説明（level は 1〜5）
     func label(level: Int) -> String {
@@ -55,6 +57,8 @@ enum Perk: String, Codable, Sendable {
         case .padBoost: return strong ? String(localized: "かそく床で、もっと速く飛びだす（いちばん速い）") : String(localized: "かそく床で、もっと速く飛びだす")
         case .breaker: return strong ? String(localized: "こわれるブロックを、どれも 1 回でこわす") : String(localized: "かたいブロックに強い（Lv3 で、どれも 1 回でこわす）")
         case .rolling: return strong ? String(localized: "よく転がる（とまりにくい）（もっと）") : String(localized: "よく転がる（とまりにくい）")
+        case .mudWalker: return strong ? String(localized: "ねばねば床でも、ほとんど止まらない") : String(localized: "ねばねば床で止まりにくい")
+        case .springy: return strong ? String(localized: "はずむかべで、もっと速く返ってくる（いちばん）") : String(localized: "はずむかべで、もっと速く返ってくる")
         }
     }
 
@@ -73,6 +77,8 @@ enum Perk: String, Codable, Sendable {
         case .padBoost: rules.padSpeed = strong ? 1000 : 900
         case .breaker: rules.breaksInOneHit = strong
         case .rolling: rules.friction *= strong ? 0.72 : 0.84
+        case .mudWalker: rules.mudFactor = strong ? 2.0 : 3.5
+        case .springy: rules.bouncyRestitution = strong ? 1.55 : 1.42
         case .none, .coins, .bigCoins: break
         }
     }
@@ -190,6 +196,30 @@ enum Roster {
                   line: String(localized: "夜空のいろを、からだにまとう。")),
         Character(id: "milk", name: String(localized: "ミルク"), rarity: .superRare, body: 0xF4F1EC, shade: 0xDCD6CE, belly: 0xFFFFFF, spot: 0xA9D4F2, mark: .note, perk: .bigMouth,
                   line: String(localized: "なんでもひとのみ。口の大きさは台いちばん。")),
+        Character(id: "kinako", name: String(localized: "キナコ"), rarity: .common, body: 0xE8CFA0, shade: 0xD1B684, belly: 0xFFF8EA, spot: 0xFFFFFF, mark: .moon, perk: .mudWalker,
+                  line: String(localized: "ねばねばの床でも、すいすい進む。")),
+        Character(id: "sora", name: String(localized: "ソラ"), rarity: .common, body: 0xA9D4F2, shade: 0x8BBCE0, belly: 0xF5FBFF, spot: 0xFFFFFF, mark: .star, perk: .extraShot,
+                  line: String(localized: "空を見上げて、もう 1 回。")),
+        Character(id: "ichigo", name: String(localized: "イチゴ"), rarity: .common, body: 0xF58E9A, shade: 0xDE7581, belly: 0xFFF1F2, spot: 0xFFF3B0, mark: .heart, perk: .springy,
+                  line: String(localized: "しま模様のかべが大すき。ぽよん！")),
+        Character(id: "nori", name: String(localized: "ノリ"), rarity: .common, body: 0x7E9C7E, shade: 0x678567, belly: 0xF1F7EE, spot: 0xFFFFFF, mark: .leaf, perk: .grip,
+                  line: String(localized: "しっとりして、すべらない。")),
+        Character(id: "purin", name: String(localized: "プリン"), rarity: .rare, body: 0xF7E3A0, shade: 0xE5CC80, belly: 0xFFFBEE, spot: 0xC98A5A, mark: .crown, perk: .mudWalker,
+                  line: String(localized: "ぷるぷるで、ねばねばに負けない。")),
+        Character(id: "cocoa", name: String(localized: "ココア"), rarity: .rare, body: 0xA9826F, shade: 0x8E6A59, belly: 0xF5E8DF, spot: 0xFFFFFF, mark: .note, perk: .breaker,
+                  line: String(localized: "あまい顔して、力もち。")),
+        Character(id: "hotaru", name: String(localized: "ホタル"), rarity: .rare, body: 0xC9E86F, shade: 0xAFCF58, belly: 0xFBFFE6, spot: 0xFFF3B0, mark: .bolt, perk: .longGuide,
+                  line: String(localized: "暗い台でも、道を照らす。")),
+        Character(id: "umi", name: String(localized: "ウミ"), rarity: .rare, body: 0x6FB7C9, shade: 0x579EB0, belly: 0xEEFAFD, spot: 0xFFFFFF, mark: .drop, perk: .warpBoost,
+                  line: String(localized: "波にのって、穴から穴へ。")),
+        Character(id: "marshmallow", name: String(localized: "マシュマロ"), rarity: .rare, body: 0xFBEFF5, shade: 0xE9D3E0, belly: 0xFFFFFF, spot: 0xF7C4DD, mark: .flower, perk: .grow,
+                  line: String(localized: "ふわふわ伸びる、白いからだ。")),
+        Character(id: "niji", name: String(localized: "ニジ"), rarity: .superRare, body: 0xF7B6C8, shade: 0xA6E3CF, belly: 0xFFFFFF, spot: 0xF7E3A0, mark: .galaxy, perk: .springy,
+                  line: String(localized: "かべに当たるたびに、いろが変わる。")),
+        Character(id: "kohaku", name: String(localized: "コハク"), rarity: .superRare, body: 0xF0B45A, shade: 0xD99A43, belly: 0xFFF4E0, spot: 0xFFFFFF, mark: .sun, perk: .lucky8,
+                  line: String(localized: "8 番球を見つけると、きらりと光る。")),
+        Character(id: "yozora", name: String(localized: "ヨゾラ"), rarity: .superRare, body: 0x45528A, shade: 0x34406E, belly: 0xE6E9FA, spot: 0xFFF3B0, mark: .moon, perk: .ghostFriend,
+                  line: String(localized: "ゴースト球と、夜どおしおしゃべり。")),
         Character(id: "ginga", name: String(localized: "ギンガ"), rarity: .pro, body: 0x6F7FC9, shade: 0x5867AE, belly: 0xE8ECFF, spot: 0xFFF3B0, mark: .galaxy, perk: .longGuide,
                   line: String(localized: "夜の台で、星の線をたどる。")),
         Character(id: "sakura", name: String(localized: "サクラ"), rarity: .pro, body: 0xF8C3CF, shade: 0xE7A2B3, belly: 0xFFF7F9, spot: 0xFFFFFF, mark: .blossom, perk: .grow,

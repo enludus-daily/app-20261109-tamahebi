@@ -283,8 +283,16 @@ final class AppModel {
 
     func pull() -> PullResult? {
         var rng = SystemRandomNumberGenerator()
-        return progress.pull(using: &rng)
+        return progress.pull(using: &rng, day: today)
     }
+
+    func pullTen() -> [PullResult]? {
+        var rng = SystemRandomNumberGenerator()
+        return progress.pullTen(using: &rng, day: today)
+    }
+
+    /// 今週のピックアップの子
+    var pickup: Character { Progress.pickup(day: today) }
 
     func refreshAfterPurchase() {
         progress.normalize(isPro: isPro, friendPack: hasFriendPack)

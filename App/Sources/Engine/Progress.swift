@@ -18,6 +18,8 @@ struct PullResult: Equatable, Sendable {
     let levelUp: Int?
     /// Lv5 の子がかぶったときに返ってくるおやつ
     let refund: Int
+    /// ピックアップの子だった
+    var isPickup = false
     /// このレベルで新しく使えるようになったもの
     var unlocked: String? {
         guard let l = levelUp else { return nil }
@@ -53,6 +55,10 @@ enum TableTheme: String, Codable, CaseIterable, Sendable {
 
 struct Progress: Codable, Equatable, Sendable {
     static let capsuleCost = 120
+    /// 10 回まとめて（1 回ぶんおまけ）。10 回目は、それまでにレア以上が出ていなければレア以上
+    static let tenPullCost = 1080
+    /// 天井：スーパーレアが出ないまま、この回数目はピックアップの子
+    static let pityLimit = 40
     static let maxLevelRefund = 60
     static let startingSnacks = 150
     static let dailyFirstPlayBonus = 50
@@ -84,6 +90,8 @@ struct Progress: Codable, Equatable, Sendable {
     var tutorialDone = false
     /// 全画面広告のために数える遊び終わりの回数（チュートリアルはのぞく）
     var adPlays = 0
+    /// 天井のために数える、スーパーレアが出ていない回数
+    var sinceSuperRare = 0
 
     init() {}
 
@@ -109,6 +117,7 @@ struct Progress: Codable, Equatable, Sendable {
         lastFreeHintDay = try c.decodeIfPresent(String.self, forKey: .lastFreeHintDay)
         tutorialDone = try c.decodeIfPresent(Bool.self, forKey: .tutorialDone) ?? false
         adPlays = try c.decodeIfPresent(Int.self, forKey: .adPlays) ?? 0
+        sinceSuperRare = try c.decodeIfPresent(Int.self, forKey: .sinceSuperRare) ?? 0
     }
 
     // MARK: ヒント
@@ -252,43 +261,103 @@ struct Progress: Codable, Equatable, Sendable {
     // MARK: カプセル
 
     /// おやつを使ってなかまを 1 匹よぶ。足りなければ nil
-    mutating func pull<G: RandomNumberGenerator>(using rng: inout G) -> PullResult? {
+    mutating func pull<G: RandomNumberGenerator>(using rng: inout G, day: String = "") -> PullResult? {
         guard canPull() else { return nil }
         snacks -= Self.capsuleCost
+        return drawOne(using: &rng, day: day, floor: .common)
+    }
+
+    func canPullTen() -> Bool { snacks >= Self.tenPullCost }
+
+    /// 10 回まとめてよぶ。足りなければ nil
+    mutating func pullTen<G: RandomNumberGenerator>(using rng: inout G, day: String = "") -> [PullResult]? {
+        guard canPullTen() else { return nil }
+        snacks -= Self.tenPullCost
+        var out: [PullResult] = []
+        for i in 0..<10 {
+            let gotRare = out.contains { $0.character.rarity != .common }
+            out.append(drawOne(using: &rng, day: day, floor: i == 9 && !gotRare ? .rare : .common))
+        }
+        return out
+    }
+
+    /// 天井まであと何回（この回数目でピックアップの子が出る）
+    var pullsUntilPity: Int { max(1, Self.pityLimit - sinceSuperRare) }
+
+    private mutating func drawOne<G: RandomNumberGenerator>(using rng: inout G, day: String, floor: Rarity) -> PullResult {
         pulls += 1
-        let c = Self.draw(using: &rng)
+        let pick = Self.pickup(day: day)
+        let c = sinceSuperRare + 1 >= Self.pityLimit ? pick : Self.draw(using: &rng, pickup: pick, floor: floor)
+        sinceSuperRare = c.rarity == .superRare ? 0 : sinceSuperRare + 1
+        let isPickup = c.id == pick.id
         guard owned.contains(c.id) else {
             owned.insert(c.id)
             levels[c.id] = 1
-            return PullResult(character: c, isNew: true, levelUp: nil, refund: 0)
+            return PullResult(character: c, isNew: true, levelUp: nil, refund: 0, isPickup: isPickup)
         }
         let lv = level(of: c)
         if lv < Roster.maxLevel {
             levels[c.id] = lv + 1
-            return PullResult(character: c, isNew: false, levelUp: lv + 1, refund: 0)
+            return PullResult(character: c, isNew: false, levelUp: lv + 1, refund: 0, isPickup: isPickup)
         }
         snacks += Self.maxLevelRefund
-        return PullResult(character: c, isNew: false, levelUp: nil, refund: Self.maxLevelRefund)
+        return PullResult(character: c, isNew: false, levelUp: nil, refund: Self.maxLevelRefund, isPickup: isPickup)
     }
 
-    static func draw<G: RandomNumberGenerator>(using rng: inout G) -> Character {
+    // MARK: ピックアップ（週がわり。月曜にかわる）
+
+    /// 1970-01-01（木曜）からの日数
+    static func dayNumber(_ day: String) -> Int {
+        let p = day.split(separator: "-").compactMap { Int($0) }
+        guard p.count == 3 else { return 0 }
+        // 年月日から日数（グレゴリオ暦。タイムゾーンに左右されない）
+        let y = p[1] <= 2 ? p[0] - 1 : p[0]
+        let m = p[1] <= 2 ? p[1] + 12 : p[1]
+        let days = 365 * y + y / 4 - y / 100 + y / 400 + (153 * (m - 3) + 2) / 5 + p[2] - 1
+        return days - 719_468
+    }
+    static func pickupWeek(day: String) -> Int { (dayNumber(day) + 3) / 7 }
+    /// ピックアップがかわるまでの日数（1〜7）
+    static func pickupDaysLeft(day: String) -> Int { 7 - (dayNumber(day) + 3) % 7 }
+    static var superRares: [Character] { Roster.capsulePool.filter { $0.rarity == .superRare } }
+    static func pickup(day: String) -> Character {
+        let list = superRares
+        let w = pickupWeek(day: day)
+        return list[((w % list.count) + list.count) % list.count]
+    }
+    /// スーパーレアの合計のうち、ピックアップの子の分
+    static let pickupShare = 0.5
+
+    /// floor：その回で出る等級の下限（10 回目の確定は .rare。ふつうの分はレアにまわる）
+    static func rarityRates(floor: Rarity = .common) -> [(Rarity, Double)] {
+        let sr = Rarity.superRare.pullRate
+        if floor == .rare { return [(.superRare, sr), (.rare, 1 - sr)] }
+        return [(.superRare, sr), (.rare, Rarity.rare.pullRate), (.common, Rarity.common.pullRate)]
+    }
+
+    static func draw<G: RandomNumberGenerator>(using rng: inout G, pickup: Character, floor: Rarity = .common) -> Character {
         let roll = Double.random(in: 0..<1, using: &rng)
         var acc = 0.0
-        var rarity = Rarity.common
-        for r in [Rarity.superRare, .rare, .common] {
-            acc += r.pullRate
-            if roll < acc { rarity = r; break }
+        var chosen: Character?
+        for c in Roster.capsulePool {
+            acc += rate(of: c, pickup: pickup, floor: floor)
+            if roll < acc { chosen = c; break }
         }
-        let pool = Roster.capsulePool.filter { $0.rarity == rarity }
-        return pool[Int.random(in: 0..<pool.count, using: &rng)]
+        return chosen ?? pickup
     }
 
-    /// 同じ等級の中では同じ確率。画面に出す表のための値
-    static func rate(of c: Character) -> Double {
-        guard c.rarity != .pro else { return 0 }
-        let same = Roster.capsulePool.filter { $0.rarity == c.rarity }.count
-        return c.rarity.pullRate / Double(same)
+    /// 1 匹ごとの確率（画面の表と抽選が同じ値を使う）
+    static func rate(of c: Character, pickup: Character, floor: Rarity = .common) -> Double {
+        guard let total = rarityRates(floor: floor).first(where: { $0.0 == c.rarity })?.1 else { return 0 }
+        let same = Roster.capsulePool.filter { $0.rarity == c.rarity }
+        if c.rarity == .superRare {
+            if c.id == pickup.id { return total * pickupShare }
+            return total * (1 - pickupShare) / Double(same.count - 1)
+        }
+        return total / Double(same.count)
     }
+
+    static func rate(of c: Character, day: String = "") -> Double { rate(of: c, pickup: pickup(day: day)) }
 
     mutating func select(_ c: Character, isPro: Bool, friendPack: Bool = false) -> Bool {
         guard owns(c, isPro: isPro, friendPack: friendPack) else { return false }

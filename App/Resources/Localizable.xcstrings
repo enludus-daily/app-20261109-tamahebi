@@ -239,6 +239,74 @@
         }
       }
     },
+    "1 回まわす": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spin once"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 回まわす"
+          }
+        }
+      }
+    },
+    "10 回の結果": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your 10 spins"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10 回の結果"
+          }
+        }
+      }
+    },
+    "10 回は 1 回ぶんおまけ。レア以上が 1 匹は出る": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10 spins for the price of 9, with at least one Rare"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10 回は 1 回ぶんおまけ。レア以上が 1 匹は出る"
+          }
+        }
+      }
+    },
+    "10 回まわす": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spin 10"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10 回まわす"
+          }
+        }
+      }
+    },
     "2 倍！": {
       "extractionState": "manual",
       "localizations": {
@@ -337,6 +405,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "8 番球をねらえ"
+          }
+        }
+      }
+    },
+    "8 番球を見つけると、きらりと光る。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sparkles whenever it spots the 8-ball."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 番球を見つけると、きらりと光る。"
           }
         }
       }
@@ -473,6 +558,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "、Pro"
+          }
+        }
+      }
+    },
+    "、あたらしい": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", new"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "、あたらしい"
           }
         }
       }
@@ -681,6 +783,23 @@
         }
       }
     },
+    "あと %@ 日": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ days left"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あと %@ 日"
+          }
+        }
+      }
+    },
     "あとちょっと…もう一回！": {
       "extractionState": "manual",
       "localizations": {
@@ -711,6 +830,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "あとで"
+          }
+        }
+      }
+    },
+    "あまい顔して、力もち。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sweet face, strong head."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あまい顔して、力もち。"
           }
         }
       }
@@ -1378,6 +1514,23 @@
         }
       }
     },
+    "かべに当たるたびに、いろが変わる。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changes color every time it hits a wall."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "かべに当たるたびに、いろが変わる。"
+          }
+        }
+      }
+    },
     "からだクッション": {
       "extractionState": "manual",
       "localizations": {
@@ -1905,6 +2058,40 @@
         }
       }
     },
+    "しっとりして、すべらない。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A little damp, so never slippery."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "しっとりして、すべらない。"
+          }
+        }
+      }
+    },
+    "しま模様のかべが大すき。ぽよん！": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loves striped walls. Boing!"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "しま模様のかべが大すき。ぽよん！"
+          }
+        }
+      }
+    },
     "しま模様のかべは、よくはずむ。当たると速くなって返ってくる": {
       "extractionState": "manual",
       "localizations": {
@@ -2415,6 +2602,23 @@
         }
       }
     },
+    "ねばねばの床でも、すいすい進む。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glides right through the stickiest mud."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ねばねばの床でも、すいすい進む。"
+          }
+        }
+      }
+    },
     "ねばねば床": {
       "extractionState": "manual",
       "localizations": {
@@ -2428,6 +2632,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "ねばねば床"
+          }
+        }
+      }
+    },
+    "ねばねば床でも、ほとんど止まらない": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barely slows down on Sticky Mud"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ねばねば床でも、ほとんど止まらない"
+          }
+        }
+      }
+    },
+    "ねばねば床で止まりにくい": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slows down less on Sticky Mud"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ねばねば床で止まりにくい"
           }
         }
       }
@@ -2551,6 +2789,40 @@
         }
       }
     },
+    "はずむかべで、もっと速く返ってくる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bouncy Walls send you back faster"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "はずむかべで、もっと速く返ってくる"
+          }
+        }
+      }
+    },
+    "はずむかべで、もっと速く返ってくる（いちばん）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bouncy Walls send you back fastest"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "はずむかべで、もっと速く返ってくる（いちばん）"
+          }
+        }
+      }
+    },
     "ひっぱって、はなす！": {
       "extractionState": "manual",
       "localizations": {
@@ -2598,6 +2870,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "ふつう"
+          }
+        }
+      }
+    },
+    "ふわふわ伸びる、白いからだ。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A soft white body that stretches and stretches."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ふわふわ伸びる、白いからだ。"
+          }
+        }
+      }
+    },
+    "ぷるぷるで、ねばねばに負けない。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wobbly enough to wiggle out of any mud."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ぷるぷるで、ねばねばに負けない。"
           }
         }
       }
@@ -3010,6 +3316,40 @@
         }
       }
     },
+    "イチゴ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Berry"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "イチゴ"
+          }
+        }
+      }
+    },
+    "ウミ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marina"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ウミ"
+          }
+        }
+      }
+    },
     "エリア %@": {
       "extractionState": "manual",
       "localizations": {
@@ -3214,6 +3554,23 @@
         }
       }
     },
+    "キナコ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kinako"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キナコ"
+          }
+        }
+      }
+    },
     "キャラメル": {
       "extractionState": "manual",
       "localizations": {
@@ -3316,6 +3673,40 @@
         }
       }
     },
+    "ココア": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cocoa"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ココア"
+          }
+        }
+      }
+    },
+    "コハク": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "コハク"
+          }
+        }
+      }
+    },
     "コピーした": {
       "extractionState": "manual",
       "localizations": {
@@ -3397,6 +3788,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "ゴースト球がおきた！"
+          }
+        }
+      }
+    },
+    "ゴースト球と、夜どおしおしゃべり。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chats with ghost balls all night long."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ゴースト球と、夜どおしおしゃべり。"
           }
         }
       }
@@ -3673,6 +4081,40 @@
         }
       }
     },
+    "スーパーレアの半分はこの子。%@ 回以内に必ず出る": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Half of all Super Rares. Guaranteed within %@ spins"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スーパーレアの半分はこの子。%@ 回以内に必ず出る"
+          }
+        }
+      }
+    },
+    "ソラ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sky"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソラ"
+          }
+        }
+      }
+    },
     "ソーダ": {
       "extractionState": "manual",
       "localizations": {
@@ -3775,6 +4217,23 @@
         }
       }
     },
+    "ニジ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rainbow"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ニジ"
+          }
+        }
+      }
+    },
     "ネオン": {
       "extractionState": "manual",
       "localizations": {
@@ -3788,6 +4247,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "ネオン"
+          }
+        }
+      }
+    },
+    "ノリ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nori"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ノリ"
           }
         }
       }
@@ -4064,6 +4540,40 @@
         }
       }
     },
+    "ピックアップ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Featured"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ピックアップ"
+          }
+        }
+      }
+    },
+    "ピックアップ：今週は %@。スーパーレア（合計 %@）のうち半分がこの子です。毎週月曜にかわります。スーパーレアが出ないまま %@ 回目になると、ピックアップの子が必ず出ます（天井。スーパーレアが出ると数えなおし）。10 回まとめて回すと %@ おやつで、10 回目はそれまでにレア以上が出ていなければレア以上が出ます（そのときはレア %@・スーパーレア %@）。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Featured this week: %1$@. It gets half of the Super Rare chance (%2$@ in total) and changes every Monday. If you go %3$@ spins without a Super Rare, that spin is guaranteed to be the featured buddy (the count resets whenever you get a Super Rare). Spinning 10 at once costs %4$@ snacks, and if none of the first 9 is Rare or better, the 10th one is (Rare %5$@, Super Rare %6$@)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ピックアップ：今週は %@。スーパーレア（合計 %@）のうち半分がこの子です。毎週月曜にかわります。スーパーレアが出ないまま %@ 回目になると、ピックアップの子が必ず出ます（天井。スーパーレアが出ると数えなおし）。10 回まとめて回すと %@ おやつで、10 回目はそれまでにレア以上が出ていなければレア以上が出ます（そのときはレア %@・スーパーレア %@）。"
+          }
+        }
+      }
+    },
     "ピンクのブロックは当てるとこわれる。イシマルはかたいブロックに強い": {
       "extractionState": "manual",
       "localizations": {
@@ -4115,6 +4625,40 @@
         }
       }
     },
+    "プリン": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pudding"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プリン"
+          }
+        }
+      }
+    },
+    "ホタル": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Firefly"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ホタル"
+          }
+        }
+      }
+    },
     "ホムラ": {
       "extractionState": "manual",
       "localizations": {
@@ -4162,6 +4706,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "ボーナスショット +1"
+          }
+        }
+      }
+    },
+    "マシュマロ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marshmallow"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "マシュマロ"
           }
         }
       }
@@ -4247,6 +4808,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "ユズ"
+          }
+        }
+      }
+    },
+    "ヨゾラ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starry"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ヨゾラ"
           }
         }
       }
@@ -4999,6 +5577,23 @@
         }
       }
     },
+    "暗い台でも、道を照らす。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lights the way on the darkest table."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暗い台でも、道を照らす。"
+          }
+        }
+      }
+    },
     "最初からやりなおして、★3 の打ち方を 1 打ずつピンクの線で見せます。指を置いたところから、ピンクの丸まで引くと「ぴったり」になります。おてほんの間は、なかまのとくいはお休みです。": {
       "extractionState": "manual",
       "localizations": {
@@ -5063,6 +5658,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "次の Lv%@：%@（カプセルでもう一度会うと上がる）"
+          }
+        }
+      }
+    },
+    "波にのって、穴から穴へ。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rides the waves from hole to hole."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "波にのって、穴から穴へ。"
           }
         }
       }
@@ -5254,6 +5866,23 @@
         }
       }
     },
+    "空を見上げて、もう 1 回。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Looks up at the sky and goes again."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "空を見上げて、もう 1 回。"
+          }
+        }
+      }
+    },
     "結果をコピー": {
       "extractionState": "manual",
       "localizations": {
@@ -5403,6 +6032,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "黄色いバンパーに当たると、よくはずむ"
+          }
+        }
+      }
+    },
+    "（なかよし Lv%@）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " (Buddy Lv%@)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "（なかよし Lv%@）"
+          }
+        }
+      }
+    },
+    "（ピックアップ）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " (Featured)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "（ピックアップ）"
           }
         }
       }
