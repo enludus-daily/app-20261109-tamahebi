@@ -40,21 +40,31 @@ struct Gen {
         }
         s.body = Array(pts.dropFirst().reversed())
 
-        // 仕掛け
-        var nBump = 0, nWall = 0, nWarp = 0, nMoving = 0, nGhost = 0, nPad = 0, nCage = 0
-        var nBall = 2
-        switch w {
-        case 1: nBump = Int((d * 3).rounded()); nBall = 1 + Int((d * 4).rounded())
-        case 2: nBump = i(0, 1 + Int(d * 2)); nBall = 2 + Int((d * 3).rounded()); nGhost = 1 + Int((d * 2).rounded())
-        case 3: s.ice = true; nWall = 1 + Int((d * 2).rounded()); nBump = i(0, Int(d * 2)); nBall = 2 + Int((d * 3).rounded())
-        case 4: nWarp = k < 6 ? 1 : i(1, 2); nBump = i(0, 2); nWall = i(0, 1); nBall = 2 + Int((d * 3).rounded()); nGhost = k > 7 ? 1 : 0
-        case 5: nMoving = 2 + Int((d * 2).rounded()); nBall = 2 + Int((d * 3).rounded()); nWall = k > 6 ? 1 : 0
-        case 6:
-            s.ice = chance(0.4); nWarp = i(0, 1); nMoving = i(0, 2); nBump = i(0, 1); nWall = i(0, 2)
-            nGhost = i(0, 2); nBall = 3 + Int((d * 3).rounded())
-        case 7: nPad = 1 + Int((d * 2).rounded()); nBump = i(0, 2); nWall = k > 5 ? i(0, 1) : 0; nBall = 2 + Int((d * 3).rounded())
-        default: nCage = 1 + Int((d * 2).rounded()); nPad = k > 5 ? i(0, 1) : 0; nBump = i(0, 1); nBall = 2 + Int((d * 3).rounded())
-        }
+        // 仕掛け：エリアの表（App/Sources/Engine/Areas.swift）から
+        let area = AreaBook.area(world: w, index: index)!
+        let g = Set(area.gimmicks(atIndex: index))
+        let trial = area.isTrial(index: index) ? area.trial : nil
+        func n(_ base: Int, _ more: Double) -> Int { base + Int((d * more).rounded()) }
+        var nBump = 0, nWall = 0, nBouncy = 0, nWarp = 0, nMoving = 0, nGhost = 0, nPad = 0, nCage = 0, nMud = 0, nHole = 0
+        // おためしの仕掛けは 1 つだけ（はじめて見る人にもわかるように）
+        let one = { (x: Gimmick) in trial == x }
+        var nBall = (w == 1 && area.number == 1) ? 1 + Int((d * 4).rounded()) : 2 + Int((d * 3).rounded())
+        if g.contains(.bumper) { nBump = w == 1 && area.number == 2 ? Int((d * 3).rounded()) + 1 : n(1, 1.5) }
+        if g.contains(.ice) { s.ice = true; nWall = n(1, 2) }
+        if g.contains(.wall) { nWall = max(nWall, n(1, 1.5)) }
+        if g.contains(.bouncy) { nBouncy = n(1, 1.5) }
+        if g.contains(.mud) { nMud = n(1, 1.5) }
+        if g.contains(.hole) { nHole = n(1, 1.5) }
+        if g.contains(.ghost) { nGhost = n(1, 2) }
+        if g.contains(.warp) { nWarp = one(.warp) ? 1 : (k < 6 ? 1 : i(1, 2)) }
+        if g.contains(.moving) { nMoving = one(.moving) ? 1 : (w == 5 ? n(2, 2) : n(1, 1)) }
+        if g.contains(.pad) { nPad = one(.pad) ? 1 : n(1, 2) }
+        if g.contains(.block) { nCage = one(.block) ? 1 : n(1, 2) }
+        if g.contains(.ordered) { s.ordered = true; nBall = min(nBall, 2 + Int((d * 2).rounded())) }
+        // 仕掛けが多い台は、球を少し減らす
+        let kinds = g.count
+        if kinds >= 3 { nBall = max(2, nBall - 1) }
+        nGhost = min(nGhost, nBall)
         func clear(_ p: Vec, _ m: Double, _ s: Stage) -> Bool {
             if p.distance(to: s.head) < m + 40 { return false }
             if (s.body).contains(where: { $0.distance(to: p) < m + 20 }) { return false }
@@ -84,6 +94,14 @@ struct Gen {
                 if [wall.a, wall.b, c].allSatisfy({ clear($0, 16, s) }) { s.walls.append(wall); break }
             }
         }
+        for _ in 0..<nBouncy {
+            for _ in 0..<50 {
+                let c = Vec(x: r(60, 300), y: r(60, 480))
+                let len = r(70, 130), ang = r(0, .pi)
+                let wall = Wall(a: c - Vec.angle(ang) * (len / 2), b: c + Vec.angle(ang) * (len / 2), bouncy: true)
+                if [wall.a, wall.b, c].allSatisfy({ clear($0, 16, s) }) { s.walls.append(wall); break }
+            }
+        }
         for _ in 0..<nWarp {
             for _ in 0..<30 {
                 guard let a = spot(Warp.radius, s) else { continue }
@@ -104,13 +122,29 @@ struct Gen {
         for _ in 0..<nPad {
             if let p = spot(Pad.radius, s) { s.pads.append(Pad(center: p, angle: Double(i(0, 7)) * .pi / 4)) }
         }
-        let eightGoal = (w == 1 && (p == 6 || p == 10)) || (w == 6 && (p == 3 || p == 7))
+        // ねばねば床とおとし穴は、頭と台のまんなかのあいだに置きやすくする（通り道にかかるように）
+        for _ in 0..<nMud {
+            let rad = r(34, 56)
+            if let p = spot(rad, s) { s.muds.append(Mud(center: p, radius: rad)) }
+        }
+        for _ in 0..<nHole {
+            if let p = spot(Hole.radius + 6, s) { s.holes.append(Hole(center: p)) }
+        }
+        let eightGoal = g.contains(.eight)
         if late && nBall < 6 && chance(0.5) { nBall += 1 }
+        // じゅんばん球は 1 から順に、場所はばらばらに
+        let order = s.ordered ? (0..<nBall).map { $0 }.shuffled(using: &rng) : []
         for n in 0..<nBall {
             if let p = spot(10, s) {
                 let ghost = n < nGhost
-                s.balls.append(StageBall(center: p, number: ghost ? 1 + (n % 7) : 1 + ((n + k) % 7), kind: ghost ? .ghost : .normal))
+                let number = s.ordered ? 1 + order[n] : (ghost ? 1 + (n % 7) : 1 + ((n + k) % 7))
+                s.balls.append(StageBall(center: p, number: number, kind: ghost ? .ghost : .normal))
             }
+        }
+        if s.ordered {
+            // 置けなかった球があっても、番号が 1 から続くように詰める
+            let sorted = s.balls.indices.sorted { s.balls[$0].number < s.balls[$1].number }
+            for (rank, bi) in sorted.enumerated() { s.balls[bi].number = rank + 1 }
         }
         // こわれるブロックのかご：球のまわり 3 方をブロックでかこむ（1 方はあいている）
         if nCage > 0 {
@@ -127,7 +161,7 @@ struct Gen {
                         let okY = p.y > 8 && p.y < rules.height - 8
                         return okX && okY
                     }
-                    let hard: Bool = k > 7 && side % 2 == 0
+                    let hard: Bool = trial == nil && p > 7 && side % 2 == 0
                     if inside { s.walls.append(Wall(a: a, b: b, hits: hard ? 2 : 1)) }
                 }
             }
@@ -225,16 +259,50 @@ struct Solver {
 
 let hints: [String: String] = [
     "1-1": "台のどこでもひっぱって、はなすと転がる。球を食べよう",
-    "1-3": "黄色いバンパーに当たると、よくはずむ",
-    "1-7": "8 番球を食べればクリア。ほかの球は食べなくてもいい",
-    "2-1": "すけている球はゴースト球。からだで跳ね返ったあとだけ食べられる",
-    "3-1": "こおりの台はよくすべる。弱めに打とう。かべでも跳ね返る",
-    "4-1": "穴に入ると、もう片方の穴から同じ向きで出てくる",
-    "5-1": "バンパーが動いている。よそく線は、いま打ったときの線",
-    "6-1": "ぜんぶの仕掛けが出てくる。なかまのとくいも使おう",
-    "7-1": "矢印の床に乗ると、矢印の向きにぎゅんと飛びだす",
-    "8-1": "こわれるブロックは当てるとこわれる。白い線のブロックは 2 回",
 ]
+
+func has(_ s: Stage, _ g: Gimmick) -> Bool {
+    switch g {
+    case .bumper: s.bumpers.contains { $0.amplitude == 0 }
+    case .wall, .ice: !s.walls.filter({ !$0.bouncy && !$0.breakable }).isEmpty && (g != .ice || s.ice)
+    case .eight: s.goal.kind == .eatEight
+    case .mud: !s.muds.isEmpty
+    case .bouncy: s.walls.contains { $0.bouncy }
+    case .hole: !s.holes.isEmpty
+    case .ordered: s.ordered && s.balls.count >= 2
+    case .ghost: s.balls.contains { $0.kind == .ghost }
+    case .warp: !s.warps.isEmpty
+    case .moving: s.bumpers.contains { $0.amplitude > 0 }
+    case .pad: !s.pads.isEmpty
+    case .block: s.walls.contains { $0.breakable }
+    }
+}
+
+/// 解き方を再生して、ねばねば床を通る・おとし穴のそばを通る・はずむかべに当たるかを見る
+func touches(_ s: Stage, _ sol: [Shot]) -> Bool {
+    let needMud = !s.muds.isEmpty, needHole = !s.holes.isEmpty, needBouncy = s.walls.contains { $0.bouncy }
+    if !needMud && !needHole && !needBouncy { return true }
+    var mud = false, hole = false, bouncy = false
+    var e = GameEngine(stage: s)
+    for shot in sol {
+        e.shoot(shot)
+        var t = 0.0
+        while e.isMoving && t < 12 {
+            _ = e.advance(by: GameEngine.tick)
+            t += GameEngine.tick
+            let h = e.head
+            if s.muds.contains(where: { h.distance(to: $0.center) < $0.radius }) { mud = true }
+            if s.holes.contains(where: { h.distance(to: $0.center) < Hole.radius + 34 }) { hole = true }
+            for w in s.walls where w.bouncy {
+                let ab = w.b - w.a
+                let q = w.a + ab * min(max((h - w.a).dot(ab) / ab.dot(ab), 0), 1)
+                if h.distance(to: q) < e.rules.headRadius + Wall.thickness + 2 { bouncy = true }
+            }
+        }
+    }
+    // どれか 1 つが効いていればよい（全部を通る解き方は少ないので）
+    return (needMud && mud) || (needHole && hole) || (needBouncy && bouncy)
+}
 
 let solver = Solver()
 var out: [Stage] = []
@@ -277,19 +345,17 @@ for w in 1...8 {
             var g = Gen(rng: SeededRandom(seed: SeededRandom.seed(from: "tamahebi-stage-\(w)-\(k)-\(tries)")))
             var s = rounded(g.candidate(world: w, index: k))
             guard !s.balls.isEmpty else { continue }
-            // ワールドの仕掛けが入っていない台は作り直す
-            if w == 2 && !s.balls.contains(where: { $0.kind == .ghost }) { continue }
-            if w == 3 && s.walls.isEmpty { continue }
-            if w == 4 && s.warps.isEmpty { continue }
-            if w == 5 && s.bumpers.filter({ $0.amplitude > 0 }).count < 2 { continue }
-            if w == 7 && s.pads.isEmpty { continue }
-            if w == 8 && !s.walls.contains(where: { $0.breakable }) { continue }
+            // エリアの仕掛けが入っていない台は作り直す
+            let area = AreaBook.area(world: w, index: k)!
+            guard area.gimmicks(atIndex: k).allSatisfy({ has(s, $0) }) else { continue }
             let target = s.goal.kind == .eatEight ? 1 : s.balls.count
             let maxDepth = min(7, target + 2)
             s.shots = maxDepth
             s.par3 = maxDepth; s.par2 = maxDepth
             let t0 = Date()
             guard let sol = solver.solve(s, maxDepth: maxDepth) else { continue }
+            // ねばねば床・おとし穴・はずむかべは、解き方の通り道にかかっている台だけ残す（置いてあるだけで関係ない台にしない）
+            guard touches(s, sol) else { continue }
             // 最初のころはやさしく、あとは解き方を考えさせる（1 ショット 1 球より少ない手で解ける台を優先しない）
             // 人は 1 ショット 1 球くらいで進むので、ショットは「球の数 + ゆとり」と「見つけた手 + 2」の多いほう
             let slack = w <= 3 ? 1 : 0
@@ -297,7 +363,10 @@ for w in 1...8 {
             s.par3 = sol.count
             s.shots = max(sol.count + 2, target + slack)
             s.par2 = max(sol.count + 1, (sol.count + s.shots + 1) / 2)
-            s.hint = hints[s.id]
+            let p = k - area.firstIndex
+            if p == 0, let g = area.new { s.hint = g.introHint }
+            if p == Area.trialFrom, let t = area.trial { s.hint = t.introHint }
+            if s.id == "1-1" { s.hint = hints["1-1"] }
             out.append(s)
             done = true
             FileHandle.standardError.write("\(s.id) balls=\(s.balls.count) solved=\(sol.count) tries=\(tries) \(String(format: "%.1f", Date().timeIntervalSince(t0)))s\n".data(using: .utf8)!)

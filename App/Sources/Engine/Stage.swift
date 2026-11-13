@@ -50,7 +50,11 @@ struct Stage: Identifiable, Equatable, Codable, Sendable {
     var walls: [Wall] = []
     var warps: [Warp] = []
     var pads: [Pad] = []
+    var muds: [Mud] = []
+    var holes: [Hole] = []
     var ice = false
+    /// じゅんばん球：番号の小さい順にしか食べられない
+    var ordered = false
     var goal: Goal
     var shots: Int
     /// このショット数以内なら星 3、par2 以内なら星 2、それ以外のクリアは星 1

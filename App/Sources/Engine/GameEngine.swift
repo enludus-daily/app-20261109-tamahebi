@@ -79,6 +79,10 @@ struct Rules: Equatable, Sendable {
     var padSpeed = 760.0
     /// こわれるブロックが 1 回でこわれる
     var breaksInOneHit = false
+    /// ねばねば床の上で、摩擦にかける数（大きいほど早く止まる）
+    var mudFactor = 6.0
+    /// よくはずむかべの、はね返りの強さ（1 より大きいと速くなって返ってくる）
+    var bouncyRestitution = 1.3
 
     static let standard = Rules()
 }
@@ -109,6 +113,8 @@ struct Wall: Equatable, Codable, Sendable {
     var b: Vec
     /// こわれるブロック：あと何回当たるとこわれるか（0 はこわれないかべ）
     var hits = 0
+    /// よくはずむかべ：当たると速くなって返ってくる
+    var bouncy = false
     static let thickness = 5.0
     var breakable: Bool { hits > 0 }
 }
@@ -119,6 +125,20 @@ struct Pad: Equatable, Codable, Sendable {
     var angle: Double
     static let radius = 18.0
     var direction: Vec { .angle(angle) }
+}
+
+/// ねばねば床：上を通ると、すぐに遅くなる
+struct Mud: Equatable, Codable, Sendable {
+    var center: Vec
+    var radius: Double
+}
+
+/// おとし穴：頭が落ちると、そのショットは打つ前の場所にもどる（食べた球はそのまま）
+struct Hole: Equatable, Codable, Sendable {
+    var center: Vec
+    static let radius = 17.0
+    /// 頭の中心がここまで入ると落ちる
+    static let catchRadius = 13.0
 }
 
 /// 入口と出口の 2 つの穴。どちらから入っても、もう片方から同じ速さで出る
@@ -145,6 +165,7 @@ enum GameEvent: Equatable, Sendable {
     case wallBreak(at: Vec)
     case pad(at: Vec)
     case warp(from: Vec, to: Vec)
+    case fell(at: Vec)
     case ghostAwake
     case eat(number: Int, combo: Int, points: Int, at: Vec)
     case bonusShot
@@ -193,6 +214,8 @@ struct GameEngine: Sendable {
     private(set) var walls: [Wall] = []
     private(set) var warps: [Warp] = []
     private(set) var pads: [Pad] = []
+    private(set) var muds: [Mud] = []
+    private(set) var holes: [Hole] = []
     private(set) var balls: [TableBall] = []
     private(set) var time = 0.0
     private(set) var ghostsAwake = false
@@ -201,6 +224,8 @@ struct GameEngine: Sendable {
     private var warpLock: Int?
     private var padLock: Int?
     private var bouncedThisShot = false
+    /// おとし穴に落ちたときにもどす、打つ前のヘビ
+    private var shotStart: (head: Vec, path: [Vec], jumps: [Bool], pathLength: Double)?
     private var accumulator = 0.0
     /// 止まっている間の時間（球の出てくる動きなど、見た目だけに使う）
     private(set) var idleTime = 0.0
@@ -209,6 +234,10 @@ struct GameEngine: Sendable {
 
     var isFinished: Bool { outcome != nil }
     var isIce: Bool { stage?.ice ?? false }
+    /// じゅんばん球の台
+    var isOrdered: Bool { stage?.ordered ?? false }
+    /// じゅんばん球の台で、次に食べられる番号
+    var nextNumber: Int? { isOrdered ? balls.map(\.number).min() : nil }
 
     /// きょうの台・ランダム台
     init(seed: UInt32, rules: Rules = .standard) {
@@ -235,6 +264,8 @@ struct GameEngine: Sendable {
         walls = stage.walls
         warps = stage.warps
         pads = stage.pads
+        muds = stage.muds
+        holes = stage.holes
         balls = stage.balls.enumerated().map { TableBall(center: $1.center, number: $1.number, kind: $1.kind, born: 0, phase: Double($0) * 1.7) }
         // はじめのからだ：折れ線を spacing ごとに打つ
         let line = stage.body + [stage.head]
@@ -292,6 +323,7 @@ struct GameEngine: Sendable {
         combo = 0
         ghostsAwake = false
         bouncedThisShot = false
+        shotStart = holes.isEmpty ? nil : (head, path, jumps, pathLength)
         return true
     }
 
@@ -355,7 +387,7 @@ struct GameEngine: Sendable {
     }
 
     private func makeField() -> Field {
-        Field(bumpers: bumpers, walls: walls, warps: warps, pads: pads, time: time, ice: isIce)
+        Field(bumpers: bumpers, walls: walls, warps: warps, pads: pads, muds: muds, holes: holes, time: time, ice: isIce)
     }
 
     private mutating func physicsStep(_ dt: Double, events: inout [GameEvent]) {
@@ -390,12 +422,22 @@ struct GameEngine: Sendable {
             events.append(.warp(from: w.from, to: w.to))
             appendPoint(head, jump: true)
         }
+        if let at = r.fell {
+            // おとし穴：打つ前の場所にもどる。食べた球・こわしたブロックはそのまま
+            events.append(.fell(at: at))
+            if let s = shotStart { head = s.head; path = s.path; jumps = s.jumps; pathLength = s.pathLength }
+            velocity = .zero
+            warpLock = nil
+            padLock = nil
+        }
         let speed = velocity.length
         if speed > 1 { direction = velocity * (1 / speed) }
-        if let last = path.last, head.distance(to: last) >= rules.spacing { appendPoint(head) }
+        if r.fell == nil, let last = path.last, head.distance(to: last) >= rules.spacing { appendPoint(head) }
 
-        for i in balls.indices.reversed() where balls[i].center.distance(to: head) < rules.eatRadius {
+        for i in balls.indices.reversed() where r.fell == nil && balls[i].center.distance(to: head) < rules.eatRadius {
             if balls[i].kind == .ghost, !ghostsAwake { continue }
+            // じゅんばん球：いちばん小さい番号からしか食べられない（ほかは通りぬける）
+            if isOrdered, let next = balls.map(\.number).min(), balls[i].number != next { continue }
             let ball = balls.remove(at: i)
             combo += 1
             eaten += 1
@@ -485,11 +527,11 @@ struct GameEngine: Sendable {
     // MARK: 物理（プレビューと共通）
 
     struct Mover { var position: Vec; var velocity: Vec; var warpLock: Int?; var padLock: Int? = nil }
-    struct Field { var bumpers: [Bumper]; var walls: [Wall]; var warps: [Warp]; var pads: [Pad] = []; var time: Double; var ice: Bool }
+    struct Field { var bumpers: [Bumper]; var walls: [Wall]; var warps: [Warp]; var pads: [Pad] = []; var muds: [Mud] = []; var holes: [Hole] = []; var time: Double; var ice: Bool }
     enum Hit: Equatable { case rail, bumper(Int), body(Int), wall, warp, pad }
     struct StepResult {
         var hit: Hit?; var stopped: Bool; var speed: Double; var warped: (from: Vec, to: Vec)?
-        var broke: Vec? = nil; var padded: Vec? = nil
+        var broke: Vec? = nil; var padded: Vec? = nil; var fell: Vec? = nil
     }
 
     static func step(_ b: inout Mover, dt: Double, rules: Rules, field: inout Field, body: [Vec], bodyLimit: Int) -> StepResult {
@@ -535,7 +577,8 @@ struct GameEngine: Sendable {
                 let n = dv * (1 / d)
                 let vn = b.velocity.dot(n)
                 if vn < 0 {
-                    b.velocity = b.velocity - n * ((1 + rules.restitution) * vn)
+                    let e = w.bouncy ? rules.bouncyRestitution : rules.restitution
+                    b.velocity = b.velocity - n * ((1 + e) * vn)
                     hit = .wall
                     if w.breakable {
                         let left = rules.breaksInOneHit ? 0 : w.hits - 1
@@ -600,12 +643,20 @@ struct GameEngine: Sendable {
             }
         }
 
+        // おとし穴：頭の中心が入ったら落ちる（そこで止まる）
+        if let h = field.holes.first(where: { b.position.distance(to: $0.center) < Hole.catchRadius }) {
+            b.position = h.center
+            b.velocity = .zero
+            return StepResult(hit: hit, stopped: true, speed: 0, warped: warped, broke: broke, padded: padded, fell: h.center)
+        }
+
         var speed = b.velocity.length
         if speed > rules.maxSpeed {
             b.velocity = b.velocity * (rules.maxSpeed / speed)
             speed = rules.maxSpeed
         }
-        let k = field.ice ? rules.iceFactor : 1
+        var k = field.ice ? rules.iceFactor : 1
+        if field.muds.contains(where: { b.position.distance(to: $0.center) < $0.radius }) { k *= rules.mudFactor }
         let next = speed * exp(-rules.friction * k * dt) - rules.deceleration * k * dt
         if next < 6 {
             b.velocity = .zero

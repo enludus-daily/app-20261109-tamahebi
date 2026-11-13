@@ -71,14 +71,16 @@ struct WorldsView: View {
     }
 }
 
-/// 1 つのワールドの 12 ステージ
+/// 1 つのワールドのステージ。12 ステージずつのエリアに分け、開いたときは次に遊ぶステージの位置にいる
 struct StagesView: View {
     @Environment(AppModel.self) private var app
     let world: Int
 
     var body: some View {
         let w = StageBook.world(world)
-        VStack(spacing: 12) {
+        let all = app.stages(in: world)
+        let areas = AreaBook.areas(world: world)
+        VStack(spacing: 10) {
             HStack {
                 BackButton { app.route = .worlds }
                 Spacer()
@@ -89,34 +91,88 @@ struct StagesView: View {
                 Spacer()
                 Color.clear.frame(width: 40, height: 40)
             }
-            ScrollView {
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3), spacing: 12) {
-                    // 12 ステージごとに章の見出し
-                    let all = app.stages(in: world)
-                    ForEach(Array(stride(from: 0, to: all.count, by: 12)), id: \.self) { start in
-                        Section {
-                            ForEach(all[start..<min(start + 12, all.count)]) { s in tile(s, felt: Color(hex: w.felt)) }
-                        } header: {
-                            HStack {
-                                Text("\(world)-\(start + 1) 〜 \(world)-\(min(start + 12, all.count))").font(Theme.label(13)).foregroundStyle(Theme.ink)
-                                Spacer()
-                                let got = all[start..<min(start + 12, all.count)].reduce(0) { $0 + app.progress.stars(of: $1.id) }
-                                Label("\(got)/\(min(12, all.count - start) * 3)", systemImage: "star.fill").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
+            ScrollViewReader { proxy in
+                // エリアへ飛ぶ（横に並べたボタン）
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 6) {
+                        ForEach(areas, id: \.number) { area in
+                            let stages = slice(all, area)
+                            let cleared = stages.filter { app.progress.stars(of: $0.id) > 0 }.count
+                            let current = stages.contains { $0.id == app.nextStage?.id }
+                            Button {
+                                Feedback.tap()
+                                withAnimation(.easeInOut(duration: 0.3)) { proxy.scrollTo(anchorID(area), anchor: .top) }
+                            } label: {
+                                Text("\(world)-\(area.number)")
+                                    .font(Theme.label(13)).monospacedDigit().foregroundStyle(Theme.ink)
+                                    .padding(.horizontal, 10).padding(.vertical, 6)
+                                    .background(Capsule().fill(current ? Theme.sun : (cleared == stages.count && !stages.isEmpty ? Theme.mint.opacity(0.5) : Theme.cream)))
+                                    .overlay(Capsule().stroke(Theme.ink, lineWidth: current ? 3 : 2))
                             }
-                            .padding(.top, start == 0 ? 0 : 10)
+                            .buttonStyle(.plain)
+                            .accessibilityLabel(String(localized: "エリア \(L.s(area.number))：\(L.s(area.title))"))
                         }
                     }
+                    .padding(.horizontal, 2).padding(.vertical, 3)
                 }
-                .padding(.vertical, 8)
-                friendTip(w)
-                    .padding(.bottom, 24)
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 10) {
+                        ForEach(areas, id: \.number) { area in
+                            areaHeader(area, stages: slice(all, area)).id(anchorID(area))
+                            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3), spacing: 12) {
+                                ForEach(slice(all, area)) { s in tile(s, felt: Color(hex: w.felt), trial: area.isTrial(index: s.index) ? area.trial : nil).id(s.id) }
+                            }
+                        }
+                    }
+                    .padding(.vertical, 8)
+                    friendTip(w)
+                        .padding(.bottom, 24)
+                }
+                .onAppear {
+                    // 次に遊ぶステージ（なければ最後にクリアしたステージ）のエリアまで、はじめから下げておく
+                    let target = app.nextStage.flatMap { n in all.first { $0.id == n.id } }
+                        ?? all.last(where: { app.progress.stars(of: $0.id) > 0 })
+                    guard let target, target.index >= Area.size, let area = AreaBook.area(world: world, index: target.index) else { return }
+                    DispatchQueue.main.async { proxy.scrollTo(anchorID(area), anchor: .top) }
+                }
             }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
     }
 
-    private func tile(_ s: Stage, felt: Color) -> some View {
+    private func anchorID(_ a: Area) -> String { "area-\(a.world)-\(a.number)" }
+
+    private func slice(_ all: [Stage], _ a: Area) -> [Stage] {
+        all.filter { $0.index >= a.firstIndex && $0.index < a.firstIndex + Area.size }
+    }
+
+    private func areaHeader(_ area: Area, stages: [Stage]) -> some View {
+        let got = stages.reduce(0) { $0 + app.progress.stars(of: $1.id) }
+        return HStack(alignment: .center, spacing: 8) {
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 6) {
+                    Text(String(localized: "エリア \(L.s(area.number))")).font(Theme.body(11)).foregroundStyle(Theme.inkSoft)
+                    if area.new != nil {
+                        Text("NEW").font(Theme.label(10)).foregroundStyle(Theme.ink)
+                            .padding(.horizontal, 6).padding(.vertical, 1)
+                            .background(Capsule().fill(Theme.sun))
+                    }
+                    if let t = area.trial, let pw = t.paidWorld {
+                        Text(String(localized: "おためし：\(L.s(t.label))（ワールド \(L.s(pw))）")).font(Theme.label(10)).foregroundStyle(Theme.ink)
+                            .padding(.horizontal, 6).padding(.vertical, 1)
+                            .background(Capsule().fill(Theme.rarity(.pro)))
+                    }
+                }
+                Text(area.title).font(Theme.label(16)).foregroundStyle(Theme.ink)
+            }
+            Spacer()
+            Label("\(got)/\(stages.count * 3)", systemImage: "star.fill").font(Theme.body(12)).foregroundStyle(Theme.inkSoft)
+        }
+        .padding(.top, area.number == 1 ? 0 : 12)
+    }
+
+    private func tile(_ s: Stage, felt: Color, trial: Gimmick?) -> some View {
         let open = app.isUnlocked(s)
         let stars = app.progress.stars(of: s.id)
         let isNext = app.nextStage?.id == s.id
@@ -125,9 +181,17 @@ struct StagesView: View {
             if open { app.playStage(s) }
         } label: {
             VStack(spacing: 4) {
-                ZStack {
-                    MiniTable(stage: s, felt: felt).opacity(open ? 1 : 0.4)
-                    if !open { Image(systemName: "lock.fill").foregroundStyle(.white) }
+                ZStack(alignment: .topTrailing) {
+                    ZStack {
+                        MiniTable(stage: s, felt: felt).opacity(open ? 1 : 0.4)
+                        if !open { Image(systemName: "lock.fill").foregroundStyle(.white) }
+                    }
+                    if trial != nil {
+                        Image(systemName: "sparkles").font(.system(size: 11, weight: .bold)).foregroundStyle(Theme.ink)
+                            .padding(4).background(Circle().fill(Theme.rarity(.pro)))
+                            .offset(x: 4, y: -4)
+                            .accessibilityHidden(true)
+                    }
                 }
                 .frame(height: 92)
                 Text(s.id).font(Theme.title(15)).foregroundStyle(Theme.ink)
@@ -187,8 +251,10 @@ struct MiniTable: View {
             func p(_ v: Vec) -> CGPoint { CGPoint(x: ox + v.x * k, y: oy + v.y * k) }
             for w in s.walls {
                 var path = Path(); path.move(to: p(w.a)); path.addLine(to: p(w.b))
-                ctx.stroke(path, with: .color(w.breakable ? Color(hex: 0xF7A9C4) : Theme.woodLight), style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                ctx.stroke(path, with: .color(w.breakable ? Color(hex: 0xF7A9C4) : (w.bouncy ? Theme.sun : Theme.woodLight)), style: StrokeStyle(lineWidth: 3, lineCap: .round))
             }
+            for m in s.muds { ctx.fill(CharacterArt.circle(p(m.center), max(3, m.radius * k)), with: .color(Color(hex: 0x8B6A4E).opacity(0.85))) }
+            for h in s.holes { ctx.fill(CharacterArt.circle(p(h.center), max(3, Hole.radius * k)), with: .color(.black)) }
             for w in s.warps { for v in [w.a, w.b] { ctx.fill(CharacterArt.circle(p(v), 4), with: .color(Theme.ink)) } }
             for pad in s.pads { ctx.fill(CharacterArt.circle(p(pad.center), 5), with: .color(Color(hex: 0x8FD9B6))) }
             for b in s.bumpers { ctx.fill(CharacterArt.circle(p(b.center), max(2, b.radius * k)), with: .color(Theme.bumper)) }

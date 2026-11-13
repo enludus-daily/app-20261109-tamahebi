@@ -1,6 +1,5 @@
 {
   "sourceLanguage": "ja",
-  "version": "1.0",
   "strings": {
     "%@ しっぱい": {
       "extractionState": "manual",
@@ -172,6 +171,23 @@
         }
       }
     },
+    "%@をもっと遊ぶ（ワールド %@）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play more %1$@ (World %2$@)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@をもっと遊ぶ（ワールド %@）"
+          }
+        }
+      }
+    },
     "%@日れんぞく": {
       "extractionState": "manual",
       "localizations": {
@@ -253,6 +269,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "8 番 OK！"
+          }
+        }
+      }
+    },
+    "8 番球": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8-ball"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 番球"
           }
         }
       }
@@ -852,6 +885,40 @@
         }
       }
     },
+    "おためし：%@（ワールド %@）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free taste: %1$@ (World %2$@)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おためし：%@（ワールド %@）"
+          }
+        }
+      }
+    },
+    "おちた！もどる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fell in! Back you go"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おちた！もどる"
+          }
+        }
+      }
+    },
     "おてほんを見る": {
       "extractionState": "manual",
       "localizations": {
@@ -916,6 +983,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "おてほん：強さ %@"
+          }
+        }
+      }
+    },
+    "おとし穴": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pits"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おとし穴"
+          }
+        }
+      }
+    },
+    "おとし穴に落ちると、打つ前の場所にもどる。食べた球はそのまま": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drop into a pit and you go back to where you shot from. Balls you ate stay eaten."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おとし穴に落ちると、打つ前の場所にもどる。食べた球はそのまま"
           }
         }
       }
@@ -1141,6 +1242,23 @@
         }
       }
     },
+    "かそく床": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boost Pads"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "かそく床"
+          }
+        }
+      }
+    },
     "かそく床で、もっと速く飛びだす": {
       "extractionState": "manual",
       "localizations": {
@@ -1239,6 +1357,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "かたい頭が自まん。ブロックはまかせて。"
+          }
+        }
+      }
+    },
+    "かべ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Walls"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "かべ"
           }
         }
       }
@@ -1498,6 +1633,23 @@
         }
       }
     },
+    "こおり": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ice"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "こおり"
+          }
+        }
+      }
+    },
     "こおりの台": {
       "extractionState": "manual",
       "localizations": {
@@ -1715,6 +1867,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "こわれるブロックを、どれも 1 回でこわす"
+          }
+        }
+      }
+    },
+    "ごちゃまぜ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mix-up"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ごちゃまぜ"
+          }
+        }
+      }
+    },
+    "しま模様のかべは、よくはずむ。当たると速くなって返ってくる": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Striped walls are bouncy. You come back off them even faster."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "しま模様のかべは、よくはずむ。当たると速くなって返ってくる"
+          }
+        }
+      }
+    },
+    "じゅんばん球": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Number Order"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "じゅんばん球"
+          }
+        }
+      }
+    },
+    "じゅんばん球：番号の小さい順にしか食べられない。光っている球がつぎ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Number order: eat the balls from lowest to highest. The glowing one is next."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "じゅんばん球：番号の小さい順にしか食べられない。光っている球がつぎ"
           }
         }
       }
@@ -2178,6 +2398,23 @@
         }
       }
     },
+    "ねばねば床": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sticky Mud"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ねばねば床"
+          }
+        }
+      }
+    },
     "のこり %@ こ": {
       "extractionState": "manual",
       "localizations": {
@@ -2276,6 +2513,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "はじめてのクリア"
+          }
+        }
+      }
+    },
+    "はずむかべ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bouncy Walls"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "はずむかべ"
           }
         }
       }
@@ -2739,6 +2993,40 @@
         }
       }
     },
+    "エリア %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Area %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "エリア %@"
+          }
+        }
+      }
+    },
+    "エリア %@：%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Area %1$@: %2$@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "エリア %@：%@"
+          }
+        }
+      }
+    },
     "オーロラ": {
       "extractionState": "manual",
       "localizations": {
@@ -3041,6 +3329,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "ゴマ"
+          }
+        }
+      }
+    },
+    "ゴースト球": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ghost Balls"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ゴースト球"
           }
         }
       }
@@ -3500,6 +3805,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "バナーと、遊んだあとの全画面広告がなくなる（見たいときの動画は選べる）"
+          }
+        }
+      }
+    },
+    "バンパー": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bumpers"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バンパー"
           }
         }
       }
@@ -4010,6 +4332,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "ワタアメ"
+          }
+        }
+      }
+    },
+    "ワープ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warps"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワープ"
           }
         }
       }
@@ -4677,6 +5016,23 @@
         }
       }
     },
+    "木のかべでも跳ね返る。かべを使って回りこもう": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wooden walls bounce you too. Use them to curve around."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "木のかべでも跳ね返る。かべを使って回りこもう"
+          }
+        }
+      }
+    },
     "次の Lv%@：%@（カプセルでもう一度会うと上がる）": {
       "extractionState": "manual",
       "localizations": {
@@ -4898,6 +5254,23 @@
         }
       }
     },
+    "茶色いねばねば床に乗ると、すぐに止まる。止めたいところで使おう": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sticky mud stops you fast. Use it to park right where you want."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "茶色いねばねば床に乗ると、すぐに止まる。止めたいところで使おう"
+          }
+        }
+      }
+    },
     "購入できませんでした。時間をおいてもう一度お試しください": {
       "extractionState": "manual",
       "localizations": {
@@ -5017,5 +5390,6 @@
         }
       }
     }
-  }
+  },
+  "version": "1.0"
 }

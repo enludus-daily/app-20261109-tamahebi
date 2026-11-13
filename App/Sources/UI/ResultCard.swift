@@ -104,6 +104,12 @@ struct ResultCard: View {
                     }
                 }
             }
+            if let area = AreaBook.area(world: s.world, index: s.index), area.isTrial(index: s.index),
+               let t = area.trial, let pw = t.paidWorld, app.isLockedBehindPurchase(StageBook.world(pw)) {
+                // おためしの台：その仕掛けのワールドへ
+                Button(String(localized: "\(L.s(t.label))をもっと遊ぶ（ワールド \(L.s(pw))）")) { app.showPro = true }
+                    .font(Theme.label(13)).foregroundStyle(Theme.ink).underline()
+            }
             if app.progress.canPull() {
                 Button(String(localized: "カプセルを回す（おやつ \(L.s(app.progress.snacks))）")) { app.continueFromResult { app.route = .capsule } }
                     .font(Theme.label(13)).foregroundStyle(Theme.ink).underline()

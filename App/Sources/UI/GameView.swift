@@ -225,6 +225,8 @@ struct TableCanvas: View {
             drawFrame(&ctx, full: full, pad: pad)
             ctx.translateBy(x: pad, y: pad)
             drawFelt(&ctx, rules: rules)
+            drawMuds(&ctx)
+            drawHoles(&ctx)
             drawWarps(&ctx)
             drawPads(&ctx)
             drawWalls(&ctx)
@@ -321,9 +323,45 @@ struct TableCanvas: View {
                 Self.drawBall(&g, at: CGPoint(x: b.center.x, y: b.center.y), number: b.number, radius: 10, scale: max(0.01, s), lift: bob)
                 let ring = CharacterArt.circle(CGPoint(x: b.center.x, y: b.center.y - bob), 15 + (awake ? sin(game.clock * 10) * 2 : 0))
                 ctx.stroke(ring, with: .color(awake ? Color(hex: 0xC3B1EE) : .white.opacity(0.6)), style: StrokeStyle(lineWidth: 2, dash: awake ? [] : [3, 4]))
+            } else if let next = game.engine.nextNumber {
+                // じゅんばん球：つぎに食べられる球だけ光らせ、ほかはうすく
+                let isNext = b.number == next
+                var g = ctx
+                g.opacity = isNext ? 1 : 0.55
+                Self.drawBall(&g, at: CGPoint(x: b.center.x, y: b.center.y), number: b.number, radius: 10, scale: max(0.01, s), lift: bob)
+                if isNext {
+                    let ring = CharacterArt.circle(CGPoint(x: b.center.x, y: b.center.y - bob), 15 + sin(game.clock * 6) * 1.5)
+                    ctx.stroke(ring, with: .color(Theme.sun), lineWidth: 3)
+                }
             } else {
                 Self.drawBall(&ctx, at: CGPoint(x: b.center.x, y: b.center.y), number: b.number, radius: 10, scale: max(0.01, s), lift: bob)
             }
+        }
+    }
+
+    private func drawMuds(_ ctx: inout GraphicsContext) {
+        for (i, m) in game.engine.muds.enumerated() {
+            let c = CGPoint(x: m.center.x, y: m.center.y)
+            // ねばねば床：茶色のしみと、ゆっくり動く泡
+            ctx.fill(CharacterArt.circle(c, m.radius), with: .color(Color(hex: 0x8B6A4E).opacity(0.85)))
+            ctx.stroke(CharacterArt.circle(c, m.radius), with: .color(Theme.ink.opacity(0.5)), style: StrokeStyle(lineWidth: 2, dash: [5, 4]))
+            for k in 0..<5 {
+                let a = Double(k) * 1.26 + Double(i)
+                let rr = m.radius * (0.25 + 0.15 * Double(k % 3))
+                let bub = CGPoint(x: c.x + cos(a + game.clock * 0.3) * rr, y: c.y + sin(a + game.clock * 0.3) * rr)
+                ctx.fill(CharacterArt.circle(bub, 2.5 + Double(k % 2) * 1.5), with: .color(Color(hex: 0xC9A27E).opacity(0.8)))
+            }
+        }
+    }
+
+    private func drawHoles(_ ctx: inout GraphicsContext) {
+        for h in game.engine.holes {
+            let c = CGPoint(x: h.center.x, y: h.center.y)
+            // おとし穴：木のふちと、まっくらな穴
+            ctx.fill(CharacterArt.circle(c, Hole.radius + 4), with: .color(Theme.wood))
+            ctx.stroke(CharacterArt.circle(c, Hole.radius + 4), with: .color(Theme.ink), lineWidth: 2.5)
+            ctx.fill(CharacterArt.circle(c, Hole.radius), with: .radialGradient(Gradient(colors: [.black, Color(hex: 0x2A1B30)]),
+                                                                                center: CGPoint(x: c.x, y: c.y + 3), startRadius: 2, endRadius: Hole.radius))
         }
     }
 
@@ -338,6 +376,10 @@ struct TableCanvas: View {
                 ctx.stroke(p, with: .color(Color(hex: 0xF7A9C4)), style: StrokeStyle(lineWidth: Wall.thickness * 2 - 1, lineCap: .round))
                 ctx.stroke(p, with: .color(Theme.ink.opacity(0.35)), style: StrokeStyle(lineWidth: 1.2, dash: [3, 5]))
                 if w.hits >= 2 { ctx.stroke(p, with: .color(.white), style: StrokeStyle(lineWidth: 2.4, lineCap: .round)) }
+            } else if w.bouncy {
+                // はずむかべ：黄色と白のしま（よくはずむ）
+                ctx.stroke(p, with: .color(Theme.sun), style: StrokeStyle(lineWidth: Wall.thickness * 2 - 1, lineCap: .round))
+                ctx.stroke(p, with: .color(.white), style: StrokeStyle(lineWidth: Wall.thickness * 2 - 3, dash: [4, 5]))
             } else {
                 ctx.stroke(p, with: .color(Theme.wood), style: StrokeStyle(lineWidth: Wall.thickness * 2 - 1, lineCap: .round))
             }

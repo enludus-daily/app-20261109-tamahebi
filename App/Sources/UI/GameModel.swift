@@ -230,6 +230,11 @@ final class GameModel {
             for p in [from, to] {
                 sparks.append(Spark(at: CGPoint(x: p.x, y: p.y), velocity: .zero, color: .white, born: clock, ring: true))
             }
+        case .fell(let at):
+            Feedback.miss()
+            setFace(.oops, for: 0.9)
+            sparks.append(Spark(at: CGPoint(x: at.x, y: at.y), velocity: .zero, color: .white, born: clock, ring: true))
+            pop(String(localized: "おちた！もどる"), at: CGPoint(x: at.x, y: at.y - 24), color: Color(hex: 0xC9A27E))
         case .ghostAwake:
             Feedback.bonus()
             pop(String(localized: "ゴースト球がおきた！"), at: CGPoint(x: engine.head.x, y: engine.head.y - 26), color: Color(hex: 0xC3B1EE))
