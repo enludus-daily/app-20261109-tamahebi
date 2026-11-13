@@ -54,6 +54,11 @@ targets:
         NSUserTrackingUsageDescription: "あなたに合った広告を出すために使います。許可しなくても、広告の数は変わらず遊べます。"
         SKAdNetworkItems:
           - SKAdNetworkIdentifier: cstr6suwn9.skadnetwork
+    # 進み具合を iCloud（キーと値）にも置く。削除して入れ直しても、同じ Apple ID なら戻る（本人の希望 2026-11-13）
+    entitlements:
+      path: App/Tamahebi.entitlements
+      properties:
+        com.apple.developer.ubiquity-kvstore-identifier: $(TeamIdentifierPrefix)$(CFBundleIdentifier)
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.enludus.daily.006

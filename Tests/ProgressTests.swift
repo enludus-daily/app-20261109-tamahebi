@@ -297,3 +297,48 @@ struct AdScheduleTests {
         #expect(shown == [15, 20, 25, 30, 35, 40])
     }
 }
+
+/// iCloud の記録と合わせる（入れ直したとき・2 台で遊んだとき）
+struct CloudMergeTests {
+    @Test func freshInstallTakesEverythingFromTheCloud() {
+        var cloud = Progress()
+        cloud.snacks = 777
+        cloud.owned = ["tama", "mint", "kirari"]
+        cloud.levels = ["mint": 3]
+        cloud.stageStars = ["1-1": 3, "1-2": 2]
+        cloud.tutorialDone = true
+        cloud.gamesPlayed = 40
+        cloud.pulls = 5
+        let fresh = Progress()
+        let m = Progress.merged(fresh, cloud)
+        #expect(m.snacks == 777)
+        #expect(m.owned == ["tama", "mint", "kirari"])
+        #expect(m.levels["mint"] == 3)
+        #expect(m.stageStars == ["1-1": 3, "1-2": 2])
+        #expect(m.tutorialDone)
+        #expect(Progress.merged(cloud, fresh) == m)
+    }
+
+    @Test func twoDevicesKeepTheBestOfBoth() {
+        var a = Progress(), b = Progress()
+        a.stageStars = ["1-1": 3, "1-2": 1]; a.gamesPlayed = 10; a.snacks = 100; a.owned = ["tama", "mint"]; a.levels = ["mint": 2]
+        b.stageStars = ["1-2": 3, "1-3": 2]; b.gamesPlayed = 20; b.snacks = 300; b.owned = ["tama", "soda"]; b.levels = ["mint": 1, "soda": 4]
+        a.hintedStages = ["1-1"]; b.hintedStages = ["2-5"]
+        a.bestByDay = ["2026-11-13": 200]; b.bestByDay = ["2026-11-13": 150, "2026-11-12": 90]
+        let m = Progress.merged(a, b)
+        #expect(m.stageStars == ["1-1": 3, "1-2": 3, "1-3": 2])
+        #expect(m.owned == ["tama", "mint", "soda"])
+        #expect(m.levels == ["mint": 2, "soda": 4])
+        #expect(m.hintedStages == ["1-1", "2-5"])
+        #expect(m.bestByDay == ["2026-11-13": 200, "2026-11-12": 90])
+        // おやつは、たくさん遊んだほう（b）の記録にそろえる（足すと増やせてしまう）
+        #expect(m.snacks == 300)
+        #expect(m.gamesPlayed == 20)
+    }
+
+    @Test func mergingTheSameRecordChangesNothing() {
+        var a = Progress()
+        a.stageStars = ["1-1": 2]; a.gamesPlayed = 3; a.snacks = 50
+        #expect(Progress.merged(a, a) == a)
+    }
+}

@@ -28,6 +28,8 @@ final class AppModel {
     private static let key = "progress.v1"
 
     var progress: Progress { didSet { save() } }
+    /// iCloud（キーと値）。テスト・撮影・デモでは使わない
+    @ObservationIgnored private let cloud: NSUbiquitousKeyValueStore?
     var route: Route = .home
     var showPro = false
     var game: GameModel?
@@ -73,19 +75,24 @@ final class AppModel {
             || defaults.string(forKey: "screenshotScene") != nil
             || ProcessInfo.processInfo.arguments.contains("-demo")
         ads = quiet ? NoAds() : AdMobRewarded()
+        cloud = quiet ? nil : NSUbiquitousKeyValueStore.default
         store = PurchaseStore(productIDs: [pro, ProductID.pack("worlds", bundleID: bundleID), ProductID.pack("friends", bundleID: bundleID)],
                               proProductIDs: [pro])
+        var loaded: Progress
         if ProcessInfo.processInfo.arguments.contains("-demo") {
             // 見本のデータ（保存しない）
-            var p = Progress()
-            p.tutorialDone = true
-            p.owned = ["tama", "mint", "soda", "momo", "kurosuke", "wataame", "kirari"]
-            progress = p
-        } else if let data = defaults.data(forKey: Self.key), let p = try? JSONDecoder().decode(Progress.self, from: data) {
-            progress = p
+            loaded = Progress()
+            loaded.tutorialDone = true
+            loaded.owned = ["tama", "mint", "soda", "momo", "kurosuke", "wataame", "kirari"]
         } else {
-            progress = Progress()
+            loaded = Self.decode(defaults.data(forKey: Self.key)) ?? Progress()
         }
+        // iCloud にある記録と合わせる（入れ直したとき・別の iPhone のとき）
+        if let cloud {
+            cloud.synchronize()
+            if let p = Self.decode(cloud.data(forKey: Self.key)) { loaded = Progress.merged(loaded, p) }
+        }
+        progress = loaded
         if let url = Bundle.main.url(forResource: "stages", withExtension: "json"),
            let data = try? Data(contentsOf: url), let b = try? StageBook.decode(data) {
             book = b.filter { $0.world > 0 }
@@ -98,10 +105,32 @@ final class AppModel {
 
     private func save() {
         guard !isDemo else { return }
-        if let data = try? JSONEncoder().encode(progress) { UserDefaults.standard.set(data, forKey: Self.key) }
+        guard let data = try? JSONEncoder().encode(progress) else { return }
+        UserDefaults.standard.set(data, forKey: Self.key)
+        cloud?.set(data, forKey: Self.key)
+    }
+
+    private static func decode(_ data: Data?) -> Progress? {
+        data.flatMap { try? JSONDecoder().decode(Progress.self, from: $0) }
+    }
+
+    /// ほかの端末（または入れ直す前）の記録が iCloud から届いたら合わせる
+    private func watchCloud() {
+        guard let cloud else { return }
+        NotificationCenter.default.addObserver(forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: cloud, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated { self?.mergeFromCloud() }
+        }
+        cloud.synchronize()
+    }
+
+    private func mergeFromCloud() {
+        guard let p = Self.decode(cloud?.data(forKey: Self.key)) else { return }
+        let merged = Progress.merged(progress, p)
+        if merged != progress { progress = merged }
     }
 
     func onLaunch() async {
+        watchCloud()
         if isDemo {
             startDemo()
             return

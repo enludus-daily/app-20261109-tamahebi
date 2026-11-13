@@ -120,6 +120,33 @@ struct Progress: Codable, Equatable, Sendable {
         sinceSuperRare = try c.decodeIfPresent(Int.self, forKey: .sinceSuperRare) ?? 0
     }
 
+    // MARK: iCloud とのあわせ
+
+    /// 遊んだ量（どちらの記録が新しいかの目安）
+    var activity: Int { gamesPlayed + pulls }
+
+    /// 2 台（または入れ直す前と後）の記録を合わせる。なくしたくないもの（星・なかま・なかよし度・ベスト）は多いほう、
+    /// 使うと減るもの（おやつ・天井の回数）や選んでいるものは、たくさん遊んだほうの記録にそろえる
+    static func merged(_ a: Progress, _ b: Progress) -> Progress {
+        var base = a.activity >= b.activity ? a : b
+        let other = a.activity >= b.activity ? b : a
+        base.owned.formUnion(other.owned)
+        base.levels.merge(other.levels) { max($0, $1) }
+        base.costumes.merge(other.costumes) { mine, _ in mine }
+        base.stageStars.merge(other.stageStars) { max($0, $1) }
+        base.bestByDay.merge(other.bestByDay) { max($0, $1) }
+        base.lastDailyDay = [base.lastDailyDay, other.lastDailyDay].compactMap { $0 }.max()
+        base.totalEaten = max(base.totalEaten, other.totalEaten)
+        base.gamesPlayed = max(base.gamesPlayed, other.gamesPlayed)
+        base.pulls = max(base.pulls, other.pulls)
+        base.hasSeenPaywall = base.hasSeenPaywall || other.hasSeenPaywall
+        base.hintedStages.formUnion(other.hintedStages)
+        base.lastFreeHintDay = [base.lastFreeHintDay, other.lastFreeHintDay].compactMap { $0 }.max()
+        base.tutorialDone = base.tutorialDone || other.tutorialDone
+        base.adPlays = max(base.adPlays, other.adPlays)
+        return base
+    }
+
     // MARK: ヒント
 
     enum HintPrice: Equatable, Sendable { case owned, pro, freeToday, snacks(Int), tooFewSnacks(Int) }
